@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест предсказаний</title>
+</head>
+<body>
+    <p>Загрузка данных...</p>
+
+    <script>
+        // --- ВСТАВЛЯЕМ САМУ ФУНКЦИЮ ПРЯМО ЗДЕСЬ, ЧТОБЫ ОНА ТОЧНО БЫЛА ---
+        function generateTestPredictions() {
+            return new Promise((resolve, reject) => {
+                // Имитация загрузки данных (искусственная задержка в 1 секунду)
+                setTimeout(() => {
+                    // Генерируем тестовый массив матчей
+                    const testData = [
+                        { id: 1, home: "Спартак", away: "Зенит", prediction: "Победа Зенита" },
+                        { id: 2, home: "Динамо", away: "ЦСКА", prediction: "Ничья" }
+                    ];
+                    // Возвращаем результат
+                    resolve(testData);
+                }, 1000);
+            });
+        }
+        // ----------------------------------------------------------------
+
+        // ДАЛЬШЕ ИДЕТ ВАШ КОД, КОТОРЫЙ ВЫЗЫВАЕТ ЭТУ ФУНКЦИЮ
+        console.log("Скрипт запущен");
+
+        generateTestPredictions()
+        .then(data => {
+            if (!data || !Array.isArray(data)) {
+                throw new Error("Функция вернула не массив или пустые данные: " + JSON.stringify(data));
+            }
+            if (data.length === 0) {
+                throw new Error("Массив данных пуст (нет матчей).");
+            }
+
+            document.body.innerHTML = '<h3>РЕЗУЛЬТАТЫ ПРОВЕРКИ (ТЕСТ):</h3>' +
+                                      '<p>ПЕРВЫЙ МАТЧ: ' + JSON.stringify(data[0]) + '</p>' +
+                                      '<p>ВСЕГО МАТЧЕЙ: ' + data.length + '</p>';
+        })
+        .catch(error => {
+            console.error("Пойманная ошибка:", error);
+            document.body.innerHTML = '<h3 style="color:red;">ОШИБКА:</h3><p style="color:red;">' + error + '</p>';
+        });
+    </script>
+</body>
+</html>
