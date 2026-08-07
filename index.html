@@ -9,15 +9,15 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Квантум">
-    <meta name="theme-color" content="#0a0a0f">
+    <meta name="theme-color" content="#0b0e14">
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
     <style>
         /* ================================================================
-           КВАНТУМ v5.3 — НЕОНОВЫЙ КИБЕРСПОРТ
+           КВАНТУМ v5.3 — ТЁМНЫЙ МИНИМАЛИЗМ
            Полный редизайн интерфейса
            ================================================================ */
 
-        /* ----- СБРОС И БАЗА (сохранение функциональности) ----- */
+        /* ----- СБРОС И БАЗА ----- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -27,8 +27,8 @@
 
         body {
             font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0a0f;
-            color: #e8e8ff;
+            background: #0b0e14;
+            color: #e6e8ec;
             max-width: 480px;
             margin: 0 auto;
             min-height: 100vh;
@@ -39,10 +39,10 @@
             transition: background 0.3s, color 0.3s;
         }
 
-        /* ----- СВЕТЛАЯ ТЕМА (переработана под холодный киберстиль) ----- */
+        /* ----- СВЕТЛАЯ ТЕМА (минималистичная) ----- */
         body.light {
-            background: #eef0f5;
-            color: #10101a;
+            background: #f2f4f8;
+            color: #1a1d24;
         }
         body.light input,
         body.light select,
@@ -50,59 +50,59 @@
         body.light .prediction-card,
         body.light .match-item {
             background: #ffffff !important;
-            color: #10101a !important;
-            border-color: #c0c8d8 !important;
+            color: #1a1d24 !important;
+            border-color: #d5dbe5 !important;
+            box-shadow: none !important;
         }
         body.light .mode-btn {
-            background: #eef0f5 !important;
-            color: #555 !important;
-            border-color: #c0c8d8 !important;
+            background: #f2f4f8 !important;
+            color: #6b7280 !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .mode-btn.active {
-            background: #00f0ff !important;
-            color: #0a0a0f !important;
-            border-color: #00f0ff !important;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+            background: #f7931a !important;
+            color: #ffffff !important;
+            border-color: #f7931a !important;
         }
         body.light .top-tab {
-            color: #888 !important;
+            color: #9ba3b5 !important;
         }
         body.light .top-tab.active {
-            color: #00f0ff !important;
+            color: #f7931a !important;
         }
         body.light .ai-card {
-            background: #f0f0fc !important;
-            border-color: #bf00ff !important;
+            background: #f8f9fc !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .ai-result {
             background: #ffffff !important;
         }
         body.light .header {
-            background: #eef0f5;
-            border-bottom-color: #c0c8d8;
+            background: #f2f4f8;
+            border-bottom-color: #d5dbe5;
         }
         body.light .advice.info {
-            background: #e8edf5 !important;
+            background: #edf1f7 !important;
         }
         body.light .advice.good {
-            background: #e0f5ec !important;
+            background: #e6f7ed !important;
         }
         body.light .advice.warn {
-            background: #f5f5e0 !important;
+            background: #f7f7e6 !important;
         }
         body.light .advice.bad {
-            background: #f5e8ec !important;
+            background: #f7ede6 !important;
         }
         body.light .h2h-summary {
-            background: #e8edf5 !important;
+            background: #edf1f7 !important;
         }
         body.light .h2h-summary .item {
             background: #ffffff !important;
-            border-color: #c0c8d8 !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .h2h-item {
-            background: #f8f8fc !important;
-            border-color: #c0c8d8 !important;
+            background: #f8f9fc !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .stats-card {
             background: #ffffff !important;
@@ -111,617 +111,567 @@
             background: #ffffff !important;
         }
         body.light .history-item:hover {
-            background: #f0f0fc !important;
+            background: #f2f4f8 !important;
         }
         body.light .settings-item {
-            border-bottom-color: #c0c8d8 !important;
+            border-bottom-color: #d5dbe5 !important;
         }
         body.light .toggle-btn {
-            background: #c0c8d8 !important;
-            color: #10101a !important;
+            background: #d5dbe5 !important;
+            color: #1a1d24 !important;
         }
         body.light .toggle-btn.active {
-            background: #00f0ff !important;
-            color: #0a0a0f !important;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+            background: #f7931a !important;
+            color: #ffffff !important;
         }
         body.light .total-display {
             background: #ffffff !important;
-            border-color: #c0c8d8 !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .bk-row {
             background: #ffffff !important;
         }
         body.light .bk-row select {
             background: #ffffff !important;
-            color: #10101a !important;
-            border-color: #c0c8d8 !important;
+            color: #1a1d24 !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .bk-row input {
             background: #ffffff !important;
-            color: #10101a !important;
-            border-color: #c0c8d8 !important;
+            color: #1a1d24 !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .ai-form-item {
-            background: #f0f0f5 !important;
+            background: #f2f4f8 !important;
         }
         body.light .bottom-nav {
-            background: #eef0f5 !important;
-            border-top-color: #c0c8d8 !important;
+            background: #f2f4f8 !important;
+            border-top-color: #d5dbe5 !important;
         }
         body.light .bottom-nav .nav-btn {
-            color: #888 !important;
+            color: #9ba3b5 !important;
         }
         body.light .bottom-nav .nav-btn.active {
-            color: #00f0ff !important;
-        }
-        body.light .bottom-nav .nav-btn.active::after {
-            background: #00f0ff !important;
-            box-shadow: 0 0 12px #00f0ff;
+            color: #f7931a !important;
         }
         body.light .btn-clear {
-            background: #f0d0d8 !important;
-            color: #bf0040 !important;
+            background: #f7edf0 !important;
+            color: #c0392b !important;
         }
         body.light .btn-api {
-            background: #00f0ff !important;
-            color: #0a0a0f !important;
+            background: #f7931a !important;
+            color: #ffffff !important;
         }
         body.light .live-events {
-            border-top-color: #c0c8d8 !important;
+            border-top-color: #d5dbe5 !important;
         }
         body.light .live-event {
-            border-bottom-color: #f0f0f5 !important;
+            border-bottom-color: #f2f4f8 !important;
         }
         body.light .ai-result .section {
-            border-bottom-color: #c0c8d8 !important;
+            border-bottom-color: #d5dbe5 !important;
         }
         body.light .ai-result .recommendation {
-            background: #e0f5ec !important;
+            background: #e6f7ed !important;
         }
         body.light .confidence-bar {
-            background: #e0e0e8 !important;
+            background: #e5e8ee !important;
         }
         body.light .weather-section {
-            background: #e8f0fc !important;
-            border-color: #00f0ff !important;
+            background: #edf1f7 !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .weather-header {
-            color: #10101a !important;
+            color: #1a1d24 !important;
         }
         body.light .weather-card {
-            background: #f5f8fc !important;
-            border-color: #00f0ff !important;
+            background: #f8f9fc !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .league-info-card {
             background: #ffffff !important;
-            border-color: #c0c8d8 !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .insights-card {
-            background: #f8f0fc !important;
-            border-color: #bf00ff !important;
+            background: #f8f9fc !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .assistant-card {
-            background: #f0f8f0 !important;
-            border-color: #00ff9d !important;
+            background: #f8f9fc !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .assistant-message.user {
-            background: #f0f2f8 !important;
+            background: #f2f4f8 !important;
         }
         body.light .assistant-message.ai {
-            background: #f0f8f0 !important;
+            background: #edf1f7 !important;
         }
         body.light .weather-input {
             background: #ffffff !important;
-            border-color: #c0c8d8 !important;
-            color: #10101a !important;
+            border-color: #d5dbe5 !important;
+            color: #1a1d24 !important;
         }
         body.light .weather-input-btn {
-            background: #00f0ff !important;
-            color: #0a0a0f !important;
+            background: #f7931a !important;
+            color: #ffffff !important;
         }
         body.light .kpi-card {
             background: #ffffff !important;
-            border-color: #c0c8d8 !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .value-bet-card {
-            background: #f5f8fc !important;
-            border-color: #00ff9d !important;
+            background: #f8f9fc !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .explanation-card {
             background: #ffffff !important;
-            border-color: #bf00ff !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .shap-container {
             background: #ffffff !important;
-            border-color: #c0c8d8 !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .momentum-bar .bar.home {
-            background: #00f0ff;
+            background: #f7931a;
         }
         body.light .momentum-bar .bar.away {
-            background: #bf00ff;
+            background: #6b7280;
         }
         body.light .match-item {
             background: #ffffff !important;
-            border-color: #c0c8d8 !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .match-item:hover {
-            background: #f0f0fc !important;
+            background: #f2f4f8 !important;
         }
         body.light .prediction-card {
             background: #ffffff !important;
-            border-color: #c0c8d8 !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .predictions-filter-bar button {
-            background: #f0f0f5 !important;
-            color: #555 !important;
-            border-color: #c0c8d8 !important;
+            background: #f2f4f8 !important;
+            color: #6b7280 !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .predictions-filter-bar button.active {
-            background: #00f0ff !important;
-            color: #0a0a0f !important;
-            border-color: #00f0ff !important;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+            background: #f7931a !important;
+            color: #ffffff !important;
+            border-color: #f7931a !important;
         }
         body.light .predictions-filter-bar select {
-            background: #f0f0f5 !important;
-            color: #555 !important;
-            border-color: #c0c8d8 !important;
+            background: #f2f4f8 !important;
+            color: #6b7280 !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .predictions-tabs button {
-            background: #f0f0f5 !important;
-            color: #555 !important;
-            border-color: #c0c8d8 !important;
+            background: #f2f4f8 !important;
+            color: #6b7280 !important;
+            border-color: #d5dbe5 !important;
         }
         body.light .predictions-tabs button.active {
-            background: #00f0ff !important;
-            color: #0a0a0f !important;
-            border-color: #00f0ff !important;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+            background: #f7931a !important;
+            color: #ffffff !important;
+            border-color: #f7931a !important;
         }
         body.light .detective-card {
             background: #fdf0f0 !important;
-            border-color: #ff0055 !important;
+            border-color: #ef4444 !important;
         }
         body.light .modal-box {
             background: #ffffff !important;
-            border-color: #00f0ff !important;
-            box-shadow: 0 0 40px rgba(0, 240, 255, 0.15);
+            border-color: #d5dbe5 !important;
         }
         body.light .modal-box .modal-result {
-            background: #f0f0f5 !important;
+            background: #f2f4f8 !important;
         }
         body.light .modal-box .modal-actions .btn-skip-modal {
-            background: #e0e0e8 !important;
-            color: #555 !important;
+            background: #e5e8ee !important;
+            color: #6b7280 !important;
         }
         body.light .turbo-result {
-            background: #f5f5f8 !important;
+            background: #f8f9fc !important;
+        }
+        body.light .disclaimer {
+            border-top-color: #d5dbe5 !important;
         }
 
-        /* ----- НЕОНОВЫЕ СТИЛИ (основные) ----- */
+        /* ----- ШАПКА (минималистичная) ----- */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 14px 6px;
-            background: #0a0a0f;
-            border-bottom: 1px solid #2a2a3d;
+            padding: 12px 16px 10px;
+            background: #0b0e14;
+            border-bottom: 1px solid #1e2430;
             flex-shrink: 0;
             z-index: 10;
-            padding-top: env(safe-area-inset-top, 10px);
+            padding-top: env(safe-area-inset-top, 12px);
         }
         .header h1 {
             font-size: 18px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            background: linear-gradient(135deg, #00f0ff, #bf00ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+            font-weight: 600;
+            color: #e6e8ec;
+            letter-spacing: -0.3px;
             display: flex;
             align-items: center;
             gap: 6px;
         }
         .header h1 span {
             font-size: 9px;
-            color: #8a8aa3;
-            -webkit-text-fill-color: #8a8aa3;
-            background: none;
+            color: #8b93a7;
             font-weight: 400;
+            letter-spacing: 0.3px;
         }
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
         }
         .header-actions button {
             background: transparent;
-            border: 1px solid #2a2a3d;
-            color: #8a8aa3;
+            border: none;
+            color: #8b93a7;
             font-size: 16px;
             cursor: pointer;
             padding: 4px 8px;
-            border-radius: 8px;
-            transition: all 0.2s;
+            border-radius: 6px;
+            transition: color 0.2s;
         }
         .header-actions button:hover {
-            border-color: #00f0ff;
-            color: #00f0ff;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+            color: #f7931a;
         }
         .header-weather {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
             font-size: 12px;
-            color: #8a8aa3;
+            color: #8b93a7;
             cursor: pointer;
             padding: 4px 10px;
-            border-radius: 12px;
-            border: 1px solid #2a2a3d;
-            transition: all 0.2s;
+            border-radius: 8px;
+            transition: background 0.2s;
             white-space: nowrap;
         }
         .header-weather:hover {
-            border-color: #00f0ff;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
         }
         .header-weather .weather-icon {
-            font-size: 16px;
+            font-size: 14px;
         }
         .header-weather .weather-temp {
-            font-weight: 700;
-            color: #00f0ff;
+            font-weight: 500;
+            color: #f7931a;
         }
         .header-weather .weather-desc {
-            color: #8a8aa3;
+            color: #8b93a7;
             font-size: 10px;
         }
 
-        /* ----- КАРТОЧКИ (неоновый стиль) ----- */
+        /* ----- КАРТОЧКИ (минималистичные) ----- */
         .card {
-            background: #12121a;
-            border: 1px solid #2a2a3d;
+            background: #13171f;
+            border: 1px solid #1e2430;
             border-radius: 14px;
-            padding: 12px 14px;
+            padding: 14px 16px;
             margin: 6px 0;
-            transition: all 0.25s ease;
-        }
-        .card:hover {
-            border-color: #00f0ff;
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.05);
         }
         .card-title {
-            font-size: 12px;
-            font-weight: 700;
-            color: #00f0ff;
-            margin-bottom: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #8b93a7;
+            margin-bottom: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            text-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
         }
         .ai-card {
-            background: #161622;
-            border: 1px solid #bf00ff;
+            background: #13171f;
+            border: 1px solid #1e2430;
             border-radius: 14px;
-            padding: 12px 14px;
+            padding: 14px 16px;
             margin: 6px 0;
-            transition: all 0.25s ease;
-        }
-        .ai-card:hover {
-            box-shadow: 0 0 40px rgba(191, 0, 255, 0.1);
         }
         .ai-card .card-title {
-            color: #bf00ff;
-            text-shadow: 0 0 20px rgba(191, 0, 255, 0.15);
+            color: #8b93a7;
         }
 
-        /* ----- КНОПКИ (неоновые градиенты) ----- */
+        /* ----- КНОПКИ (минималистичные) ----- */
         .btn {
             width: 100%;
             padding: 14px;
             border-radius: 12px;
             border: none;
-            font-weight: 700;
-            font-size: 16px;
+            font-weight: 600;
+            font-size: 15px;
             cursor: pointer;
             margin: 4px 0;
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
+            transition: background 0.2s, transform 0.1s;
         }
         .btn:active {
-            transform: scale(0.97);
+            transform: scale(0.98);
         }
         .btn-calc {
-            background: linear-gradient(135deg, #00f0ff, #bf00ff);
-            color: #0a0a0f;
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+            background: #f7931a;
+            color: #0b0e14;
         }
         .btn-calc:hover {
-            box-shadow: 0 0 50px rgba(0, 240, 255, 0.4);
-            transform: translateY(-1px);
-        }
-        .btn-calc:active {
-            box-shadow: 0 0 60px rgba(0, 240, 255, 0.6);
+            background: #e8850a;
         }
         .btn-save {
-            background: #00ff9d;
-            color: #0a0a0f;
-            box-shadow: 0 0 30px rgba(0, 255, 157, 0.15);
+            background: #22c55e;
+            color: #0b0e14;
             flex: 2;
         }
         .btn-save:hover {
-            box-shadow: 0 0 50px rgba(0, 255, 157, 0.3);
+            background: #1aaf4a;
         }
         .btn-clear {
             background: transparent;
-            color: #ff0055;
-            border: 1px solid #ff0055;
+            color: #ef4444;
+            border: 1px solid #1e2430;
             flex: 1;
         }
         .btn-clear:hover {
-            background: #ff0055;
-            color: #0a0a0f;
-            box-shadow: 0 0 30px rgba(255, 0, 85, 0.2);
+            background: rgba(239, 68, 68, 0.08);
         }
         .action-row {
             display: flex;
             gap: 10px;
         }
         .btn-api {
-            background: linear-gradient(135deg, #00f0ff, #0088ff);
-            color: #0a0a0f;
+            background: #f7931a;
+            color: #0b0e14;
             width: 100%;
             padding: 14px;
             border-radius: 12px;
             border: none;
-            font-weight: 700;
-            font-size: 16px;
+            font-weight: 600;
+            font-size: 15px;
             cursor: pointer;
             margin: 4px 0;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
         }
         .btn-api:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
         .btn-api:hover {
-            box-shadow: 0 0 50px rgba(0, 240, 255, 0.3);
+            background: #e8850a;
         }
         .btn-ai {
-            background: linear-gradient(135deg, #bf00ff, #7700ff);
-            color: #fff;
+            background: #f7931a;
+            color: #0b0e14;
             width: 100%;
             padding: 14px;
             border-radius: 12px;
             border: none;
-            font-weight: 700;
-            font-size: 16px;
+            font-weight: 600;
+            font-size: 15px;
             cursor: pointer;
             margin: 4px 0;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            box-shadow: 0 0 30px rgba(191, 0, 255, 0.15);
         }
         .btn-ai:active {
-            transform: scale(0.97);
+            transform: scale(0.98);
         }
         .btn-ai:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
         .btn-ai:hover {
-            box-shadow: 0 0 50px rgba(191, 0, 255, 0.3);
+            background: #e8850a;
         }
 
-        /* ----- ТУРБО-КНОПКА (самая яркая) ----- */
+        /* ----- ТУРБО-КНОПКА (заметная, но спокойная) ----- */
         .btn-turbo {
             width: 100%;
             padding: 14px;
             border-radius: 12px;
             border: none;
-            font-weight: 700;
+            font-weight: 600;
             font-size: 15px;
             cursor: pointer;
             margin: 6px 0 4px;
-            background: linear-gradient(135deg, #00f0ff, #bf00ff);
-            color: #0a0a0f;
-            box-shadow: 0 0 40px rgba(0, 240, 255, 0.3);
-            transition: all 0.3s ease;
+            background: #f7931a;
+            color: #0b0e14;
+            transition: background 0.2s, transform 0.1s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
         .btn-turbo:hover {
-            box-shadow: 0 0 60px rgba(0, 240, 255, 0.5);
-            transform: translateY(-1px);
+            background: #e8850a;
         }
         .btn-turbo:active {
-            transform: scale(0.96);
-            box-shadow: 0 0 80px rgba(0, 240, 255, 0.7);
+            transform: scale(0.98);
         }
         .btn-turbo:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
-            box-shadow: none;
         }
         .btn-turbo .spinner-turbo {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(0, 0, 0, 0.3);
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(0, 0, 0, 0.2);
             border-radius: 50%;
-            border-top-color: #0a0a0f;
+            border-top-color: #0b0e14;
             animation: spin 0.7s linear infinite;
         }
 
-        /* ----- ПРОГРЕСС-БАРЫ (неоновый градиент) ----- */
+        /* ----- ПРОГРЕСС-БАРЫ (тонкие, спокойные) ----- */
         .confidence-bar {
-            background: #1a1a2a;
-            border-radius: 6px;
-            height: 6px;
+            background: #1e2430;
+            border-radius: 4px;
+            height: 4px;
             margin: 4px 0;
             overflow: hidden;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
         }
         .confidence-bar .fill {
             height: 100%;
-            border-radius: 6px;
-            transition: width 0.5s ease;
-            background: linear-gradient(90deg, #ff0055, #f0ff00, #00ff9d);
-            box-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
+            border-radius: 4px;
+            transition: width 0.4s ease;
+            background: #f7931a;
         }
         .turbo-progress-bar {
-            height: 6px;
-            background: #1a1a2a;
+            height: 4px;
+            background: #1e2430;
             border-radius: 4px;
             overflow: hidden;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
         }
         .turbo-progress-bar .fill {
             height: 100%;
             border-radius: 4px;
-            background: linear-gradient(90deg, #00f0ff, #bf00ff);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+            background: #f7931a;
             transition: width 0.4s ease;
             width: 0%;
         }
 
-        /* ----- ПРОГНОЗЫ (карточки с неоновой границей) ----- */
+        /* ----- ПРОГНОЗЫ (карточки с тонкой границей) ----- */
         .prediction-card {
-            background: #12121a;
-            border: 1px solid #2a2a3d;
+            background: #13171f;
+            border: 1px solid #1e2430;
             border-radius: 14px;
-            padding: 12px 14px;
+            padding: 14px 16px;
             margin: 6px 0;
-            transition: all 0.3s ease;
-            position: relative;
+            transition: border-color 0.2s;
         }
         .prediction-card:hover {
-            border-color: #00f0ff;
-            box-shadow: 0 0 40px rgba(0, 240, 255, 0.08);
+            border-color: #2a3342;
         }
         .prediction-card .match-info .teams {
-            font-size: 15px;
-            font-weight: 700;
-            color: #e8e8ff;
+            font-size: 14px;
+            font-weight: 600;
+            color: #e6e8ec;
         }
         .prediction-card .status-badge.live {
-            background: rgba(255, 0, 85, 0.2);
-            color: #ff0055;
-            border: 1px solid #ff0055;
-            animation: pulse-neon 1s infinite;
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
         }
         .prediction-card .status-badge.upcoming {
-            background: rgba(0, 240, 255, 0.1);
-            color: #00f0ff;
-            border: 1px solid #00f0ff;
+            background: rgba(247, 147, 26, 0.1);
+            color: #f7931a;
+            border: 1px solid rgba(247, 147, 26, 0.15);
         }
         .prediction-card .status-badge.finished {
-            background: rgba(138, 138, 163, 0.1);
-            color: #8a8aa3;
-            border: 1px solid #2a2a3d;
+            background: rgba(139, 147, 167, 0.1);
+            color: #8b93a7;
+            border: 1px solid rgba(139, 147, 167, 0.15);
         }
         .prediction-card .prediction-details .highlight {
-            color: #00f0ff;
-            font-weight: 700;
-            text-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+            color: #f7931a;
+            font-weight: 600;
         }
         .prediction-card .prediction-details .confidence-high {
-            color: #00ff9d;
+            color: #22c55e;
         }
         .prediction-card .prediction-details .confidence-medium {
-            color: #f0ff00;
+            color: #eab308;
         }
         .prediction-card .prediction-details .confidence-low {
-            color: #ff0055;
+            color: #ef4444;
         }
         .prediction-card .progress .fill {
-            background: linear-gradient(90deg, #ff0055, #f0ff00, #00ff9d);
-            box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+            background: #f7931a;
         }
 
-        /* ----- СТАТУСЫ И БЕЙДЖИ ----- */
+        /* ----- СТАТУСЫ И БЕЙДЖИ (минималистичные) ----- */
         .status-badge.live {
-            animation: pulse-neon 1.2s infinite;
+            animation: pulse-minimal 1.5s ease-in-out infinite;
         }
-        @keyframes pulse-neon {
-            0%, 100% { box-shadow: 0 0 10px rgba(255, 0, 85, 0.3); }
-            50% { box-shadow: 0 0 30px rgba(255, 0, 85, 0.6); }
+        @keyframes pulse-minimal {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
         .detective-badge.derby {
-            background: #bf00ff;
-            color: #fff;
-            box-shadow: 0 0 20px rgba(191, 0, 255, 0.3);
+            background: #f7931a;
+            color: #0b0e14;
         }
         .detective-badge.high {
-            background: #ff0055;
-            color: #fff;
+            background: #ef4444;
+            color: #ffffff;
         }
         .detective-badge.medium {
-            background: #f0ff00;
-            color: #0a0a0f;
+            background: #eab308;
+            color: #0b0e14;
         }
         .detective-badge.low {
-            background: #00ff9d;
-            color: #0a0a0f;
+            background: #22c55e;
+            color: #0b0e14;
         }
         .detective-badge.motivation {
-            background: #00f0ff;
-            color: #0a0a0f;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+            background: #f7931a;
+            color: #0b0e14;
         }
 
-        /* ----- МОДАЛЬНОЕ ОКНО (неоновое) ----- */
+        /* ----- МОДАЛЬНОЕ ОКНО (чистое) ----- */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
             z-index: 1000;
             display: none;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.25s ease;
         }
         .modal-overlay.active {
             display: flex;
         }
         .modal-box {
-            background: #12121a;
-            border: 1px solid #00f0ff;
+            background: #13171f;
+            border: 1px solid #1e2430;
             border-radius: 16px;
             padding: 24px;
             max-width: 400px;
             width: 100%;
-            animation: slideUp 0.3s ease;
-            box-shadow: 0 0 60px rgba(0, 240, 255, 0.1);
+            animation: slideUp 0.25s ease;
         }
         .modal-box h3 {
-            color: #00f0ff;
+            color: #e6e8ec;
             font-size: 18px;
+            font-weight: 600;
             margin-bottom: 12px;
             text-align: center;
-            text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
         }
         .modal-box .modal-result {
-            background: #0a0a0f;
+            background: #0b0e14;
             border-radius: 10px;
             padding: 12px;
             margin: 8px 0;
@@ -729,11 +679,11 @@
             line-height: 1.6;
         }
         .modal-box .modal-result .label {
-            color: #8a8aa3;
+            color: #8b93a7;
         }
         .modal-box .modal-result .value {
-            color: #00f0ff;
-            font-weight: 700;
+            color: #f7931a;
+            font-weight: 600;
         }
         .modal-box .modal-actions {
             display: flex;
@@ -745,36 +695,35 @@
             padding: 14px;
             border-radius: 12px;
             border: none;
-            font-weight: 700;
+            font-weight: 600;
             font-size: 14px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: background 0.2s;
         }
         .modal-box .modal-actions button:active {
-            transform: scale(0.95);
+            transform: scale(0.98);
         }
         .modal-box .modal-actions .btn-save-modal {
-            background: #00ff9d;
-            color: #0a0a0f;
-            box-shadow: 0 0 30px rgba(0, 255, 157, 0.2);
+            background: #22c55e;
+            color: #0b0e14;
         }
         .modal-box .modal-actions .btn-save-modal:hover {
-            box-shadow: 0 0 50px rgba(0, 255, 157, 0.4);
+            background: #1aaf4a;
         }
         .modal-box .modal-actions .btn-skip-modal {
-            background: #1a1a2a;
-            color: #8a8aa3;
-            border: 1px solid #2a2a3d;
+            background: #1e2430;
+            color: #8b93a7;
+            border: 1px solid #1e2430;
         }
         .modal-box .modal-actions .btn-skip-modal:hover {
-            border-color: #8a8aa3;
+            background: #2a3342;
         }
 
-        /* ----- НИЖНЯЯ НАВИГАЦИЯ (неоновая) ----- */
+        /* ----- НИЖНЯЯ НАВИГАЦИЯ (минималистичная) ----- */
         .bottom-nav {
             display: flex;
-            background: #0a0a0f;
-            border-top: 1px solid #2a2a3d;
+            background: #0b0e14;
+            border-top: 1px solid #1e2430;
             flex-shrink: 0;
             padding: 4px 0 env(safe-area-inset-bottom, 4px);
             position: sticky;
@@ -786,10 +735,10 @@
         }
         .bottom-nav .nav-btn {
             flex: 0 0 auto;
-            padding: 6px 12px 4px;
+            padding: 8px 12px 4px;
             font-size: 9px;
             font-weight: 500;
-            color: #666;
+            color: #6b7280;
             cursor: pointer;
             background: transparent;
             border: none;
@@ -798,201 +747,166 @@
             flex-direction: column;
             align-items: center;
             gap: 2px;
-            transition: all 0.3s ease;
-            position: relative;
+            transition: color 0.2s;
             min-width: 50px;
+            position: relative;
         }
         .bottom-nav .nav-btn .nav-icon {
-            font-size: 22px;
+            font-size: 20px;
             line-height: 1.2;
-            transition: all 0.3s ease;
         }
         .bottom-nav .nav-btn .nav-label {
             font-size: 8px;
-            transition: color 0.3s;
         }
         .bottom-nav .nav-btn.active {
-            color: #00f0ff;
-        }
-        .bottom-nav .nav-btn.active .nav-icon {
-            text-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
-        }
-        .bottom-nav .nav-btn::after {
-            content: '';
-            position: absolute;
-            top: -1px;
-            left: 20%;
-            right: 20%;
-            height: 2px;
-            background: transparent;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
-        .bottom-nav .nav-btn.active::after {
-            background: #00f0ff;
-            box-shadow: 0 0 20px #00f0ff;
-            left: 10%;
-            right: 10%;
+            color: #f7931a;
         }
         .bottom-nav .nav-btn .badge {
-            background: #ff0055;
-            color: #fff;
+            background: #ef4444;
+            color: #ffffff;
             font-size: 7px;
             padding: 1px 6px;
             border-radius: 10px;
             margin-left: 2px;
-            box-shadow: 0 0 20px rgba(255, 0, 85, 0.3);
         }
 
-        /* ----- ПОЛЯ ВВОДА (неоновые) ----- */
+        /* ----- ПОЛЯ ВВОДА (минималистичные) ----- */
         .input-row .field input {
             width: 100%;
             padding: 12px;
             border-radius: 10px;
-            border: 1px solid #2a2a3d;
-            background: #0a0a0f;
-            color: #e8e8ff;
+            border: 1px solid #1e2430;
+            background: #0b0e14;
+            color: #e6e8ec;
             text-align: center;
             font-size: 16px;
             outline: none;
-            transition: all 0.25s ease;
+            transition: border-color 0.2s;
         }
         .input-row .field input:focus {
-            border-color: #00f0ff;
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
+            border-color: #f7931a;
         }
         .weather-input {
             width: 100%;
             padding: 12px;
             border-radius: 10px;
-            border: 1px solid #2a2a3d;
-            background: #0a0a0f;
-            color: #e8e8ff;
+            border: 1px solid #1e2430;
+            background: #0b0e14;
+            color: #e6e8ec;
             text-align: center;
             font-size: 14px;
             outline: none;
-            transition: all 0.25s ease;
+            transition: border-color 0.2s;
         }
         .weather-input:focus {
-            border-color: #00f0ff;
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
+            border-color: #f7931a;
         }
         .weather-input-btn {
-            background: linear-gradient(135deg, #00f0ff, #0088ff);
-            color: #0a0a0f;
+            background: #f7931a;
+            color: #0b0e14;
             padding: 12px 18px;
             border-radius: 10px;
             border: none;
-            font-weight: 700;
+            font-weight: 600;
             font-size: 14px;
             cursor: pointer;
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
-            transition: all 0.2s;
+            transition: background 0.2s;
         }
         .weather-input-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.98);
         }
         .weather-input-btn:hover {
-            box-shadow: 0 0 50px rgba(0, 240, 255, 0.3);
+            background: #e8850a;
         }
         select {
             width: 100%;
             padding: 10px 12px;
             border-radius: 10px;
-            border: 1px solid #2a2a3d;
-            background: #0a0a0f;
-            color: #e8e8ff;
+            border: 1px solid #1e2430;
+            background: #0b0e14;
+            color: #e6e8ec;
             font-size: 13px;
             outline: none;
-            transition: all 0.25s ease;
+            transition: border-color 0.2s;
         }
         select:focus {
-            border-color: #00f0ff;
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
+            border-color: #f7931a;
         }
 
-        /* ----- РЕЖИМЫ (неоновые) ----- */
+        /* ----- РЕЖИМЫ (минималистичные) ----- */
         .mode-btn {
             flex: 1;
             padding: 10px 4px;
             border-radius: 10px;
-            border: 1px solid #2a2a3d;
+            border: 1px solid #1e2430;
             background: transparent;
-            color: #8a8aa3;
-            font-weight: 600;
+            color: #8b93a7;
+            font-weight: 500;
             font-size: 12px;
             cursor: pointer;
             text-align: center;
             min-width: 50px;
-            transition: all 0.25s ease;
+            transition: all 0.2s;
         }
         .mode-btn.active {
-            background: #00f0ff;
-            color: #0a0a0f;
-            border-color: #00f0ff;
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+            background: #f7931a;
+            color: #0b0e14;
+            border-color: #f7931a;
         }
         .mode-btn:hover {
-            border-color: #00f0ff;
+            border-color: #f7931a;
         }
 
-        /* ----- TOAST (неоновый) ----- */
+        /* ----- TOAST (минималистичный) ----- */
         .toast {
             position: fixed;
             bottom: 80px;
             left: 50%;
             transform: translateX(-50%);
             padding: 10px 24px;
-            border-radius: 14px;
-            font-weight: 600;
+            border-radius: 12px;
+            font-weight: 500;
             font-size: 13px;
             z-index: 999;
-            background: #12121a;
-            color: #00f0ff;
-            border: 1px solid #00f0ff;
-            box-shadow: 0 0 40px rgba(0, 240, 255, 0.15);
-            animation: slideUp 0.3s ease;
+            background: #13171f;
+            color: #e6e8ec;
+            border: 1px solid #1e2430;
+            animation: slideUp 0.25s ease;
             max-width: 90%;
             text-align: center;
         }
         .toast.success {
-            background: #12121a;
-            color: #00ff9d;
-            border-color: #00ff9d;
-            box-shadow: 0 0 40px rgba(0, 255, 157, 0.15);
+            background: #13171f;
+            color: #22c55e;
+            border-color: #1e2430;
         }
         .toast.error {
-            background: #12121a;
-            color: #ff0055;
-            border-color: #ff0055;
-            box-shadow: 0 0 40px rgba(255, 0, 85, 0.15);
+            background: #13171f;
+            color: #ef4444;
+            border-color: #1e2430;
         }
 
-        /* ----- ОСТАЛЬНЫЕ ЭЛЕМЕНТЫ (сохранение стилей, адаптация под неон) ----- */
+        /* ----- ОСТАЛЬНЫЕ ЭЛЕМЕНТЫ (минималистичные) ----- */
         .total-display {
-            background: #12121a;
+            background: #13171f;
             padding: 12px;
             border-radius: 12px;
             text-align: center;
             margin: 6px 0;
-            border: 1px solid #2a2a3d;
-            transition: all 0.25s ease;
-        }
-        .total-display:hover {
-            border-color: #00f0ff;
+            border: 1px solid #1e2430;
         }
         .total-display .value {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 700;
-            color: #00f0ff;
-            text-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+            color: #f7931a;
+            letter-spacing: -0.5px;
         }
         .total-display .label {
             font-size: 10px;
-            color: #8a8aa3;
+            color: #8b93a7;
         }
         .h2h-summary {
-            background: #161622;
+            background: #13171f;
             border-radius: 10px;
             padding: 8px 12px;
             margin: 6px 0;
@@ -1000,21 +914,21 @@
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            border: 1px solid #2a2a3d;
+            border: 1px solid #1e2430;
         }
         .h2h-summary .item {
-            background: #0a0a0f;
+            background: #0b0e14;
             padding: 4px 12px;
-            border-radius: 12px;
-            border: 1px solid #2a2a3d;
+            border-radius: 8px;
+            border: 1px solid #1e2430;
         }
         .h2h-summary .item .num {
-            font-weight: 700;
-            color: #00f0ff;
+            font-weight: 600;
+            color: #f7931a;
         }
         .h2h-item {
-            background: #12121a;
-            border: 1px solid #2a2a3d;
+            background: #13171f;
+            border: 1px solid #1e2430;
             border-radius: 8px;
             padding: 6px 10px;
             font-size: 11px;
@@ -1022,33 +936,29 @@
             align-items: center;
             gap: 4px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: border-color 0.2s;
         }
         .h2h-item:hover {
-            border-color: #00f0ff;
+            border-color: #f7931a;
         }
         .stats-card {
-            background: #12121a;
+            background: #13171f;
             padding: 10px;
             border-radius: 12px;
             text-align: center;
-            border: 1px solid #2a2a3d;
-            transition: all 0.25s ease;
-        }
-        .stats-card:hover {
-            border-color: #00f0ff;
+            border: 1px solid #1e2430;
         }
         .stats-card .num {
             font-size: 22px;
             font-weight: 700;
-            color: #00f0ff;
+            color: #f7931a;
         }
         .stats-card .label {
             font-size: 9px;
-            color: #8a8aa3;
+            color: #8b93a7;
         }
         .history-item {
-            background: #12121a;
+            background: #13171f;
             padding: 8px 12px;
             border-radius: 10px;
             display: flex;
@@ -1056,331 +966,316 @@
             font-size: 12px;
             margin: 3px 0;
             cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid #2a2a3d;
+            transition: background 0.2s;
+            border: 1px solid #1e2430;
         }
         .history-item:hover {
-            border-color: #00f0ff;
-            background: #1a1a2a;
+            background: #1a1f2a;
         }
         .history-item .win {
-            color: #00ff9d;
+            color: #22c55e;
         }
         .history-item .loss {
-            color: #ff0055;
+            color: #ef4444;
         }
         .history-item .pending {
-            color: #f0ff00;
+            color: #eab308;
         }
         .kpi-card {
-            background: #12121a;
-            border: 1px solid #2a2a3d;
+            background: #13171f;
+            border: 1px solid #1e2430;
             border-radius: 12px;
             padding: 12px 14px;
-            transition: all 0.25s ease;
-        }
-        .kpi-card:hover {
-            border-color: #00f0ff;
         }
         .kpi-card .value {
             font-size: 24px;
             font-weight: 700;
-            color: #00f0ff;
+            color: #f7931a;
+            letter-spacing: -0.3px;
         }
         .kpi-card .label {
             font-size: 9px;
-            color: #8a8aa3;
+            color: #8b93a7;
         }
         .shap-container {
-            background: #12121a;
-            border: 1px solid #bf00ff;
+            background: #13171f;
+            border: 1px solid #1e2430;
             border-radius: 12px;
             padding: 12px 14px;
             margin: 6px 0;
         }
         .shap-container h3 {
             font-size: 12px;
-            color: #bf00ff;
+            color: #8b93a7;
             margin-bottom: 6px;
-            text-shadow: 0 0 20px rgba(191, 0, 255, 0.15);
+            font-weight: 500;
         }
         .value-container {
-            background: #12121a;
-            border: 1px solid #00ff9d;
+            background: #13171f;
+            border: 1px solid #1e2430;
             border-radius: 12px;
             padding: 12px 14px;
             margin: 6px 0;
         }
         .value-container h3 {
             font-size: 12px;
-            color: #00ff9d;
+            color: #8b93a7;
             margin-bottom: 6px;
-            text-shadow: 0 0 20px rgba(0, 255, 157, 0.15);
+            font-weight: 500;
         }
         .value-bet-card {
-            background: #0a0a0f;
-            border: 1px solid #00ff9d;
+            background: #0b0e14;
+            border: 1px solid #1e2430;
             border-radius: 10px;
             padding: 10px 14px;
             margin: 6px 0;
-            box-shadow: 0 0 30px rgba(0, 255, 157, 0.05);
         }
         .value-bet-card .details .ev {
-            color: #00ff9d;
-            font-weight: 700;
+            color: #22c55e;
+            font-weight: 600;
         }
         .value-bet-card .details .recommendation {
-            color: #00ff9d;
-            font-weight: 700;
+            color: #22c55e;
+            font-weight: 600;
         }
         .explanation-card {
-            background: #12121a;
-            border: 1px solid #bf00ff;
+            background: #13171f;
+            border: 1px solid #1e2430;
             border-radius: 12px;
             padding: 12px 14px;
             margin: 6px 0;
         }
         .explanation-card .contribution.positive {
-            color: #00ff9d;
+            color: #22c55e;
         }
         .explanation-card .contribution.negative {
-            color: #ff0055;
+            color: #ef4444;
         }
         .insights-card {
-            background: #161622;
-            border: 1px solid #bf00ff;
+            background: #13171f;
+            border: 1px solid #1e2430;
             border-radius: 12px;
             padding: 12px 14px;
             margin: 6px 0;
-            border-left: 3px solid #bf00ff;
+            border-left: 3px solid #f7931a;
         }
         .insights-card .card-title {
-            color: #bf00ff;
+            color: #8b93a7;
         }
         .insights-card .insight-recommendation {
-            background: #0a0a0f;
+            background: #0b0e14;
             border-radius: 8px;
             padding: 8px 12px;
-            border-left: 3px solid #00ff9d;
+            border-left: 3px solid #22c55e;
         }
         .assistant-card {
-            background: #161622;
-            border: 1px solid #00ff9d;
+            background: #13171f;
+            border: 1px solid #1e2430;
             border-radius: 14px;
             padding: 12px 14px;
             margin: 6px 0;
         }
         .assistant-card .card-title {
-            color: #00ff9d;
+            color: #8b93a7;
         }
         .assistant-message.ai {
-            background: #1a2a1a;
-            border-left: 3px solid #00ff9d;
+            background: #1a1f2a;
+            border-left: 3px solid #f7931a;
         }
         .assistant-message.user {
-            background: #1a1a2a;
-            border-right: 3px solid #00f0ff;
+            background: #1a1f2a;
+            border-right: 3px solid #f7931a;
         }
         .assistant-input-row button {
-            background: linear-gradient(135deg, #00ff9d, #00f0ff);
-            color: #0a0a0f;
-            font-weight: 700;
-            box-shadow: 0 0 30px rgba(0, 255, 157, 0.15);
+            background: #f7931a;
+            color: #0b0e14;
+            font-weight: 600;
         }
         .assistant-input-row button:hover {
-            box-shadow: 0 0 50px rgba(0, 255, 157, 0.3);
+            background: #e8850a;
         }
         .league-info-card {
-            background: #161622;
-            border: 1px solid #00f0ff;
+            background: #13171f;
+            border: 1px solid #1e2430;
             border-radius: 12px;
             padding: 12px 14px;
             margin: 6px 0;
         }
         .league-info-card .league-name {
-            color: #00f0ff;
-            text-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+            color: #e6e8ec;
+            font-weight: 600;
         }
         .weather-card {
-            background: #161622;
-            border: 1px solid #00f0ff;
+            background: #13171f;
+            border: 1px solid #1e2430;
             border-radius: 14px;
             padding: 14px 16px;
             margin: 6px 0;
         }
         .weather-card .card-title {
-            color: #00f0ff;
+            color: #8b93a7;
         }
         .weather-card .weather-main .temp-big {
-            color: #00f0ff;
-            text-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+            color: #f7931a;
+            font-weight: 700;
         }
         .detective-card {
-            background: #1a1212;
-            border: 1px solid #ff0055;
+            background: #1a1a22;
+            border: 1px solid #1e2430;
             border-radius: 12px;
             padding: 10px 12px;
             margin: 6px 0;
         }
         .detective-card .card-title {
-            color: #ff0055;
+            color: #8b93a7;
         }
         .ai-result .recommendation {
-            background: #1a2a1a;
+            background: #1a1f2a;
             padding: 8px 12px;
             border-radius: 10px;
             margin: 6px 0;
-            border-left: 3px solid #00ff9d;
+            border-left: 3px solid #22c55e;
         }
         .ai-result .recommendation .big {
-            color: #00ff9d;
+            color: #22c55e;
             font-weight: 700;
-            text-shadow: 0 0 30px rgba(0, 255, 157, 0.15);
+            font-size: 16px;
         }
         .ai-result .section .value {
-            color: #00f0ff;
+            color: #f7931a;
+            font-weight: 600;
         }
         .predictions-filter-bar button.active {
-            background: #00f0ff;
-            color: #0a0a0f;
-            border-color: #00f0ff;
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+            background: #f7931a;
+            color: #0b0e14;
+            border-color: #f7931a;
         }
         .predictions-filter-bar select {
-            background: #12121a;
-            color: #8a8aa3;
-            border-color: #2a2a3d;
+            background: #13171f;
+            color: #8b93a7;
+            border-color: #1e2430;
         }
         .predictions-tabs button.active {
-            background: #00f0ff;
-            color: #0a0a0f;
-            border-color: #00f0ff;
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+            background: #f7931a;
+            color: #0b0e14;
+            border-color: #f7931a;
         }
 
-        /* ----- АНИМАЦИИ (неоновые) ----- */
+        /* ----- АНИМАЦИИ (минималистичные) ----- */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
         @keyframes slideUp {
-            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            from { opacity: 0; transform: translateX(-50%) translateY(16px); }
             to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        @keyframes pulse-neon {
-            0%, 100% { box-shadow: 0 0 10px rgba(255, 0, 85, 0.3); }
-            50% { box-shadow: 0 0 30px rgba(255, 0, 85, 0.6); }
-        }
 
-        /* ----- ДИСКЛЕЙМЕР (адаптирован) ----- */
+        /* ----- ДИСКЛЕЙМЕР ----- */
         .disclaimer {
             font-size: 10px;
-            color: #555;
+            color: #6b7280;
             text-align: center;
             padding: 8px 0 4px;
-            border-top: 1px solid #2a2a3d;
+            border-top: 1px solid #1e2430;
             margin-top: 8px;
             line-height: 1.4;
         }
-        body.light .disclaimer {
-            border-top-color: #c0c8d8;
-        }
 
-        /* ----- ОСТАЛЬНЫЕ СТИЛИ СОХРАНЕНЫ ДЛЯ ФУНКЦИОНАЛЬНОСТИ ----- */
+        /* ----- ОСТАЛЬНЫЕ СТИЛИ (сохранены для функциональности) ----- */
         .main-content { flex: 1; overflow-y: auto; padding: 8px 14px 16px; -webkit-overflow-scrolling: touch; padding-bottom: 70px; }
         .main-content::-webkit-scrollbar { width: 3px; }
-        .main-content::-webkit-scrollbar-thumb { background: #2a2a3d; border-radius: 3px; }
+        .main-content::-webkit-scrollbar-thumb { background: #1e2430; border-radius: 3px; }
         .screen { display: none; animation: fadeIn 0.25s ease; }
         .screen.active { display: block; }
         .result-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; text-align: center; }
-        .result-grid .label { font-size: 9px; color: #8a8aa3; }
-        .result-grid .value { font-size: 22px; font-weight: 700; color: #00f0ff; text-shadow: 0 0 30px rgba(0, 240, 255, 0.1); }
-        .advice { margin-top: 6px; padding: 10px 12px; border-radius: 10px; text-align: center; font-weight: 600; font-size: 14px; border-left: 4px solid #00ff9d; }
-        .advice.info { background: #161622; border-left-color: #00f0ff; color: #00f0ff; }
-        .advice.good { background: #1a2a1a; border-left-color: #00ff9d; color: #00ff9d; }
-        .advice.warn { background: #2a2a1a; border-left-color: #f0ff00; color: #f0ff00; }
-        .advice.bad { background: #2a1a1a; border-left-color: #ff0055; color: #ff0055; }
-        .text-muted { color: #8a8aa3; }
+        .result-grid .label { font-size: 9px; color: #8b93a7; }
+        .result-grid .value { font-size: 22px; font-weight: 700; color: #f7931a; }
+        .advice { margin-top: 6px; padding: 10px 12px; border-radius: 10px; text-align: center; font-weight: 500; font-size: 14px; border-left: 4px solid #22c55e; }
+        .advice.info { background: #13171f; border-left-color: #f7931a; color: #f7931a; }
+        .advice.good { background: #13171f; border-left-color: #22c55e; color: #22c55e; }
+        .advice.warn { background: #13171f; border-left-color: #eab308; color: #eab308; }
+        .advice.bad { background: #13171f; border-left-color: #ef4444; color: #ef4444; }
+        .text-muted { color: #8b93a7; }
         .text-center { text-align: center; }
-        .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin 0.8s linear infinite; }
+        .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid #e6e8ec; border-radius: 50%; border-top-color: transparent; animation: spin 0.8s linear infinite; }
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin: 6px 0; }
-        .dashboard-item { background: #161622; padding: 8px; border-radius: 10px; text-align: center; border: 1px solid #2a2a3d; }
-        .dashboard-item .num { font-size: 18px; font-weight: 700; color: #00f0ff; }
-        .dashboard-item .label { font-size: 8px; color: #8a8aa3; }
+        .dashboard-item { background: #13171f; padding: 8px; border-radius: 10px; text-align: center; border: 1px solid #1e2430; }
+        .dashboard-item .num { font-size: 18px; font-weight: 700; color: #f7931a; }
+        .dashboard-item .label { font-size: 8px; color: #8b93a7; }
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
         .ai-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 6px 0; }
-        .ai-form-item { background: #0a0a0f; padding: 6px 10px; border-radius: 8px; text-align: center; font-size: 11px; border: 1px solid #2a2a3d; }
-        .ai-form-item .form-result.win { color: #00ff9d; }
-        .ai-form-item .form-result.loss { color: #ff0055; }
-        .ai-form-item .form-result.draw { color: #f0ff00; }
-        .ai-score-box { display: flex; gap: 20px; justify-content: center; padding: 10px; background: #0a0a0f; border-radius: 10px; margin: 6px 0; border: 1px solid #2a2a3d; }
-        .ai-score-box .score-item .num { font-size: 24px; font-weight: 700; color: #00f0ff; text-shadow: 0 0 30px rgba(0, 240, 255, 0.15); }
-        .ai-score-box .score-item .label { font-size: 9px; color: #8a8aa3; }
-        .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #ff0055; display: inline-block; animation: pulse-neon 1s infinite; margin-right: 6px; }
-        .swipe-indicator { position: fixed; bottom: 76px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.6); border-radius: 20px; padding: 6px 16px; font-size: 10px; color: #555; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); opacity: 0.6; pointer-events: none; display: none; }
+        .ai-form-item { background: #0b0e14; padding: 6px 10px; border-radius: 8px; text-align: center; font-size: 11px; border: 1px solid #1e2430; }
+        .ai-form-item .form-result.win { color: #22c55e; }
+        .ai-form-item .form-result.loss { color: #ef4444; }
+        .ai-form-item .form-result.draw { color: #eab308; }
+        .ai-score-box { display: flex; gap: 20px; justify-content: center; padding: 10px; background: #0b0e14; border-radius: 10px; margin: 6px 0; border: 1px solid #1e2430; }
+        .ai-score-box .score-item .num { font-size: 24px; font-weight: 700; color: #f7931a; }
+        .ai-score-box .score-item .label { font-size: 9px; color: #8b93a7; }
+        .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; display: inline-block; animation: pulse-minimal 1s infinite; margin-right: 6px; }
+        .swipe-indicator { position: fixed; bottom: 76px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.6); border-radius: 20px; padding: 6px 16px; font-size: 10px; color: #6b7280; backdrop-filter: blur(8px); border: 1px solid #1e2430; opacity: 0.5; pointer-events: none; display: none; }
         .swipe-indicator.show { display: block; }
         @media (pointer: coarse) { .swipe-indicator.show { display: block; } }
-        .btn-ai-train { background: linear-gradient(135deg, #bf00ff, #7700ff); color: #fff; padding: 8px 18px; border-radius: 10px; border: none; font-size: 11px; cursor: pointer; box-shadow: 0 0 30px rgba(191, 0, 255, 0.15); transition: all 0.2s; }
-        .btn-ai-train:hover { box-shadow: 0 0 50px rgba(191, 0, 255, 0.3); }
+        .btn-ai-train { background: #f7931a; color: #0b0e14; padding: 8px 18px; border-radius: 10px; border: none; font-size: 11px; cursor: pointer; transition: background 0.2s; font-weight: 500; }
+        .btn-ai-train:hover { background: #e8850a; }
         .btn-ai-train:disabled { opacity: 0.5; cursor: not-allowed; }
-        .ai-training-status .status-dot.trained { background: #00ff9d; box-shadow: 0 0 20px rgba(0, 255, 157, 0.3); }
-        .ai-training-status .status-dot.training { background: #f0ff00; animation: pulse 0.8s infinite; }
-        .ai-training-status .status-dot.untrained { background: #8a8aa3; }
-        .momentum-bar { flex: 1; height: 8px; background: #1a1a2a; border-radius: 4px; overflow: hidden; display: flex; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
-        .momentum-bar .bar.home { background: #00f0ff; box-shadow: 0 0 20px rgba(0, 240, 255, 0.2); }
-        .momentum-bar .bar.away { background: #bf00ff; box-shadow: 0 0 20px rgba(191, 0, 255, 0.2); }
-        .chart-container { background: #12121a; border-radius: 12px; padding: 12px; margin: 6px 0; border: 1px solid #2a2a3d; }
-        .chart-controls button.active { background: #00f0ff; color: #0a0a0f; box-shadow: 0 0 30px rgba(0, 240, 255, 0.2); }
-        .toggle-btn.active { background: #00f0ff; color: #0a0a0f; box-shadow: 0 0 30px rgba(0, 240, 255, 0.2); }
-        .settings-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #2a2a3d; }
-        .settings-item .label { font-size: 13px; color: #8a8aa3; }
-        .toggle-btn { background: #2a2a3d; border: none; color: #fff; padding: 4px 14px; border-radius: 12px; font-size: 11px; cursor: pointer; transition: all 0.25s; }
-        .toggle-btn.active { background: #00f0ff; color: #0a0a0f; }
-        .settings-item input { padding: 10px; border-radius: 10px; border: 1px solid #2a2a3d; background: #0a0a0f; color: #e8e8ff; outline: none; transition: all 0.25s; }
-        .settings-item input:focus { border-color: #00f0ff; box-shadow: 0 0 30px rgba(0, 240, 255, 0.1); }
-        .match-item { background: #12121a; border: 1px solid #2a2a3d; border-radius: 10px; padding: 10px 12px; margin: 4px 0; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; }
-        .match-item:hover { border-color: #00f0ff; }
-        .match-item .score { color: #00f0ff; font-weight: 700; }
-        .match-item .status.live { color: #ff0055; animation: pulse-neon 1s infinite; }
-        .match-item .status.finished { color: #00ff9d; }
-        .match-item .odds span { color: #00f0ff; font-weight: 700; }
-        .live-container { background: #12121a; border: 1px solid #ff0055; border-radius: 12px; padding: 12px 14px; margin: 6px 0; }
-        .live-container h3 { color: #ff0055; font-size: 12px; margin-bottom: 6px; text-shadow: 0 0 20px rgba(255, 0, 85, 0.15); }
-        .live-score .home { color: #00f0ff; }
-        .live-score .away { color: #bf00ff; }
-        .predictions-header .refresh-btn { background: transparent; border: 1px solid #2a2a3d; color: #8a8aa3; padding: 4px 14px; border-radius: 12px; font-size: 11px; cursor: pointer; transition: all 0.2s; }
-        .predictions-header .refresh-btn:hover { border-color: #00f0ff; color: #00f0ff; }
-        .section-title { font-size: 14px; font-weight: 700; color: #00f0ff; margin: 8px 0 4px; display: flex; align-items: center; gap: 6px; text-shadow: 0 0 20px rgba(0, 240, 255, 0.1); }
-        .history-stats-mini .stat .num { color: #00f0ff; font-weight: 700; }
-        .filter-tags .over { color: #00ff9d; }
-        .filter-tags .under { color: #00f0ff; }
-        .filter-tags .oz-yes { color: #f0ff00; }
-        .filter-tags .oz-no { color: #8a8aa3; }
-        .turbo-progress-text .step { color: #00f0ff; font-weight: 600; }
-        .turbo-progress-text .percent { color: #00ff9d; font-weight: 600; }
-        .prediction-card.analyzed-excellent { border: 2px solid #00ff9d !important; box-shadow: 0 0 40px rgba(0, 255, 157, 0.2); animation: pulse-glow 2s ease-in-out 3; }
-        .prediction-card.analyzed-good { border: 2px solid #f0ff00 !important; box-shadow: 0 0 40px rgba(240, 255, 0, 0.15); animation: pulse-glow 2s ease-in-out 3; }
-        .prediction-card.analyzed-risky { border: 2px solid #ff0055 !important; box-shadow: 0 0 40px rgba(255, 0, 85, 0.15); animation: pulse-glow 2s ease-in-out 3; }
-        @keyframes pulse-glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-        .turbo-result { margin-top: 6px; padding: 10px 12px; background: #0a0a0f; border-radius: 10px; font-size: 11px; line-height: 1.5; display: none; border-left: 3px solid #00f0ff; }
-        .turbo-result.active { display: block; animation: fadeIn 0.4s ease; }
-        .turbo-result .row .value.good { color: #00ff9d; }
-        .turbo-result .row .value.warn { color: #f0ff00; }
-        .turbo-result .row .value.bad { color: #ff0055; }
+        .ai-training-status .status-dot.trained { background: #22c55e; }
+        .ai-training-status .status-dot.training { background: #eab308; animation: pulse-minimal 0.8s infinite; }
+        .ai-training-status .status-dot.untrained { background: #8b93a7; }
+        .momentum-bar { flex: 1; height: 6px; background: #1e2430; border-radius: 4px; overflow: hidden; display: flex; }
+        .momentum-bar .bar.home { background: #f7931a; }
+        .momentum-bar .bar.away { background: #8b93a7; }
+        .chart-container { background: #13171f; border-radius: 12px; padding: 12px; margin: 6px 0; border: 1px solid #1e2430; }
+        .chart-controls button.active { background: #f7931a; color: #0b0e14; border-color: #f7931a; }
+        .toggle-btn.active { background: #f7931a; color: #0b0e14; }
+        .settings-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #1e2430; }
+        .settings-item .label { font-size: 13px; color: #8b93a7; }
+        .toggle-btn { background: #1e2430; border: none; color: #e6e8ec; padding: 4px 14px; border-radius: 12px; font-size: 11px; cursor: pointer; transition: background 0.2s; }
+        .toggle-btn.active { background: #f7931a; color: #0b0e14; }
+        .settings-item input { padding: 10px; border-radius: 10px; border: 1px solid #1e2430; background: #0b0e14; color: #e6e8ec; outline: none; transition: border-color 0.2s; }
+        .settings-item input:focus { border-color: #f7931a; }
+        .match-item { background: #13171f; border: 1px solid #1e2430; border-radius: 10px; padding: 10px 12px; margin: 4px 0; cursor: pointer; transition: border-color 0.2s; display: flex; justify-content: space-between; align-items: center; }
+        .match-item:hover { border-color: #f7931a; }
+        .match-item .score { color: #f7931a; font-weight: 700; }
+        .match-item .status.live { color: #ef4444; animation: pulse-minimal 1s infinite; }
+        .match-item .status.finished { color: #22c55e; }
+        .match-item .odds span { color: #f7931a; font-weight: 700; }
+        .live-container { background: #13171f; border: 1px solid #1e2430; border-radius: 12px; padding: 12px 14px; margin: 6px 0; }
+        .live-container h3 { color: #8b93a7; font-size: 12px; margin-bottom: 6px; font-weight: 500; }
+        .live-score .home { color: #f7931a; }
+        .live-score .away { color: #8b93a7; }
+        .predictions-header .refresh-btn { background: transparent; border: 1px solid #1e2430; color: #8b93a7; padding: 4px 14px; border-radius: 12px; font-size: 11px; cursor: pointer; transition: border-color 0.2s, color 0.2s; }
+        .predictions-header .refresh-btn:hover { border-color: #f7931a; color: #f7931a; }
+        .section-title { font-size: 14px; font-weight: 600; color: #e6e8ec; margin: 8px 0 4px; display: flex; align-items: center; gap: 6px; }
+        .history-stats-mini .stat .num { color: #f7931a; font-weight: 600; }
+        .filter-tags .over { color: #22c55e; }
+        .filter-tags .under { color: #f7931a; }
+        .filter-tags .oz-yes { color: #eab308; }
+        .filter-tags .oz-no { color: #8b93a7; }
+        .turbo-progress-text .step { color: #8b93a7; font-weight: 500; }
+        .turbo-progress-text .percent { color: #f7931a; font-weight: 600; }
+        .prediction-card.analyzed-excellent { border-color: #22c55e !important; }
+        .prediction-card.analyzed-good { border-color: #eab308 !important; }
+        .prediction-card.analyzed-risky { border-color: #ef4444 !important; }
+        .turbo-result { margin-top: 6px; padding: 10px 12px; background: #0b0e14; border-radius: 10px; font-size: 11px; line-height: 1.5; display: none; border-left: 3px solid #f7931a; }
+        .turbo-result.active { display: block; animation: fadeIn 0.3s ease; }
+        .turbo-result .row .value.good { color: #22c55e; }
+        .turbo-result .row .value.warn { color: #eab308; }
+        .turbo-result .row .value.bad { color: #ef4444; }
         .turbo-result .row .value { font-weight: 600; }
-        .turbo-result .row .label { color: #8a8aa3; }
-        .btn-turbo .spinner-turbo { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(0,0,0,0.3); border-radius: 50%; border-top-color: #000; animation: spin 0.7s linear infinite; }
+        .turbo-result .row .label { color: #8b93a7; }
+        .btn-turbo .spinner-turbo { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(0,0,0,0.15); border-radius: 50%; border-top-color: #0b0e14; animation: spin 0.7s linear infinite; }
         .turbo-progress-container { margin: 4px 0 2px; display: none; }
         .turbo-progress-container.active { display: block; }
-        .modal-box .modal-result .value { color: #00f0ff; font-weight: 700; }
-        .btn-save-modal { background: #00ff9d; color: #0a0a0f; box-shadow: 0 0 30px rgba(0, 255, 157, 0.2); }
-        .btn-skip-modal { background: #1a1a2a; color: #8a8aa3; border: 1px solid #2a2a3d; }
-        .header-actions button { background: transparent; border: 1px solid #2a2a3d; color: #8a8aa3; font-size: 16px; cursor: pointer; padding: 4px 8px; border-radius: 8px; transition: all 0.2s; }
-        .header-actions button:hover { border-color: #00f0ff; color: #00f0ff; box-shadow: 0 0 20px rgba(0, 240, 255, 0.15); }
+        .modal-box .modal-result .value { color: #f7931a; font-weight: 600; }
+        .btn-save-modal { background: #22c55e; color: #0b0e14; }
+        .btn-skip-modal { background: #1e2430; color: #8b93a7; border: 1px solid #1e2430; }
+        .header-actions button { background: transparent; border: none; color: #8b93a7; font-size: 16px; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: color 0.2s; }
+        .header-actions button:hover { color: #f7931a; }
     </style>
 </head>
 <body>
@@ -1412,20 +1307,20 @@
                     <span>📈 Ср.тотал: <span class="num" id="leagueAvgGoals">--</span></span>
                     <span>⚽ ОЗ: <span class="num" id="leagueOz">--</span></span>
                     <span>📊 Матчей: <span class="num" id="leagueMatches">--</span></span>
-                    <span id="leagueDataStatus" style="color:#8a8aa3;font-size:9px;"></span>
+                    <span id="leagueDataStatus" style="color:#8b93a7;font-size:9px;"></span>
                 </div>
             </div>
 
-            <div class="mode-wrap" id="modeTabs">
+            <div class="mode-wrap" id="modeTabs" style="display:flex;gap:4px;margin:6px 0;flex-wrap:wrap;">
                 <button class="mode-btn active" data-mode="total" onclick="switchMode('total',this)">⚽ Тотал</button>
                 <button class="mode-btn" data-mode="oz" onclick="switchMode('oz',this)">⚽ ОЗ</button>
                 <button class="mode-btn" data-mode="fora" onclick="switchMode('fora',this)">⚖️ Фора</button>
             </div>
 
             <div id="inputArea">
-                <div class="input-row">
-                    <div class="field"><label>🏠 Хозяева</label><input type="number" id="homeGoals" value="0" min="0" oninput="updateSum(); calculateDebounced();" /></div>
-                    <div class="field"><label>✈️ Гости</label><input type="number" id="awayGoals" value="0" min="0" oninput="updateSum(); calculateDebounced();" /></div>
+                <div class="input-row" style="display:flex;gap:8px;margin:4px 0;">
+                    <div class="field" style="flex:1;"><label style="font-size:10px;color:#8b93a7;display:block;">🏠 Хозяева</label><input type="number" id="homeGoals" value="0" min="0" oninput="updateSum(); calculateDebounced();" /></div>
+                    <div class="field" style="flex:1;"><label style="font-size:10px;color:#8b93a7;display:block;">✈️ Гости</label><input type="number" id="awayGoals" value="0" min="0" oninput="updateSum(); calculateDebounced();" /></div>
                 </div>
             </div>
 
@@ -1448,7 +1343,7 @@
                     <div><div class="label">Разница</div><div class="value" id="resValue3">--</div></div>
                 </div>
                 <div class="advice info" id="resAdvice">⏳ Введите данные для расчёта</div>
-                <div style="display:flex;justify-content:space-between;font-size:10px;color:#8a8aa3;margin-top:4px;">
+                <div style="display:flex;justify-content:space-between;font-size:10px;color:#8b93a7;margin-top:4px;">
                     <span>📊 Индекс доверия</span>
                     <span id="confidenceLabel">0%</span>
                 </div>
@@ -1497,31 +1392,31 @@
                     <div class="recommendation">
                         <div class="label">🎯 РЕКОМЕНДАЦИЯ:</div>
                         <div class="big" id="aiRecommendation">—</div>
-                        <div style="font-size:12px;color:#8a8aa3;margin-top:4px;" id="aiAdvice">—</div>
+                        <div style="font-size:12px;color:#8b93a7;margin-top:4px;" id="aiAdvice">—</div>
                     </div>
-                    <div id="aiDataStatus" style="font-size:9px;color:#8a8aa3;margin-top:4px;text-align:center;"></div>
+                    <div id="aiDataStatus" style="font-size:9px;color:#8b93a7;margin-top:4px;text-align:center;"></div>
                 </div>
             </div>
 
             <div class="weather-card" id="weatherCard">
                 <div class="card-title">🌤️ Погода на стадионе</div>
-                <div class="weather-input-row">
+                <div class="weather-input-row" style="display:flex;gap:6px;margin-bottom:8px;">
                     <input type="text" id="cityWeatherInput" placeholder="Введите город (например: London)" class="weather-input">
                     <button onclick="loadWeatherByCity()" class="weather-input-btn">🔍</button>
                 </div>
                 <div id="weatherCardContent">
-                    <div class="weather-loading-text">⏳ Загрузка погоды...</div>
+                    <div class="weather-loading-text" style="color:#8b93a7;text-align:center;padding:8px 0;">⏳ Загрузка погоды...</div>
                 </div>
-                <div id="weatherDataStatus" style="font-size:9px;color:#8a8aa3;margin-top:4px;text-align:center;"></div>
+                <div id="weatherDataStatus" style="font-size:9px;color:#8b93a7;margin-top:4px;text-align:center;"></div>
             </div>
 
             <div class="insights-card" id="smartInsightsCard" style="display:none;">
                 <div class="card-title">🧠 Краткие выводы</div>
-                <div class="insight-summary" id="smartSummary">—</div>
-                <ul class="insight-details" id="smartDetails"></ul>
-                <div class="insight-recommendation" id="smartRecommendation">—</div>
-                <div class="insight-warnings" id="smartWarnings"></div>
-                <div class="insight-score" id="smartScore">📊 Оценка: <span class="num">0</span>%</div>
+                <div class="insight-summary" id="smartSummary" style="font-weight:600;margin-bottom:4px;">—</div>
+                <ul class="insight-details" id="smartDetails" style="font-size:12px;color:#8b93a7;line-height:1.5;list-style:none;padding:0;"></ul>
+                <div class="insight-recommendation" id="smartRecommendation" style="margin-top:6px;padding:6px 10px;background:#0b0e14;border-radius:8px;border-left:3px solid #22c55e;font-size:13px;">—</div>
+                <div class="insight-warnings" id="smartWarnings" style="margin-top:4px;font-size:11px;color:#ef4444;"></div>
+                <div class="insight-score" id="smartScore" style="font-size:11px;color:#8b93a7;margin-top:2px;">📊 Оценка: <span class="num" style="color:#f7931a;font-weight:600;">0</span>%</div>
             </div>
 
             <div class="disclaimer">Это аналитический инструмент, а не рекомендация к ставкам. Решения принимаете вы.</div>
@@ -1533,17 +1428,17 @@
         <div class="screen" id="searchScreen">
             <div class="card">
                 <div class="card-title">🔍 Поиск H2H + Статистика</div>
-                <div class="input-row">
-                    <div class="field"><label>🏠 Хозяева</label><input type="text" id="homeTeamH2H" placeholder="Например: Real Madrid" /></div>
-                    <div class="field"><label>✈️ Гости</label><input type="text" id="awayTeamH2H" placeholder="Например: Barcelona" /></div>
+                <div class="input-row" style="display:flex;gap:8px;margin:4px 0;">
+                    <div class="field" style="flex:1;"><label style="font-size:10px;color:#8b93a7;display:block;">🏠 Хозяева</label><input type="text" id="homeTeamH2H" placeholder="Например: Real Madrid" /></div>
+                    <div class="field" style="flex:1;"><label style="font-size:10px;color:#8b93a7;display:block;">✈️ Гости</label><input type="text" id="awayTeamH2H" placeholder="Например: Barcelona" /></div>
                 </div>
                 <button class="btn-api" id="loadH2HBtn" onclick="loadH2H()">
                     <span id="loadBtnText">📊 Загрузить H2H</span>
                     <span id="loadSpinner" style="display:none;"><span class="spinner"></span></span>
                 </button>
                 <div id="h2hContainer">
-                    <div id="h2hStatus" style="color:#8a8aa3;font-size:12px;padding:4px 0;">Введите команды и нажмите "Загрузить H2H"</div>
-                    <div id="h2hDataStatus" style="font-size:9px;color:#8a8aa3;margin-top:2px;"></div>
+                    <div id="h2hStatus" style="color:#8b93a7;font-size:12px;padding:4px 0;">Введите команды и нажмите "Загрузить H2H"</div>
+                    <div id="h2hDataStatus" style="font-size:9px;color:#8b93a7;margin-top:2px;"></div>
                     <div class="h2h-results" id="h2hResults"></div>
                 </div>
             </div>
@@ -1551,13 +1446,13 @@
                 <div class="card-title">📊 Детальная статистика команд</div>
                 <div id="teamStatsContainer">
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                        <div id="homeTeamStats" style="background:#12121a;padding:8px;border-radius:10px;text-align:center;border:1px solid #2a2a3d;">
-                            <div style="font-size:11px;color:#8a8aa3;">🏠 Статистика хозяев</div>
-                            <div id="homeStatsContent">—</div>
+                        <div id="homeTeamStats" style="background:#13171f;padding:8px;border-radius:10px;text-align:center;border:1px solid #1e2430;">
+                            <div style="font-size:11px;color:#8b93a7;">🏠 Статистика хозяев</div>
+                            <div id="homeStatsContent" style="color:#e6e8ec;">—</div>
                         </div>
-                        <div id="awayTeamStats" style="background:#12121a;padding:8px;border-radius:10px;text-align:center;border:1px solid #2a2a3d;">
-                            <div style="font-size:11px;color:#8a8aa3;">✈️ Статистика гостей</div>
-                            <div id="awayStatsContent">—</div>
+                        <div id="awayTeamStats" style="background:#13171f;padding:8px;border-radius:10px;text-align:center;border:1px solid #1e2430;">
+                            <div style="font-size:11px;color:#8b93a7;">✈️ Статистика гостей</div>
+                            <div id="awayStatsContent" style="color:#e6e8ec;">—</div>
                         </div>
                     </div>
                 </div>
@@ -1569,61 +1464,61 @@
         ============================================================ -->
         <div class="screen" id="statsScreen">
             <div class="kpi-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0;">
-                <div class="kpi-card"><div class="label">📊 ROI</div><div class="value" id="kpiROIDisplay">0%</div><div class="trend" style="font-size:9px;color:#8a8aa3;" id="kpiROITrend">📈 За месяц</div></div>
-                <div class="kpi-card"><div class="label">🎯 Точность AI</div><div class="value" id="kpiAIDisplay">0%</div><div class="trend" style="font-size:9px;color:#8a8aa3;" id="kpiAITrend">✅ Обучен</div></div>
-                <div class="kpi-card"><div class="label">💰 Прибыль</div><div class="value" id="kpiProfitDisplay">0</div><div class="trend" style="font-size:9px;color:#8a8aa3;" id="kpiProfitTrend">📊 Ставок: 0</div></div>
-                <div class="kpi-card"><div class="label">🏆 Value ставки</div><div class="value" id="kpiValueDisplay">0%</div><div class="trend" style="font-size:9px;color:#8a8aa3;" id="kpiValueTrend">✅ +0%</div></div>
+                <div class="kpi-card"><div class="label">📊 ROI</div><div class="value" id="kpiROIDisplay">0%</div><div class="trend" style="font-size:9px;color:#8b93a7;" id="kpiROITrend">📈 За месяц</div></div>
+                <div class="kpi-card"><div class="label">🎯 Точность AI</div><div class="value" id="kpiAIDisplay">0%</div><div class="trend" style="font-size:9px;color:#8b93a7;" id="kpiAITrend">✅ Обучен</div></div>
+                <div class="kpi-card"><div class="label">💰 Прибыль</div><div class="value" id="kpiProfitDisplay">0</div><div class="trend" style="font-size:9px;color:#8b93a7;" id="kpiProfitTrend">📊 Ставок: 0</div></div>
+                <div class="kpi-card"><div class="label">🏆 Value ставки</div><div class="value" id="kpiValueDisplay">0%</div><div class="trend" style="font-size:9px;color:#8b93a7;" id="kpiValueTrend">✅ +0%</div></div>
             </div>
 
             <div class="chart-container">
                 <div class="card-title">📈 График баланса</div>
                 <canvas id="balanceChart" height="80"></canvas>
                 <div class="chart-controls" style="display:flex;gap:4px;margin-top:6px;justify-content:center;">
-                    <button class="time-range" data-range="7d" onclick="setChartRange('7d')" style="background:transparent;border:1px solid #2a2a3d;color:#8a8aa3;padding:4px 12px;border-radius:12px;font-size:10px;cursor:pointer;transition:all 0.2s;">7д</button>
-                    <button class="time-range active" data-range="30d" onclick="setChartRange('30d')" style="background:transparent;border:1px solid #2a2a3d;color:#8a8aa3;padding:4px 12px;border-radius:12px;font-size:10px;cursor:pointer;transition:all 0.2s;">30д</button>
-                    <button class="time-range" data-range="90d" onclick="setChartRange('90d')" style="background:transparent;border:1px solid #2a2a3d;color:#8a8aa3;padding:4px 12px;border-radius:12px;font-size:10px;cursor:pointer;transition:all 0.2s;">90д</button>
-                    <button class="time-range" data-range="all" onclick="setChartRange('all')" style="background:transparent;border:1px solid #2a2a3d;color:#8a8aa3;padding:4px 12px;border-radius:12px;font-size:10px;cursor:pointer;transition:all 0.2s;">Всё</button>
+                    <button class="time-range" data-range="7d" onclick="setChartRange('7d')" style="background:transparent;border:1px solid #1e2430;color:#8b93a7;padding:4px 12px;border-radius:12px;font-size:10px;cursor:pointer;transition:all 0.2s;">7д</button>
+                    <button class="time-range active" data-range="30d" onclick="setChartRange('30d')" style="background:transparent;border:1px solid #1e2430;color:#8b93a7;padding:4px 12px;border-radius:12px;font-size:10px;cursor:pointer;transition:all 0.2s;">30д</button>
+                    <button class="time-range" data-range="90d" onclick="setChartRange('90d')" style="background:transparent;border:1px solid #1e2430;color:#8b93a7;padding:4px 12px;border-radius:12px;font-size:10px;cursor:pointer;transition:all 0.2s;">90д</button>
+                    <button class="time-range" data-range="all" onclick="setChartRange('all')" style="background:transparent;border:1px solid #1e2430;color:#8b93a7;padding:4px 12px;border-radius:12px;font-size:10px;cursor:pointer;transition:all 0.2s;">Всё</button>
                 </div>
             </div>
 
             <div class="shap-container" id="shapContainer">
                 <h3>🔍 Влияние факторов на прогноз</h3>
-                <div id="shapVisualization"><div class="text-muted text-center" style="padding:10px 0;color:#8a8aa3;">Нет данных для анализа</div></div>
+                <div id="shapVisualization"><div class="text-muted text-center" style="padding:10px 0;color:#8b93a7;">Нет данных для анализа</div></div>
             </div>
 
             <div class="value-container">
                 <h3>💰 Найденные Value-ставки</h3>
-                <div id="valueBetsList"><div class="text-muted text-center" style="padding:10px 0;color:#8a8aa3;">Пока нет value-ставок</div></div>
+                <div id="valueBetsList"><div class="text-muted text-center" style="padding:10px 0;color:#8b93a7;">Пока нет value-ставок</div></div>
             </div>
 
             <div class="live-container" id="liveDashboard" style="display:none;">
                 <h3>🔴 Live аналитика</h3>
                 <div id="liveAnalytics">
                     <div class="momentum-indicator" style="display:flex;align-items:center;gap:8px;">
-                        <div class="team home" id="liveHomeTeam" style="font-size:11px;font-weight:600;color:#00f0ff;min-width:60px;text-align:right;">⚽ Хозяева</div>
-                        <div class="momentum-bar" style="flex:1;height:8px;background:#1a1a2a;border-radius:4px;overflow:hidden;display:flex;box-shadow:inset 0 0 10px rgba(0,0,0,0.5);">
-                            <div class="bar home" id="liveHomeBar" style="width:50%;height:100%;background:#00f0ff;box-shadow:0 0 20px rgba(0,240,255,0.2);"></div>
-                            <div class="bar away" id="liveAwayBar" style="width:50%;height:100%;background:#bf00ff;box-shadow:0 0 20px rgba(191,0,255,0.2);"></div>
+                        <div class="team home" id="liveHomeTeam" style="font-size:11px;font-weight:500;color:#f7931a;min-width:60px;text-align:right;">⚽ Хозяева</div>
+                        <div class="momentum-bar" style="flex:1;height:6px;background:#1e2430;border-radius:4px;overflow:hidden;display:flex;">
+                            <div class="bar home" id="liveHomeBar" style="width:50%;height:100%;background:#f7931a;"></div>
+                            <div class="bar away" id="liveAwayBar" style="width:50%;height:100%;background:#8b93a7;"></div>
                         </div>
-                        <div class="team away" id="liveAwayTeam" style="font-size:11px;font-weight:600;color:#bf00ff;min-width:60px;">✈️ Гости</div>
+                        <div class="team away" id="liveAwayTeam" style="font-size:11px;font-weight:500;color:#8b93a7;min-width:60px;">✈️ Гости</div>
                     </div>
-                    <div class="in-play-prob" id="liveProbabilities" style="display:flex;gap:12px;font-size:11px;color:#8a8aa3;margin-top:6px;flex-wrap:wrap;">
-                        <div style="background:#0a0a0f;padding:4px 10px;border-radius:12px;border:1px solid #2a2a3d;">⏳ Ожидание данных...</div>
+                    <div class="in-play-prob" id="liveProbabilities" style="display:flex;gap:12px;font-size:11px;color:#8b93a7;margin-top:6px;flex-wrap:wrap;">
+                        <div style="background:#0b0e14;padding:4px 10px;border-radius:12px;border:1px solid #1e2430;">⏳ Ожидание данных...</div>
                     </div>
                 </div>
             </div>
 
             <div>
                 <div style="display:flex;justify-content:space-between;margin:6px 0;">
-                    <span style="font-size:14px;font-weight:700;color:#00f0ff;text-shadow:0 0 20px rgba(0,240,255,0.1);">📜 История</span>
-                    <button onclick="clearHistory()" style="background:transparent;color:#ff0055;border:1px solid #ff0055;padding:2px 12px;border-radius:12px;font-size:10px;cursor:pointer;transition:all 0.2s;">🗑️</button>
+                    <span style="font-size:14px;font-weight:600;color:#e6e8ec;">📜 История</span>
+                    <button onclick="clearHistory()" style="background:transparent;color:#ef4444;border:1px solid #1e2430;padding:2px 12px;border-radius:12px;font-size:10px;cursor:pointer;transition:all 0.2s;">🗑️</button>
                 </div>
-                <div id="historyList"><div class="text-muted text-center" style="padding:10px 0;color:#8a8aa3;">Нет ставок</div></div>
+                <div id="historyList"><div class="text-muted text-center" style="padding:10px 0;color:#8b93a7;">Нет ставок</div></div>
             </div>
 
-            <div class="card" style="border-left:3px solid #00f0ff;margin-top:6px;">
+            <div class="card" style="border-left:3px solid #f7931a;margin-top:6px;">
                 <div class="card-title">🧠 Краткие выводы</div>
-                <div id="insightsContent"><div class="text-muted text-center" style="padding:6px 0;color:#8a8aa3;">Нет данных</div></div>
+                <div id="insightsContent"><div class="text-muted text-center" style="padding:6px 0;color:#8b93a7;">Нет данных</div></div>
             </div>
 
             <div class="disclaimer">Это аналитический инструмент, а не рекомендация к ставкам. Решения принимаете вы.</div>
@@ -1635,21 +1530,21 @@
         <div class="screen" id="liveScreen">
             <div class="card">
                 <div class="predictions-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-                    <div class="card-title" style="margin-bottom:0;">🔮 Актуальные прогнозы <span id="predictionsCount" style="font-size:10px;color:#8a8aa3;"></span></div>
-                    <button class="refresh-btn" id="refreshPredictionsBtn" onclick="refreshPredictions()" style="background:transparent;border:1px solid #2a2a3d;color:#8a8aa3;padding:4px 14px;border-radius:12px;font-size:11px;cursor:pointer;transition:all 0.2s;">
+                    <div class="card-title" style="margin-bottom:0;">🔮 Актуальные прогнозы <span id="predictionsCount" style="font-size:10px;color:#8b93a7;"></span></div>
+                    <button class="refresh-btn" id="refreshPredictionsBtn" onclick="refreshPredictions()" style="background:transparent;border:1px solid #1e2430;color:#8b93a7;padding:4px 14px;border-radius:12px;font-size:11px;cursor:pointer;transition:all 0.2s;">
                         <span id="refreshIcon">🔄</span> Обновить
                     </button>
                 </div>
 
                 <div class="predictions-filter-bar" style="display:flex;flex-wrap:wrap;gap:4px;margin:6px 0;">
-                    <button class="active" data-filter="time" data-value="6h" onclick="setTimeFilter('6h',this)" style="padding:4px 10px;border-radius:12px;border:1px solid #2a2a3d;background:transparent;color:#8a8aa3;font-size:10px;cursor:pointer;transition:all 0.2s;">⏱ Ближайшие 6ч</button>
-                    <button data-filter="time" data-value="today" onclick="setTimeFilter('today',this)" style="padding:4px 10px;border-radius:12px;border:1px solid #2a2a3d;background:transparent;color:#8a8aa3;font-size:10px;cursor:pointer;transition:all 0.2s;">📅 Сегодня</button>
-                    <button data-filter="time" data-value="tomorrow" onclick="setTimeFilter('tomorrow',this)" style="padding:4px 10px;border-radius:12px;border:1px solid #2a2a3d;background:transparent;color:#8a8aa3;font-size:10px;cursor:pointer;transition:all 0.2s;">📅 Завтра</button>
-                    <button data-filter="time" data-value="week" onclick="setTimeFilter('week',this)" style="padding:4px 10px;border-radius:12px;border:1px solid #2a2a3d;background:transparent;color:#8a8aa3;font-size:10px;cursor:pointer;transition:all 0.2s;">📅 Эта неделя</button>
+                    <button class="active" data-filter="time" data-value="6h" onclick="setTimeFilter('6h',this)" style="padding:4px 10px;border-radius:12px;border:1px solid #1e2430;background:transparent;color:#8b93a7;font-size:10px;cursor:pointer;transition:all 0.2s;">⏱ Ближайшие 6ч</button>
+                    <button data-filter="time" data-value="today" onclick="setTimeFilter('today',this)" style="padding:4px 10px;border-radius:12px;border:1px solid #1e2430;background:transparent;color:#8b93a7;font-size:10px;cursor:pointer;transition:all 0.2s;">📅 Сегодня</button>
+                    <button data-filter="time" data-value="tomorrow" onclick="setTimeFilter('tomorrow',this)" style="padding:4px 10px;border-radius:12px;border:1px solid #1e2430;background:transparent;color:#8b93a7;font-size:10px;cursor:pointer;transition:all 0.2s;">📅 Завтра</button>
+                    <button data-filter="time" data-value="week" onclick="setTimeFilter('week',this)" style="padding:4px 10px;border-radius:12px;border:1px solid #1e2430;background:transparent;color:#8b93a7;font-size:10px;cursor:pointer;transition:all 0.2s;">📅 Эта неделя</button>
                 </div>
 
                 <div class="predictions-filter-bar" style="display:flex;flex-wrap:wrap;gap:4px;margin:6px 0;">
-                    <select id="filterTotal" onchange="applyFilters()" style="padding:4px 8px;border-radius:12px;border:1px solid #2a2a3d;background:#12121a;color:#8a8aa3;font-size:10px;width:auto;outline:none;">
+                    <select id="filterTotal" onchange="applyFilters()" style="padding:4px 8px;border-radius:12px;border:1px solid #1e2430;background:#13171f;color:#8b93a7;font-size:10px;width:auto;outline:none;">
                         <option value="all">Все тоталы</option>
                         <option value="over1.5">ОВЕР 1.5</option>
                         <option value="under1.5">АНДЕР 1.5</option>
@@ -1658,10 +1553,10 @@
                         <option value="over3.5">ОВЕР 3.5</option>
                         <option value="under3.5">АНДЕР 3.5</option>
                     </select>
-                    <select id="filterLeague" onchange="applyFilters()" style="padding:4px 8px;border-radius:12px;border:1px solid #2a2a3d;background:#12121a;color:#8a8aa3;font-size:10px;width:auto;outline:none;">
+                    <select id="filterLeague" onchange="applyFilters()" style="padding:4px 8px;border-radius:12px;border:1px solid #1e2430;background:#13171f;color:#8b93a7;font-size:10px;width:auto;outline:none;">
                         <option value="all">Все лиги</option>
                     </select>
-                    <select id="filterConfidence" onchange="applyFilters()" style="padding:4px 8px;border-radius:12px;border:1px solid #2a2a3d;background:#12121a;color:#8a8aa3;font-size:10px;width:auto;outline:none;">
+                    <select id="filterConfidence" onchange="applyFilters()" style="padding:4px 8px;border-radius:12px;border:1px solid #1e2430;background:#13171f;color:#8b93a7;font-size:10px;width:auto;outline:none;">
                         <option value="0">Мин. уверенность</option>
                         <option value="50">≥ 50%</option>
                         <option value="60">≥ 60%</option>
@@ -1669,40 +1564,40 @@
                         <option value="80">≥ 80%</option>
                         <option value="90">≥ 90%</option>
                     </select>
-                    <select id="filterType" onchange="applyFilters()" style="padding:4px 8px;border-radius:12px;border:1px solid #2a2a3d;background:#12121a;color:#8a8aa3;font-size:10px;width:auto;outline:none;">
+                    <select id="filterType" onchange="applyFilters()" style="padding:4px 8px;border-radius:12px;border:1px solid #1e2430;background:#13171f;color:#8b93a7;font-size:10px;width:auto;outline:none;">
                         <option value="all">Все прогнозы</option>
                         <option value="oz">ОЗ</option>
                         <option value="total">Тотал</option>
                         <option value="fora">Фора</option>
                     </select>
-                    <label style="display:flex;align-items:center;gap:4px;font-size:10px;color:#8a8aa3;">
-                        <input type="checkbox" id="filterLiveOdds" onchange="applyFilters()" style="accent-color:#00f0ff;"> Только с live-коэф.
+                    <label style="display:flex;align-items:center;gap:4px;font-size:10px;color:#8b93a7;">
+                        <input type="checkbox" id="filterLiveOdds" onchange="applyFilters()" style="accent-color:#f7931a;"> Только с live-коэф.
                     </label>
                 </div>
 
                 <div id="predictionsContainer">
-                    <div class="empty-state" id="predictionsEmpty" style="text-align:center;padding:20px 0;color:#8a8aa3;font-size:13px;">⏳ Загрузка прогнозов...</div>
+                    <div class="empty-state" id="predictionsEmpty" style="text-align:center;padding:20px 0;color:#8b93a7;font-size:13px;">⏳ Загрузка прогнозов...</div>
                     <div class="predictions-list" id="predictionsList" style="display:flex;flex-direction:column;gap:6px;margin-top:6px;max-height:500px;overflow-y:auto;"></div>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-title">📊 История прогнозов <span style="font-size:10px;color:#8a8aa3;">(сыгранные матчи)</span></div>
+                <div class="card-title">📊 История прогнозов <span style="font-size:10px;color:#8b93a7;">(сыгранные матчи)</span></div>
                 <div id="historyPredictionsContainer">
-                    <div class="empty-state" style="text-align:center;padding:20px 0;color:#8a8aa3;font-size:13px;">Нет сыгранных прогнозов</div>
+                    <div class="empty-state" style="text-align:center;padding:20px 0;color:#8b93a7;font-size:13px;">Нет сыгранных прогнозов</div>
                     <div class="predictions-list" id="historyPredictionsList" style="display:flex;flex-direction:column;gap:6px;margin-top:6px;max-height:500px;overflow-y:auto;"></div>
                 </div>
-                <div class="history-stats-mini" id="historyStatsMini" style="display:flex;gap:12px;font-size:11px;color:#8a8aa3;padding:4px 0;">
-                    <span class="stat" style="background:#0a0a0f;padding:2px 10px;border-radius:10px;border:1px solid #2a2a3d;">✅ Побед: <span class="num" id="histWins" style="color:#00f0ff;font-weight:700;">0</span></span>
-                    <span class="stat" style="background:#0a0a0f;padding:2px 10px;border-radius:10px;border:1px solid #2a2a3d;">❌ Поражений: <span class="num" id="histLosses" style="color:#ff0055;font-weight:700;">0</span></span>
-                    <span class="stat" style="background:#0a0a0f;padding:2px 10px;border-radius:10px;border:1px solid #2a2a3d;">📊 Точность: <span class="num" id="histAccuracy" style="color:#00f0ff;font-weight:700;">0%</span></span>
+                <div class="history-stats-mini" id="historyStatsMini" style="display:flex;gap:12px;font-size:11px;color:#8b93a7;padding:4px 0;">
+                    <span class="stat" style="background:#0b0e14;padding:2px 10px;border-radius:10px;border:1px solid #1e2430;">✅ Побед: <span class="num" id="histWins" style="color:#f7931a;font-weight:600;">0</span></span>
+                    <span class="stat" style="background:#0b0e14;padding:2px 10px;border-radius:10px;border:1px solid #1e2430;">❌ Поражений: <span class="num" id="histLosses" style="color:#ef4444;font-weight:600;">0</span></span>
+                    <span class="stat" style="background:#0b0e14;padding:2px 10px;border-radius:10px;border:1px solid #1e2430;">📊 Точность: <span class="num" id="histAccuracy" style="color:#f7931a;font-weight:600;">0%</span></span>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-title">📊 Тренды и прогнозы</div>
                 <div id="trendsContainer">
-                    <div class="text-muted text-center" style="padding:10px 0;color:#8a8aa3;">Анализ трендов...</div>
+                    <div class="text-muted text-center" style="padding:10px 0;color:#8b93a7;">Анализ трендов...</div>
                 </div>
             </div>
         </div>
@@ -1716,42 +1611,42 @@
                 <div class="settings-item"><span class="label">🎨 Тема</span><button class="toggle-btn" id="themeToggle" onclick="toggleTheme()">🌙 Тёмная</button></div>
                 <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:6px;">
                     <span class="label">🔑 API ключ (платный)</span>
-                    <input type="password" id="apiKeyInput" placeholder="Вставьте ваш платный API ключ" style="padding:10px;border-radius:10px;border:1px solid #2a2a3d;background:#0a0a0f;color:#e8e8ff;outline:none;transition:all 0.25s;">
-                    <button onclick="saveApiKey()" style="padding:10px;border-radius:10px;border:1px solid #00ff9d;background:transparent;color:#00ff9d;cursor:pointer;transition:all 0.2s;">💾 Сохранить ключ</button>
-                    <div id="apiStatus" style="font-size:11px;color:#8a8aa3;"></div>
+                    <input type="password" id="apiKeyInput" placeholder="Вставьте ваш платный API ключ" style="padding:10px;border-radius:10px;border:1px solid #1e2430;background:#0b0e14;color:#e6e8ec;outline:none;transition:border-color 0.2s;">
+                    <button onclick="saveApiKey()" style="padding:10px;border-radius:10px;border:1px solid #1e2430;background:transparent;color:#f7931a;cursor:pointer;transition:all 0.2s;">💾 Сохранить ключ</button>
+                    <div id="apiStatus" style="font-size:11px;color:#8b93a7;"></div>
                 </div>
                 <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:6px;">
                     <span class="label">🌤️ OpenWeatherMap ключ (погода)</span>
-                    <input type="password" id="weatherKeyInput" placeholder="Вставьте ваш ключ погоды" style="padding:10px;border-radius:10px;border:1px solid #2a2a3d;background:#0a0a0f;color:#e8e8ff;outline:none;transition:all 0.25s;">
-                    <button onclick="saveWeatherKey()" style="padding:10px;border-radius:10px;border:1px solid #00f0ff;background:transparent;color:#00f0ff;cursor:pointer;transition:all 0.2s;">💾 Сохранить ключ погоды</button>
-                    <div id="weatherStatus" style="font-size:11px;color:#8a8aa3;"></div>
+                    <input type="password" id="weatherKeyInput" placeholder="Вставьте ваш ключ погоды" style="padding:10px;border-radius:10px;border:1px solid #1e2430;background:#0b0e14;color:#e6e8ec;outline:none;transition:border-color 0.2s;">
+                    <button onclick="saveWeatherKey()" style="padding:10px;border-radius:10px;border:1px solid #1e2430;background:transparent;color:#f7931a;cursor:pointer;transition:all 0.2s;">💾 Сохранить ключ погоды</button>
+                    <div id="weatherStatus" style="font-size:11px;color:#8b93a7;"></div>
                 </div>
                 <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:6px;">
                     <span class="label">🧠 Экспериментальная модель</span>
                     <div style="display:flex;gap:8px;">
-                        <button class="btn-ai-train" id="trainAIBtn" onclick="trainUltimateAI()" style="flex:2;background:linear-gradient(135deg,#bf00ff,#7700ff);color:#fff;padding:8px 18px;border-radius:10px;border:none;font-size:11px;cursor:pointer;box-shadow:0 0 30px rgba(191,0,255,0.15);transition:all 0.2s;">🧠 Обучить модель</button>
-                        <button class="btn-ai-train" onclick="updateAIStatus()" style="flex:1;background:linear-gradient(135deg,#00f0ff,#0088ff);color:#0a0a0f;padding:8px 18px;border-radius:10px;border:none;font-size:11px;cursor:pointer;box-shadow:0 0 30px rgba(0,240,255,0.15);transition:all 0.2s;">🔄 Статус</button>
+                        <button class="btn-ai-train" id="trainAIBtn" onclick="trainUltimateAI()" style="flex:2;background:#f7931a;color:#0b0e14;padding:8px 18px;border-radius:10px;border:none;font-size:11px;cursor:pointer;transition:background 0.2s;font-weight:500;">🧠 Обучить модель</button>
+                        <button class="btn-ai-train" onclick="updateAIStatus()" style="flex:1;background:#f7931a;color:#0b0e14;padding:8px 18px;border-radius:10px;border:none;font-size:11px;cursor:pointer;transition:background 0.2s;font-weight:500;">🔄 Статус</button>
                     </div>
-                    <div class="ai-training-status" id="aiTrainingStatus" style="padding:6px 10px;border-radius:8px;background:#12121a;border:1px solid #2a2a3d;margin-top:4px;font-size:11px;display:flex;justify-content:space-between;align-items:center;">
-                        <span><span class="status-dot untrained" id="aiStatusDot" style="display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:#8a8aa3;"></span><span id="aiStatusText">⏳ Не обучена</span></span>
-                        <span class="accuracy" id="aiAccuracyDisplay" style="color:#8a8aa3;">—</span>
+                    <div class="ai-training-status" id="aiTrainingStatus" style="padding:6px 10px;border-radius:8px;background:#13171f;border:1px solid #1e2430;margin-top:4px;font-size:11px;display:flex;justify-content:space-between;align-items:center;">
+                        <span><span class="status-dot untrained" id="aiStatusDot" style="display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:#8b93a7;"></span><span id="aiStatusText">⏳ Не обучена</span></span>
+                        <span class="accuracy" id="aiAccuracyDisplay" style="color:#8b93a7;">—</span>
                     </div>
-                    <div style="font-size:9px;color:#555;margin-top:2px;">📊 Требуется минимум 10 ставок</div>
-                    <div id="aiTrainLog" style="font-size:10px;color:#8a8aa3;margin-top:4px;max-height:60px;overflow-y:auto;display:none;background:#0a0a0f;padding:4px 8px;border-radius:6px;border:1px solid #2a2a3d;"></div>
+                    <div style="font-size:9px;color:#6b7280;margin-top:2px;">📊 Требуется минимум 10 ставок</div>
+                    <div id="aiTrainLog" style="font-size:10px;color:#8b93a7;margin-top:4px;max-height:60px;overflow-y:auto;display:none;background:#0b0e14;padding:4px 8px;border-radius:6px;border:1px solid #1e2430;"></div>
                 </div>
                 <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:6px;border-bottom:none;padding-bottom:4px;">
                     <span class="label">💾 Данные</span>
                     <div style="display:flex;gap:8px;">
-                        <button onclick="exportData()" style="flex:1;padding:8px;border-radius:10px;border:1px solid #2a2a3d;background:transparent;color:#e8e8ff;cursor:pointer;font-size:12px;transition:all 0.2s;">📦 Экспорт</button>
-                        <button onclick="document.getElementById('importFile').click()" style="flex:1;padding:8px;border-radius:10px;border:1px solid #2a2a3d;background:transparent;color:#e8e8ff;cursor:pointer;font-size:12px;transition:all 0.2s;">📥 Импорт</button>
+                        <button onclick="exportData()" style="flex:1;padding:8px;border-radius:10px;border:1px solid #1e2430;background:transparent;color:#e6e8ec;cursor:pointer;font-size:12px;transition:all 0.2s;">📦 Экспорт</button>
+                        <button onclick="document.getElementById('importFile').click()" style="flex:1;padding:8px;border-radius:10px;border:1px solid #1e2430;background:transparent;color:#e6e8ec;cursor:pointer;font-size:12px;transition:all 0.2s;">📥 Импорт</button>
                         <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
                     </div>
                 </div>
                 <div class="settings-item" style="border-bottom:none;padding-bottom:4px;">
                     <span class="label">🗑️ Сброс</span>
-                    <button onclick="resetAll()" style="padding:6px 16px;border-radius:10px;border:1px solid #ff0055;background:transparent;color:#ff0055;cursor:pointer;font-size:12px;transition:all 0.2s;">Сбросить всё</button>
+                    <button onclick="resetAll()" style="padding:6px 16px;border-radius:10px;border:1px solid #ef4444;background:transparent;color:#ef4444;cursor:pointer;font-size:12px;transition:all 0.2s;">Сбросить всё</button>
                 </div>
-                <div style="text-align:center;font-size:10px;color:#555;margin-top:8px;border-top:1px solid #2a2a3d;padding-top:8px;">
+                <div style="text-align:center;font-size:10px;color:#6b7280;margin-top:8px;border-top:1px solid #1e2430;padding-top:8px;">
                     ⚛️ Квантум · Анализ на основе H2H, Poisson и погоды
                 </div>
                 <div class="disclaimer">Это аналитический инструмент, а не рекомендация к ставкам. Решения принимаете вы.</div>
@@ -1765,26 +1660,26 @@
             <div class="assistant-card">
                 <div class="card-title">🧠 Ассистент</div>
                 <div class="assistant-chat" id="assistantChat" style="max-height:350px;overflow-y:auto;margin-bottom:8px;">
-                    <div class="assistant-message ai" style="padding:8px 12px;border-radius:10px;margin:4px 0;max-width:90%;font-size:13px;line-height:1.5;background:#1a2a1a;margin-right:auto;border-left:3px solid #00ff9d;">
+                    <div class="assistant-message ai" style="padding:8px 12px;border-radius:10px;margin:4px 0;max-width:90%;font-size:13px;line-height:1.5;background:#1a1f2a;margin-right:auto;border-left:3px solid #f7931a;">
                         👋 Привет! Я ассистент Квантум v5.3.<br>
                         Задай вопрос о ставках, прогнозах или анализе матчей.
-                        <div class="time" style="font-size:9px;color:#555;margin-top:2px;">🤖 Ассистент</div>
+                        <div class="time" style="font-size:9px;color:#6b7280;margin-top:2px;">🤖 Ассистент</div>
                     </div>
                 </div>
                 <div class="assistant-input-row" style="display:flex;gap:8px;margin-top:8px;">
-                    <input type="text" id="assistantInput" placeholder="Спроси меня о ставках..." onkeydown="if(event.key==='Enter') sendUltimateMessage()" style="flex:1;padding:10px 12px;border-radius:10px;border:1px solid #2a2a3d;background:#0a0a0f;color:#e8e8ff;font-size:14px;outline:none;transition:all 0.25s;">
-                    <button onclick="sendUltimateMessage()" style="padding:10px 16px;border-radius:10px;border:none;background:linear-gradient(135deg,#00ff9d,#00f0ff);color:#0a0a0f;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 0 30px rgba(0,255,157,0.15);transition:all 0.2s;">➤</button>
+                    <input type="text" id="assistantInput" placeholder="Спроси меня о ставках..." onkeydown="if(event.key==='Enter') sendUltimateMessage()" style="flex:1;padding:10px 12px;border-radius:10px;border:1px solid #1e2430;background:#0b0e14;color:#e6e8ec;font-size:14px;outline:none;transition:border-color 0.2s;">
+                    <button onclick="sendUltimateMessage()" style="padding:10px 16px;border-radius:10px;border:none;background:#f7931a;color:#0b0e14;font-weight:600;font-size:14px;cursor:pointer;transition:background 0.2s;">➤</button>
                 </div>
             </div>
             <div class="card" style="margin-top:8px;">
                 <div class="card-title">📊 Быстрые вопросы</div>
                 <div style="display:flex;flex-wrap:wrap;gap:4px;">
-                    <button class="btn" style="padding:6px 12px;font-size:11px;width:auto;background:transparent;color:#8a8aa3;border:1px solid #2a2a3d;border-radius:10px;cursor:pointer;transition:all 0.2s;" onclick="quickUltimateQuestion('Какой прогноз на сегодня?')">📈 Прогноз</button>
-                    <button class="btn" style="padding:6px 12px;font-size:11px;width:auto;background:transparent;color:#8a8aa3;border:1px solid #2a2a3d;border-radius:10px;cursor:pointer;transition:all 0.2s;" onclick="quickUltimateQuestion('Какая погода влияет на голы?')">🌤️ Погода</button>
-                    <button class="btn" style="padding:6px 12px;font-size:11px;width:auto;background:transparent;color:#8a8aa3;border:1px solid #2a2a3d;border-radius:10px;cursor:pointer;transition:all 0.2s;" onclick="quickUltimateQuestion('Почему такой прогноз?')">🔍 Объясни</button>
-                    <button class="btn" style="padding:6px 12px;font-size:11px;width:auto;background:transparent;color:#8a8aa3;border:1px solid #2a2a3d;border-radius:10px;cursor:pointer;transition:all 0.2s;" onclick="quickUltimateQuestion('Что такое Value Betting?')">💰 Value</button>
-                    <button class="btn" style="padding:6px 12px;font-size:11px;width:auto;background:transparent;color:#8a8aa3;border:1px solid #2a2a3d;border-radius:10px;cursor:pointer;transition:all 0.2s;" onclick="quickUltimateQuestion('Как улучшить точность ставок?')">🎯 Советы</button>
-                    <button class="btn" style="padding:6px 12px;font-size:11px;width:auto;background:transparent;color:#8a8aa3;border:1px solid #2a2a3d;border-radius:10px;cursor:pointer;transition:all 0.2s;" onclick="quickUltimateQuestion('Что такое дополнительный анализ?')">🕵️ Анализ</button>
+                    <button class="btn" style="padding:6px 12px;font-size:11px;width:auto;background:transparent;color:#8b93a7;border:1px solid #1e2430;border-radius:10px;cursor:pointer;transition:all 0.2s;" onclick="quickUltimateQuestion('Какой прогноз на сегодня?')">📈 Прогноз</button>
+                    <button class="btn" style="padding:6px 12px;font-size:11px;width:auto;background:transparent;color:#8b93a7;border:1px solid #1e2430;border-radius:10px;cursor:pointer;transition:all 0.2s;" onclick="quickUltimateQuestion('Какая погода влияет на голы?')">🌤️ Погода</button>
+                    <button class="btn" style="padding:6px 12px;font-size:11px;width:auto;background:transparent;color:#8b93a7;border:1px solid #1e2430;border-radius:10px;cursor:pointer;transition:all 0.2s;" onclick="quickUltimateQuestion('Почему такой прогноз?')">🔍 Объясни</button>
+                    <button class="btn" style="padding:6px 12px;font-size:11px;width:auto;background:transparent;color:#8b93a7;border:1px solid #1e2430;border-radius:10px;cursor:pointer;transition:all 0.2s;" onclick="quickUltimateQuestion('Что такое Value Betting?')">💰 Value</button>
+                    <button class="btn" style="padding:6px 12px;font-size:11px;width:auto;background:transparent;color:#8b93a7;border:1px solid #1e2430;border-radius:10px;cursor:pointer;transition:all 0.2s;" onclick="quickUltimateQuestion('Как улучшить точность ставок?')">🎯 Советы</button>
+                    <button class="btn" style="padding:6px 12px;font-size:11px;width:auto;background:transparent;color:#8b93a7;border:1px solid #1e2430;border-radius:10px;cursor:pointer;transition:all 0.2s;" onclick="quickUltimateQuestion('Что такое дополнительный анализ?')">🕵️ Анализ</button>
                 </div>
             </div>
             <div class="disclaimer">Это аналитический инструмент, а не рекомендация к ставкам. Решения принимаете вы.</div>
@@ -1834,7 +1729,7 @@
                 <div><span class="label">🕵️ Анализ:</span> <span class="value" id="modalDetective">—</span></div>
                 <div><span class="label">🌤️ Погода:</span> <span class="value" id="modalWeather">—</span></div>
             </div>
-            <div class="disclaimer" style="font-size:10px;color:#555;text-align:center;margin:6px 0;">Это аналитический инструмент, а не рекомендация к ставкам. Решения принимаете вы.</div>
+            <div class="disclaimer" style="font-size:10px;color:#6b7280;text-align:center;margin:6px 0;">Это аналитический инструмент, а не рекомендация к ставкам. Решения принимаете вы.</div>
             <div class="modal-actions">
                 <button class="btn-save-modal" id="modalSaveBtn" onclick="confirmSaveBet()">✅ Да, сохранить</button>
                 <button class="btn-skip-modal" onclick="closeSaveModal()">❌ Нет, только посмотреть</button>
@@ -1922,7 +1817,7 @@
 
     function getDataStatus(timestamp, ttl, dataCount = null, minCount = 3) {
         if (!timestamp) {
-            return { text: '⏳ Данных нет', color: '#8a8aa3', emoji: '⏳' };
+            return { text: '⏳ Данных нет', color: '#8b93a7', emoji: '⏳' };
         }
         const age = Date.now() - timestamp;
         const isFresh = age < ttl / 2;
@@ -1930,26 +1825,26 @@
         const hours = Math.round(age / (60 * 60 * 1000));
         
         let statusText = '';
-        let color = '#8a8aa3';
+        let color = '#8b93a7';
         let emoji = '📊';
         
         if (isFresh) {
             statusText = '✅ Данные свежие';
-            color = '#00ff9d';
+            color = '#22c55e';
             emoji = '✅';
         } else if (isCached) {
             statusText = `📦 Из кэша (обновлено ${hours} ч. назад)`;
-            color = '#f0ff00';
+            color = '#eab308';
             emoji = '📦';
         } else {
             statusText = '⚠️ Данные устарели';
-            color = '#ff0055';
+            color = '#ef4444';
             emoji = '⚠️';
         }
         
         if (dataCount !== null && dataCount < minCount) {
             statusText += ` · Мало данных (${dataCount})`;
-            color = '#f0ff00';
+            color = '#eab308';
         }
         
         return { text: statusText, color, emoji };
@@ -2245,7 +2140,7 @@
                 statusEl.style.color = status.color;
             } else {
                 statusEl.textContent = '📊 Данные загружены';
-                statusEl.style.color = '#8a8aa3';
+                statusEl.style.color = '#8b93a7';
             }
         }
     }
@@ -2433,10 +2328,10 @@
                     <div class="h2h-item">
                         ${sanitizeHTML(m.home)} ${m.homeScore}:${m.awayScore} ${sanitizeHTML(m.away)}
                         ${m.oz ? '✅' : '❌'}
-                        <span style="color:#555;font-size:9px;">${new Date(m.date).toLocaleDateString()}</span>
+                        <span style="color:#6b7280;font-size:9px;">${new Date(m.date).toLocaleDateString()}</span>
                     </div>
                 `).join('')}
-                ${total > 15 ? `<div style="color:#8a8aa3;font-size:10px;text-align:center;margin-top:4px;">и еще ${total - 15} матчей...</div>` : ''}
+                ${total > 15 ? `<div style="color:#8b93a7;font-size:10px;text-align:center;margin-top:4px;">и еще ${total - 15} матчей...</div>` : ''}
             `;
         }
         const badge = $('searchBadgeNav');
@@ -2752,7 +2647,7 @@
             iconEl.textContent = '❌';
             tempEl.textContent = '--°C';
             descEl.textContent = 'Нет ключа';
-            updateWeatherCardStatus('❌ Нет ключа погоды', '#ff0055');
+            updateWeatherCardStatus('❌ Нет ключа погоды', '#ef4444');
             return;
         }
         try {
@@ -2783,7 +2678,7 @@
             iconEl.textContent = '❌';
             tempEl.textContent = '--°C';
             descEl.textContent = 'Ошибка';
-            updateWeatherCardStatus('❌ Ошибка загрузки погоды', '#ff0055');
+            updateWeatherCardStatus('❌ Ошибка загрузки погоды', '#ef4444');
         }
     }
 
@@ -2827,7 +2722,7 @@
         showToast('🔄 Обновление погоды...', 'info');
     }
 
-    function updateWeatherCardStatus(text, color = '#8a8aa3') {
+    function updateWeatherCardStatus(text, color = '#8b93a7') {
         const statusEl = document.getElementById('weatherDataStatus');
         if (statusEl) {
             statusEl.textContent = text;
@@ -2843,11 +2738,11 @@
             const status = getDataStatus(state.headerWeatherTimestamp, CACHE_CONFIG.WEATHER_TTL);
             updateWeatherCardStatus(status.text, status.color);
         } else {
-            updateWeatherCardStatus('⏳ Данных нет', '#8a8aa3');
+            updateWeatherCardStatus('⏳ Данных нет', '#8b93a7');
         }
         
         if (!state.headerWeather) {
-            container.innerHTML = `<div class="weather-loading-text">⏳ Загрузка погоды...</div>`;
+            container.innerHTML = `<div class="weather-loading-text" style="color:#8b93a7;text-align:center;padding:8px 0;">⏳ Загрузка погоды...</div>`;
             return;
         }
         const w = state.headerWeather;
@@ -2855,20 +2750,20 @@
         const impact = getWeatherImpactText(w);
         const location = w.city && w.country ? `${w.city}, ${w.country}` : 'Москва, Россия';
         container.innerHTML = `
-            <div class="weather-main">
-                <span class="big-icon">${emoji}</span>
+            <div class="weather-main" style="display:flex;align-items:center;gap:16px;padding:4px 0;">
+                <span class="big-icon" style="font-size:36px;">${emoji}</span>
                 <div>
-                    <div class="temp-big">${w.temp}°C</div>
-                    <div class="desc-big">${w.description}</div>
+                    <div class="temp-big" style="font-size:28px;font-weight:700;color:#f7931a;">${w.temp}°C</div>
+                    <div class="desc-big" style="font-size:14px;color:#e6e8ec;">${w.description}</div>
                 </div>
             </div>
-            <div class="weather-details">
+            <div class="weather-details" style="display:flex;gap:16px;flex-wrap:wrap;margin-top:6px;font-size:12px;color:#8b93a7;">
                 <span>💨 ${Math.round(w.wind_speed)} км/ч</span>
                 <span>💧 ${w.humidity}%</span>
                 <span>🌡️ Ощущается ${w.feels_like}°C</span>
             </div>
-            <div class="weather-city">📍 ${location}</div>
-            <div class="weather-impact">📊 ${impact}</div>
+            <div class="weather-city" style="font-size:11px;color:#6b7280;margin-top:2px;">📍 ${location}</div>
+            <div class="weather-impact" style="margin-top:6px;padding:4px 10px;background:#0b0e14;border-radius:6px;font-size:12px;color:#8b93a7;">📊 ${impact}</div>
         `;
     }
 
@@ -2913,7 +2808,7 @@
             showToast(`✅ Погода в ${data.name}, ${data.sys.country}`, 'success');
         } catch (e) {
             showToast(`❌ Город "${city}" не найден`, 'error');
-            updateWeatherCardStatus(`❌ Город "${city}" не найден`, '#ff0055');
+            updateWeatherCardStatus(`❌ Город "${city}" не найден`, '#ef4444');
         }
     }
 
@@ -3020,7 +2915,7 @@
         localStorage.setItem('quantum_api_key', key);
         state.apiKey = key;
         document.getElementById('apiStatus').textContent = '✅ Ключ сохранен';
-        document.getElementById('apiStatus').style.color = '#00ff9d';
+        document.getElementById('apiStatus').style.color = '#22c55e';
         showToast('✅ API ключ сохранен', 'success');
         loadAllLeagues();
     }
@@ -3030,7 +2925,7 @@
         if (!key) { showToast('⚠️ Введите ключ погоды', 'error'); return; }
         localStorage.setItem('quantum_weather_key', key);
         document.getElementById('weatherStatus').textContent = '✅ Ключ погоды сохранен';
-        document.getElementById('weatherStatus').style.color = '#00ff9d';
+        document.getElementById('weatherStatus').style.color = '#22c55e';
         showToast('✅ Ключ погоды сохранен', 'success');
         loadHeaderWeather();
     }
@@ -3242,16 +3137,16 @@
         let recommendationColor = '';
         if (aiConfidence >= 70 && valueResult.isValue) {
             finalRecommendation = '✅ Хороший сигнал + Value';
-            recommendationColor = '#00ff9d';
+            recommendationColor = '#22c55e';
         } else if (aiConfidence >= 60) {
             finalRecommendation = '🟡 Можно рассмотреть';
-            recommendationColor = '#f0ff00';
+            recommendationColor = '#eab308';
         } else if (aiConfidence >= 50) {
             finalRecommendation = '🟠 С осторожностью';
-            recommendationColor = '#f0ff00';
+            recommendationColor = '#eab308';
         } else {
             finalRecommendation = '🔴 Лучше пропустить';
-            recommendationColor = '#ff0055';
+            recommendationColor = '#ef4444';
         }
 
         if (detectiveResult.derby) {
@@ -3287,8 +3182,8 @@
                 <div class="row"><span class="label">💰 Value:</span><span class="value ${results.isValue ? 'good' : 'warn'}">${results.value}</span></div>
                 <div class="row"><span class="label">🕵️ Анализ:</span><span class="value">${results.detective}</span></div>
                 <div class="row"><span class="label">🧠 xG:</span><span class="value">${results.homeXG.toFixed(2)} - ${results.awayXG.toFixed(2)}</span></div>
-                <div class="row" style="border-top:1px solid #2a2a3d;padding-top:4px;margin-top:4px;">
-                    <span style="color:${results.recommendationColor};font-weight:700;">${results.recommendation}</span>
+                <div class="row" style="border-top:1px solid #1e2430;padding-top:4px;margin-top:4px;">
+                    <span style="color:${results.recommendationColor};font-weight:600;">${results.recommendation}</span>
                 </div>
             `;
         }
@@ -3483,14 +3378,14 @@
             if (state.weatherData) statusText += ' + погоде';
             if (h2hCount < 3) statusText += ' · ⚠️ Мало данных';
             dataStatusEl.textContent = statusText;
-            dataStatusEl.style.color = h2hCount >= 3 ? '#8a8aa3' : '#f0ff00';
+            dataStatusEl.style.color = h2hCount >= 3 ? '#8b93a7' : '#eab308';
         }
         
         if (shapResult) {
             document.getElementById('explanationCard').style.display = 'block';
             const contribContainer = document.getElementById('explanationContributions');
             contribContainer.innerHTML = shapResult.contributions.map(c =>
-                `<div class="contribution ${c.direction}">${c.emoji} ${c.name}: ${c.impact}</div>`
+                `<div class="contribution ${c.direction}" style="font-size:12px;padding:3px 0;${c.direction === 'positive' ? 'color:#22c55e;' : 'color:#ef4444;'}">${c.emoji} ${c.name}: ${c.impact}</div>`
             ).join('');
             document.getElementById('explanationCI').textContent = `📊 95% CI: ${shapResult.ci}`;
             state.shapData = shapResult;
@@ -3500,13 +3395,13 @@
             const valueContent = document.getElementById('valueContent');
             valueContent.innerHTML = `
                 <div class="value-bet-card">
-                    <div class="match">💰 Value-ставка найдена!</div>
-                    <div class="details">
-                        <span class="ev">EV: ${valueResult.evPercent}</span>
+                    <div class="match" style="font-size:13px;font-weight:600;">💰 Value-ставка найдена!</div>
+                    <div class="details" style="display:flex;gap:12px;font-size:11px;color:#8b93a7;margin-top:4px;">
+                        <span class="ev" style="color:#22c55e;font-weight:600;">EV: ${valueResult.evPercent}</span>
                         <span class="kelly">Kelly: ${valueResult.kellyPercent}</span>
-                        <span class="recommendation">${valueResult.recommendation}</span>
+                        <span class="recommendation" style="color:#22c55e;font-weight:600;">${valueResult.recommendation}</span>
                     </div>
-                    <div style="font-size:10px;color:#555;margin-top:2px;">${valueResult.reasoning}</div>
+                    <div style="font-size:10px;color:#6b7280;margin-top:2px;">${valueResult.reasoning}</div>
                 </div>
             `;
             if (valueResult.isValue) {
@@ -3527,20 +3422,20 @@
         const detectiveContent = document.getElementById('detectiveContent');
         if (detectiveCard && detectiveContent) {
             detectiveCard.style.display = 'block';
-            const derbyBadge = detectiveResult.derby ? '<span class="detective-badge derby">⚔️ ДЕРБИ</span>' : '';
-            const motBadge = detectiveResult.motivation?.factor > 1.2 ? `<span class="detective-badge motivation">🔥 ${detectiveResult.motivation.reason}</span>` : '';
-            const homeUnpredictable = detectiveResult.homeUnpredictability ? `<span class="detective-badge ${detectiveResult.homeUnpredictability.level}">🏠 ${detectiveResult.homeUnpredictability.advice}</span>` : '';
-            const awayUnpredictable = detectiveResult.awayUnpredictability ? `<span class="detective-badge ${detectiveResult.awayUnpredictability.level}">✈️ ${detectiveResult.awayUnpredictability.advice}</span>` : '';
+            const derbyBadge = detectiveResult.derby ? '<span class="detective-badge derby" style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:10px;font-weight:600;background:#f7931a;color:#0b0e14;">⚔️ ДЕРБИ</span>' : '';
+            const motBadge = detectiveResult.motivation?.factor > 1.2 ? `<span class="detective-badge motivation" style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:10px;font-weight:600;background:#f7931a;color:#0b0e14;">🔥 ${detectiveResult.motivation.reason}</span>` : '';
+            const homeUnpredictable = detectiveResult.homeUnpredictability ? `<span class="detective-badge ${detectiveResult.homeUnpredictability.level}" style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:10px;font-weight:600;">🏠 ${detectiveResult.homeUnpredictability.advice}</span>` : '';
+            const awayUnpredictable = detectiveResult.awayUnpredictability ? `<span class="detective-badge ${detectiveResult.awayUnpredictability.level}" style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:10px;font-weight:600;">✈️ ${detectiveResult.awayUnpredictability.advice}</span>` : '';
             const confidenceModifier = detectiveResult.confidenceModifier || 100;
-            const modColor = confidenceModifier >= 100 ? '#00ff9d' : (confidenceModifier >= 85 ? '#f0ff00' : '#ff0055');
+            const modColor = confidenceModifier >= 100 ? '#22c55e' : (confidenceModifier >= 85 ? '#eab308' : '#ef4444');
             detectiveContent.innerHTML = `
                 <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">
                     ${derbyBadge} ${motBadge} ${homeUnpredictable} ${awayUnpredictable}
                 </div>
-                <div style="font-size:12px;color:#8a8aa3;margin:4px 0;">📊 ${detectiveResult.formAnalysis}</div>
-                <div style="font-size:13px;color:#e8e8ff;margin:4px 0;padding:6px 10px;background:#0a0a0f;border-radius:6px;border:1px solid #2a2a3d;">🕵️ ${detectiveResult.summary}</div>
-                <div style="display:flex;justify-content:space-between;font-size:11px;color:#8a8aa3;margin-top:4px;">
-                    <span>📊 Доверие к прогнозу: <span style="color:${modColor};font-weight:700;">${confidenceModifier}%</span></span>
+                <div style="font-size:12px;color:#8b93a7;margin:4px 0;">📊 ${detectiveResult.formAnalysis}</div>
+                <div style="font-size:13px;color:#e6e8ec;margin:4px 0;padding:6px 10px;background:#0b0e14;border-radius:6px;border:1px solid #1e2430;">🕵️ ${detectiveResult.summary}</div>
+                <div style="display:flex;justify-content:space-between;font-size:11px;color:#8b93a7;margin-top:4px;">
+                    <span>📊 Доверие к прогнозу: <span style="color:${modColor};font-weight:600;">${confidenceModifier}%</span></span>
                     <span>${detectiveResult.derby ? '⚔️ Дерби-фактор' : '📊 Стандартный матч'}</span>
                 </div>
             `;
@@ -3975,7 +3870,7 @@
             statusText.textContent = `✅ Обучена (${total} ставок)`;
             statusDot.className = 'status-dot trained';
             accuracyDisplay.textContent = `🎯 ${acc}%`;
-            accuracyDisplay.style.color = acc > 70 ? '#00ff9d' : acc > 50 ? '#f0ff00' : '#ff0055';
+            accuracyDisplay.style.color = acc > 70 ? '#22c55e' : acc > 50 ? '#eab308' : '#ef4444';
         } else {
             statusText.textContent = '⏳ Не обучена';
             statusDot.className = 'status-dot untrained';
@@ -4033,7 +3928,7 @@
         log.style.display = 'block';
         const entry = document.createElement('div');
         entry.textContent = '🧠 ' + msg;
-        entry.style.borderBottom = '1px solid #2a2a3d';
+        entry.style.borderBottom = '1px solid #1e2430';
         entry.style.padding = '2px 0';
         log.appendChild(entry);
         log.scrollTop = log.scrollHeight;
@@ -4049,7 +3944,7 @@
         const list = $('historyList');
         if (!list) return;
         if (state.bets.length === 0) {
-            list.innerHTML = '<div class="text-muted text-center" style="padding:10px 0;color:#8a8aa3;">Нет ставок</div>';
+            list.innerHTML = '<div class="text-muted text-center" style="padding:10px 0;color:#8b93a7;">Нет ставок</div>';
             return;
         }
         const modeNames = { 'total': 'Тотал', 'fora': 'Фора', 'oz': 'ОЗ' };
@@ -4063,8 +3958,8 @@
             return `<div class="history-item" onclick="editBet(${idx})">
                 <div>
                     <b>${modeNames[b.mode] || b.mode}</b>: ${b.value}
-                    <div style="font-size:9px;color:#555;">${b.match || ''}</div>
-                    ${weatherInfo ? `<div style="font-size:8px;color:#555;">${weatherInfo}</div>` : ''}
+                    <div style="font-size:9px;color:#6b7280;">${b.match || ''}</div>
+                    ${weatherInfo ? `<div style="font-size:8px;color:#6b7280;">${weatherInfo}</div>` : ''}
                 </div>
                 <div><span class="${cls}">${emoji} ${b.resultText || '⏳'}</span></div>
             </div>`;
@@ -4127,9 +4022,9 @@
         if (state.shapData) {
             const shapContainer = document.getElementById('shapVisualization');
             shapContainer.innerHTML = state.shapData.contributions.map(c =>
-                `<div style="display:flex;justify-content:space-between;font-size:11px;padding:2px 0;border-bottom:1px solid #2a2a3d;">
+                `<div style="display:flex;justify-content:space-between;font-size:11px;padding:2px 0;border-bottom:1px solid #1e2430;">
                     <span>${c.emoji} ${c.name}</span>
-                    <span style="color:${c.direction === 'positive' ? '#00ff9d' : '#ff0055'};">${c.direction === 'positive' ? '+' : ''}${c.impact}</span>
+                    <span style="color:${c.direction === 'positive' ? '#22c55e' : '#ef4444'};">${c.direction === 'positive' ? '+' : ''}${c.impact}</span>
                 </div>`
             ).join('');
         }
@@ -4137,11 +4032,11 @@
             const valueList = document.getElementById('valueBetsList');
             valueList.innerHTML = state.valueBets.slice(-5).reverse().map(v =>
                 `<div class="value-bet-card">
-                    <div class="match">${v.match}</div>
-                    <div class="details">
-                        <span class="ev">EV: ${v.ev}</span>
+                    <div class="match" style="font-size:13px;font-weight:600;">${v.match}</div>
+                    <div class="details" style="display:flex;gap:12px;font-size:11px;color:#8b93a7;margin-top:4px;">
+                        <span class="ev" style="color:#22c55e;font-weight:600;">EV: ${v.ev}</span>
                         <span class="kelly">Kelly: ${v.kelly}</span>
-                        <span class="recommendation">${v.recommendation}</span>
+                        <span class="recommendation" style="color:#22c55e;font-weight:600;">${v.recommendation}</span>
                     </div>
                 </div>`
             ).join('');
@@ -4168,7 +4063,7 @@
         });
         ctx.clearRect(0, 0, width, height);
         if (chartData.length === 0) {
-            ctx.fillStyle = '#8a8aa3';
+            ctx.fillStyle = '#8b93a7';
             ctx.font = '11px sans-serif';
             ctx.textAlign = 'center';
             ctx.fillText('Нет данных', width / 2, height / 2 + 4);
@@ -4183,10 +4078,10 @@
             const x = padding + i * (barWidth + 1);
             const barHeight = (Math.abs(val) / max) * chartHeight;
             const y = val >= 0 ? height - padding - barHeight : height - padding;
-            ctx.fillStyle = val >= 0 ? '#00f0ff' : '#ff0055';
+            ctx.fillStyle = val >= 0 ? '#f7931a' : '#ef4444';
             ctx.fillRect(x, y, barWidth, barHeight);
         });
-        ctx.strokeStyle = '#2a2a3d';
+        ctx.strokeStyle = '#1e2430';
         ctx.lineWidth = 0.5;
         ctx.setLineDash([2, 2]);
         ctx.beginPath();
@@ -4207,7 +4102,7 @@
     function renderMonthlyChart() {
         const container = $('monthlyChart');
         if (!container) return;
-        if (state.bets.length === 0) { container.innerHTML = '<span style="color:#8a8aa3;font-size:11px;">Нет данных</span>'; return; }
+        if (state.bets.length === 0) { container.innerHTML = '<span style="color:#8b93a7;font-size:11px;">Нет данных</span>'; return; }
         const monthData = {};
         state.bets.forEach(b => {
             if (b.outcome === 'pending') return;
@@ -4219,7 +4114,7 @@
         const sorted = Object.keys(monthData).sort();
         container.innerHTML = sorted.slice(-6).map(m => {
             const rate = monthData[m].total > 0 ? Math.round((monthData[m].wins / monthData[m].total) * 100) : 0;
-            const color = rate > 60 ? '#00ff9d' : rate > 40 ? '#f0ff00' : '#ff0055';
+            const color = rate > 60 ? '#22c55e' : rate > 40 ? '#eab308' : '#ef4444';
             return `<div class="month-item"><span class="month">${m}</span><span class="rate" style="color:${color};">${rate}%</span><span class="count">${monthData[m].total}</span></div>`;
         }).join('');
     }
@@ -4227,7 +4122,7 @@
     function renderInsights() {
         const container = $('insightsContent');
         if (!container) return;
-        if (state.bets.length === 0) { container.innerHTML = '<div class="text-muted text-center" style="padding:6px 0;color:#8a8aa3;">Нет данных</div>'; return; }
+        if (state.bets.length === 0) { container.innerHTML = '<div class="text-muted text-center" style="padding:6px 0;color:#8b93a7;">Нет данных</div>'; return; }
         const wins = state.bets.filter(b => b.outcome === 'win').length;
         const losses = state.bets.filter(b => b.outcome === 'loss').length;
         const rate = Math.round((wins / (wins + losses)) * 100);
@@ -4653,7 +4548,7 @@
 
     function getPredictionsDataStatus(timestamp, count) {
         if (!timestamp) {
-            return { text: '⏳ Данных нет', color: '#8a8aa3' };
+            return { text: '⏳ Данных нет', color: '#8b93a7' };
         }
         const status = getDataStatus(timestamp, CACHE_CONFIG.PREDICTIONS_TTL, count);
         return status;
@@ -4684,7 +4579,7 @@
         if (!statusEl && container) {
             statusEl = document.createElement('div');
             statusEl.className = 'predictions-status';
-            statusEl.style.cssText = 'font-size:9px;color:#8a8aa3;margin-top:2px;text-align:center;';
+            statusEl.style.cssText = 'font-size:9px;color:#8b93a7;margin-top:2px;text-align:center;';
             container.prepend(statusEl);
         }
         if (statusEl && state.lastUpdate) {
@@ -4714,7 +4609,7 @@
         const finished = matches.filter(m => m.status === 'finished');
 
         if (upcoming.length === 0) {
-            list.innerHTML = '<div class="empty-state" style="text-align:center;padding:20px 0;color:#8a8aa3;">Нет будущих матчей</div>';
+            list.innerHTML = '<div class="empty-state" style="text-align:center;padding:20px 0;color:#8b93a7;">Нет будущих матчей</div>';
         } else {
             list.innerHTML = upcoming.map(m => {
                 const statusInfo = getMatchStatusInfo(m);
@@ -4726,24 +4621,24 @@
                 const dateStr = new Date(m.startTime).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
                 return `
                     <div class="prediction-card" data-match-id="${m.id}">
-                        <div class="match-info">
-                            <div class="teams">${sanitizeHTML(m.home)} vs ${sanitizeHTML(m.away)}</div>
-                            <div class="status-badge ${statusInfo.badgeClass}">${statusInfo.emoji} ${statusInfo.label}</div>
+                        <div class="match-info" style="display:flex;justify-content:space-between;align-items:center;">
+                            <div class="teams" style="font-size:14px;font-weight:600;color:#e6e8ec;">${sanitizeHTML(m.home)} vs ${sanitizeHTML(m.away)}</div>
+                            <div class="status-badge ${statusInfo.badgeClass}" style="font-size:10px;padding:2px 8px;border-radius:10px;white-space:nowrap;">${statusInfo.emoji} ${statusInfo.label}</div>
                         </div>
-                        <div class="prediction-details">
-                            <span class="highlight">🎯 ${m.prediction}</span>
-                            <span class="${confidenceClass}">📊 ${m.confidence}%</span>
+                        <div class="prediction-details" style="display:flex;flex-wrap:wrap;gap:8px;font-size:11px;color:#8b93a7;">
+                            <span class="highlight" style="color:#f7931a;font-weight:600;">🎯 ${m.prediction}</span>
+                            <span class="${confidenceClass}" style="font-weight:600;">📊 ${m.confidence}%</span>
                             <span>📅 ${dateStr} ${timeStr}</span>
                             <span>🏆 ${m.league}</span>
                             ${m.odds ? `<span>💰 ${m.odds.toFixed(2)}</span>` : ''}
                         </div>
-                        <div class="filter-tags">
-                            <span class="${m.total >= 2.5 ? 'over' : 'under'}">${totalLabel}</span>
-                            <span class="${m.oz ? 'oz-yes' : 'oz-no'}">${ozLabel}</span>
-                            <span>🌍 ${m.country || 'Мир'}</span>
+                        <div class="filter-tags" style="display:flex;flex-wrap:wrap;gap:2px;font-size:8px;">
+                            <span class="${m.total >= 2.5 ? 'over' : 'under'}" style="background:#0b0e14;padding:1px 6px;border-radius:8px;color:#8b93a7;">${totalLabel}</span>
+                            <span class="${m.oz ? 'oz-yes' : 'oz-no'}" style="background:#0b0e14;padding:1px 6px;border-radius:8px;color:#8b93a7;">${ozLabel}</span>
+                            <span style="background:#0b0e14;padding:1px 6px;border-radius:8px;color:#8b93a7;">🌍 ${m.country || 'Мир'}</span>
                         </div>
-                        <div class="progress"><div class="fill" style="width:${m.confidence}%"></div></div>
-                        <div class="time-remaining">⏱ ${statusInfo.emoji} ${statusInfo.label}</div>
+                        <div class="progress" style="height:3px;background:#1e2430;border-radius:2px;margin-top:4px;overflow:hidden;"><div class="fill" style="height:100%;background:#f7931a;width:${m.confidence}%;"></div></div>
+                        <div class="time-remaining" style="font-size:10px;color:#6b7280;">⏱ ${statusInfo.emoji} ${statusInfo.label}</div>
                         
                         <button class="btn-turbo" onclick="turboAnalyze(${m.id})">
                             🔥 Турбо-анализ
@@ -4752,7 +4647,7 @@
                             <div class="turbo-progress-bar">
                                 <div class="fill turbo-progress-fill" style="width:0%"></div>
                             </div>
-                            <div class="turbo-progress-text">
+                            <div class="turbo-progress-text" style="display:flex;justify-content:space-between;font-size:10px;color:#8b93a7;margin-top:2px;">
                                 <span class="step turbo-step">Шаг 0/8: Ожидание...</span>
                                 <span class="percent turbo-percent">0%</span>
                             </div>
@@ -4773,7 +4668,7 @@
         const list = document.getElementById('historyPredictionsList');
         if (!container || !list) return;
         if (finished.length === 0) {
-            container.innerHTML = '<div class="empty-state" style="text-align:center;padding:20px 0;color:#8a8aa3;">Нет сыгранных прогнозов</div>';
+            container.innerHTML = '<div class="empty-state" style="text-align:center;padding:20px 0;color:#8b93a7;">Нет сыгранных прогнозов</div>';
             return;
         }
         container.innerHTML = '';
@@ -4781,21 +4676,21 @@
             const statusInfo = getMatchStatusInfo(m);
             const isWin = m.actualOutcome === 'win';
             const emoji = isWin ? '✅' : '❌';
-            const color = isWin ? '#00ff9d' : '#ff0055';
+            const color = isWin ? '#22c55e' : '#ef4444';
             const scoreStr = `${m.homeScore}:${m.awayScore}`;
             return `
                 <div class="prediction-card" style="border-left:3px solid ${color};">
-                    <div class="match-info">
-                        <div class="teams">${sanitizeHTML(m.home)} vs ${sanitizeHTML(m.away)}</div>
-                        <div class="status-badge finished">${statusInfo.emoji} ${scoreStr}</div>
+                    <div class="match-info" style="display:flex;justify-content:space-between;align-items:center;">
+                        <div class="teams" style="font-size:14px;font-weight:600;color:#e6e8ec;">${sanitizeHTML(m.home)} vs ${sanitizeHTML(m.away)}</div>
+                        <div class="status-badge finished" style="font-size:10px;padding:2px 8px;border-radius:10px;white-space:nowrap;background:rgba(139,147,167,0.1);color:#8b93a7;border:1px solid rgba(139,147,167,0.15);">${statusInfo.emoji} ${scoreStr}</div>
                     </div>
-                    <div class="prediction-details">
-                        <span class="highlight">🎯 ${m.prediction}</span>
-                        <span style="color:${color};font-weight:700;">${emoji} ${isWin ? 'Выигрыш' : 'Проигрыш'}</span>
+                    <div class="prediction-details" style="display:flex;flex-wrap:wrap;gap:8px;font-size:11px;color:#8b93a7;">
+                        <span class="highlight" style="color:#f7931a;font-weight:600;">🎯 ${m.prediction}</span>
+                        <span style="color:${color};font-weight:600;">${emoji} ${isWin ? 'Выигрыш' : 'Проигрыш'}</span>
                         <span>📊 ${m.confidence}%</span>
                         <span>🏆 ${m.league}</span>
                     </div>
-                    <div style="font-size:10px;color:#555;">${new Date(m.startTime).toLocaleString('ru-RU')}</div>
+                    <div style="font-size:10px;color:#6b7280;">${new Date(m.startTime).toLocaleString('ru-RU')}</div>
                 </div>
             `;
         }).join('');
@@ -4911,19 +4806,19 @@
         if (!chat) return;
         if (state.assistantHistory.length === 0) {
             chat.innerHTML = `
-                <div class="assistant-message ai" style="padding:8px 12px;border-radius:10px;margin:4px 0;max-width:90%;font-size:13px;line-height:1.5;background:#1a2a1a;margin-right:auto;border-left:3px solid #00ff9d;">
+                <div class="assistant-message ai" style="padding:8px 12px;border-radius:10px;margin:4px 0;max-width:90%;font-size:13px;line-height:1.5;background:#1a1f2a;margin-right:auto;border-left:3px solid #f7931a;">
                     👋 Привет! Я ассистент Квантум v5.3.<br>
                     Сезон ${CURRENT_SEASON} - все прогнозы актуальны!<br>
                     Задай вопрос о ставках, прогнозах или анализе матчей.
-                    <div class="time" style="font-size:9px;color:#555;margin-top:2px;">🤖 Ассистент</div>
+                    <div class="time" style="font-size:9px;color:#6b7280;margin-top:2px;">🤖 Ассистент</div>
                 </div>
             `;
             return;
         }
         chat.innerHTML = state.assistantHistory.map(msg => `
-            <div class="assistant-message ${msg.type}" style="padding:8px 12px;border-radius:10px;margin:4px 0;max-width:90%;font-size:13px;line-height:1.5;${msg.type === 'ai' ? 'background:#1a2a1a;margin-right:auto;border-left:3px solid #00ff9d;' : 'background:#1a1a2a;margin-left:auto;border-right:3px solid #00f0ff;'}">
+            <div class="assistant-message ${msg.type}" style="padding:8px 12px;border-radius:10px;margin:4px 0;max-width:90%;font-size:13px;line-height:1.5;${msg.type === 'ai' ? 'background:#1a1f2a;margin-right:auto;border-left:3px solid #f7931a;' : 'background:#1a1f2a;margin-left:auto;border-right:3px solid #f7931a;'}">
                 ${msg.text}
-                <div class="time" style="font-size:9px;color:#555;margin-top:2px;">${msg.time}</div>
+                <div class="time" style="font-size:9px;color:#6b7280;margin-top:2px;">${msg.time}</div>
             </div>
         `).join('');
         chat.scrollTop = chat.scrollHeight;
