@@ -3,48 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тест предсказаний</title>
+    <title>Футбольные прогнозы</title>
 </head>
 <body>
-    <p>Загрузка данных...</p>
+    <h3>Загрузка футбольных данных...</h3>
 
     <script>
-        // --- ВСТАВЛЯЕМ САМУ ФУНКЦИЮ ПРЯМО ЗДЕСЬ, ЧТОБЫ ОНА ТОЧНО БЫЛА ---
+        // ВСТАВЬТЕ СЮДА ВАШ API-KEY ОТ API-FOOTBALL (Без кавычек)
+        const API_KEY = 40a548b23a46b859463c5bf4d4698aa1;
+        
+        // ID Чемпионата России (RPL). Если хотите другой - поменяйте число.
+        const LEAGUE_ID = 235; 
+        const SEASON = 2024; 
+
+        // ВАЖНО: API-Football блокирует запросы с сайтов. 
+        // Мы используем бесплатный прокси CORS, чтобы обойти это ограничение.
+        const PROXY_URL = "https://corsproxy.io/?";
+        
+        // Формируем ссылку на АПИ с параметрами
+        const API_URL = `https://v3.football.api-sports.io/fixtures?league=${LEAGUE_ID}&season=${SEASON}`;
+
         function generateTestPredictions() {
-            return new Promise((resolve, reject) => {
-                // Имитация загрузки данных (искусственная задержка в 1 секунду)
-                setTimeout(() => {
-                    // Генерируем тестовый массив матчей
-                    const testData = [
-                        { id: 1, home: "Спартак", away: "Зенит", prediction: "Победа Зенита" },
-                        { id: 2, home: "Динамо", away: "ЦСКА", prediction: "Ничья" }
-                    ];
-                    // Возвращаем результат
-                    resolve(testData);
-                }, 1000);
+            // Возвращаем Promise, чтобы сработал .then() и .catch()
+            return fetch(PROXY_URL + API_URL, {
+                method: 'GET',
+                headers: {
+                    // Некоторые API (включая API-Football) требуют ключ в заголовках
+                    'x-apisports-key': API_KEY
+                }
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error(`Ошибка HTTP: ${response.status}`);
+                }
+                return response.json();
             });
         }
-        // ----------------------------------------------------------------
 
-        // ДАЛЬШЕ ИДЕТ ВАШ КОД, КОТОРЫЙ ВЫЗЫВАЕТ ЭТУ ФУНКЦИЮ
-        console.log("Скрипт запущен");
-
+        // --- ЗАПУСК ---
         generateTestPredictions()
         .then(data => {
-            if (!data || !Array.isArray(data)) {
-                throw new Error("Функция вернула не массив или пустые данные: " + JSON.stringify(data));
-            }
-            if (data.length === 0) {
-                throw new Error("Массив данных пуст (нет матчей).");
+            console.log("Данные получены:", data); // Для отладки, если подключите к ПК
+
+            if (!data || !data.response || data.response.length === 0) {
+                document.body.innerHTML = '<h3 style="color: orange;">Нет данных по этому чемпионату.</h3>';
+                return;
             }
 
-            document.body.innerHTML = '<h3>РЕЗУЛЬТАТЫ ПРОВЕРКИ (ТЕСТ):</h3>' +
-                                      '<p>ПЕРВЫЙ МАТЧ: ' + JSON.stringify(data[0]) + '</p>' +
-                                      '<p>ВСЕГО МАТЧЕЙ: ' + data.length + '</p>';
+            // Берем первые 2 матча для теста
+            const matches = data.response.slice(0, 2);
+
+            document.body.innerHTML = '<h3>РЕЗУЛЬТАТЫ ЗАГРУЗКИ (АПИ):</h3>' +
+                                      '<p>Загружено матчей: ' + data.response.length + '</p>';
+            
+            // Выводим информацию по каждому матчу
+            matches.forEach((match, index) => {
+                const home = match.teams.home.name;
+                const away = match.teams.away.name;
+                const date = match.fixture.date;
+                document.body.innerHTML += `<p><b>Матч ${index + 1}:</b> ${home} vs ${away} <br> (Дата: ${date})</p>`;
+            });
+
         })
         .catch(error => {
-            console.error("Пойманная ошибка:", error);
-            document.body.innerHTML = '<h3 style="color:red;">ОШИБКА:</h3><p style="color:red;">' + error + '</p>';
+            console.error("Ошибка:", error);
+            document.body.innerHTML = '<h3 style="color:red;">ОШИБКА ЗАГРУЗКИ ДАННЫХ:</h3>' +
+                                      '<p style="color:red;">' + error + '</p>' +
+                                      '<p>Проверьте ключ API или интернет-соединение.</p>';
         });
     </script>
 </body>
