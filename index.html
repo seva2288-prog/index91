@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -12,1495 +12,273 @@
     <meta name="theme-color" content="#0b0e14">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background: #0b0e14;
-            color: #e6e8ec;
-            max-width: 480px;
-            margin: 0 auto;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-            transition: background 0.3s, color 0.3s;
-        }
-
-        body.light {
-            background: #f0f2f5;
-            color: #1a202c;
-        }
-        body.light input,
-        body.light select,
-        body.light .card {
-            background: #ffffff !important;
-            color: #1a202c !important;
-            border-color: #e2e8f0 !important;
-        }
-        body.light .mode-btn {
-            background: #f0f2f5 !important;
-            color: #64748b !important;
-            border-color: #e2e8f0 !important;
-        }
-        body.light .mode-btn.active {
-            background: #f7931a !important;
-            color: #ffffff !important;
-            border-color: #f7931a !important;
-        }
-        body.light .header {
-            background: #ffffff;
-            border-bottom-color: #e2e8f0;
-        }
-        body.light .bottom-nav {
-            background: #ffffff;
-            border-top-color: #e2e8f0;
-        }
-        body.light .bottom-nav .nav-btn {
-            color: #94a3b8 !important;
-        }
-        body.light .bottom-nav .nav-btn.active {
-            color: #f7931a !important;
-        }
-        body.light .filter-bar {
-            background: #ffffff !important;
-            border-color: #e2e8f0 !important;
-        }
-        body.light .match-row:hover {
-            background: #f8fafc !important;
-        }
-        body.light .match-row .confidence-high {
-            color: #16a34a;
-        }
-        body.light .match-row .confidence-medium {
-            color: #ca8a04;
-        }
-        body.light .match-row .confidence-low {
-            color: #dc2626;
-        }
-        body.light .status-badge.live {
-            background: #fef2f2;
-            color: #dc2626;
-        }
-        body.light .status-badge.upcoming {
-            background: #fff7ed;
-            color: #f7931a;
-        }
-        body.light .status-badge.finished {
-            background: #f1f5f9;
-            color: #94a3b8;
-        }
-        body.light .card {
-            background: #ffffff !important;
-            border-color: #e2e8f0 !important;
-        }
-        body.light .total-display {
-            background: #ffffff !important;
-            border-color: #e2e8f0 !important;
-        }
-        body.light .search-input {
-            background: #ffffff !important;
-            border-color: #e2e8f0 !important;
-            color: #1a202c !important;
-        }
-        body.light .popular-tag {
-            background: #f1f5f9 !important;
-            color: #1a202c !important;
-        }
-        body.light .popular-tag:hover {
-            background: #e2e8f0 !important;
-        }
-        body.light .kpi-card {
-            background: #ffffff !important;
-            border-color: #e2e8f0 !important;
-        }
-        body.light .history-item {
-            background: #ffffff !important;
-            border-color: #e2e8f0 !important;
-        }
-        body.light .history-item:hover {
-            background: #f8fafc !important;
-        }
-        body.light .settings-item {
-            border-bottom-color: #e2e8f0 !important;
-        }
-        body.light .toggle-btn {
-            background: #e2e8f0 !important;
-            color: #1a202c !important;
-        }
-        body.light .toggle-btn.active {
-            background: #f7931a !important;
-            color: #ffffff !important;
-        }
-        body.light .modal-box {
-            background: #ffffff !important;
-            border-color: #e2e8f0 !important;
-        }
-        body.light .modal-box .modal-result {
-            background: #f8fafc !important;
-        }
-        body.light .toast {
-            background: #ffffff !important;
-            color: #1a202c !important;
-            border-color: #e2e8f0 !important;
-        }
-        body.light .toast.success {
-            background: #f0fdf4 !important;
-            color: #16a34a !important;
-            border-color: #bbf7d0 !important;
-        }
-        body.light .toast.error {
-            background: #fef2f2 !important;
-            color: #dc2626 !important;
-            border-color: #fecaca !important;
-        }
-        body.light .disclaimer {
-            border-top-color: #e2e8f0 !important;
-        }
-        body.light .table-header {
-            background: #f8fafc !important;
-            border-color: #e2e8f0 !important;
-            color: #94a3b8 !important;
-        }
-        body.light .turbo-details {
-            background: #f8fafc !important;
-            border-color: #e2e8f0 !important;
-            color: #64748b !important;
-        }
-        body.light .weather-card {
-            background: #ffffff !important;
-            border-color: #e2e8f0 !important;
-        }
-        body.light .weather-input {
-            background: #ffffff !important;
-            border-color: #e2e8f0 !important;
-            color: #1a202c !important;
-        }
-        body.light .weather-input-btn {
-            background: #f7931a !important;
-            color: #ffffff !important;
-        }
-        body.light .btn-calc {
-            background: #f7931a !important;
-            color: #ffffff !important;
-        }
-        body.light .btn-save {
-            background: #16a34a !important;
-            color: #ffffff !important;
-        }
-        body.light .btn-clear {
-            background: #ffffff !important;
-            color: #dc2626 !important;
-            border-color: #e2e8f0 !important;
-        }
-        body.light .btn-api {
-            background: #f7931a !important;
-            color: #ffffff !important;
-        }
-        body.light .search-result-item {
-            background: #ffffff !important;
-            border-color: #e2e8f0 !important;
-        }
-        body.light .search-result-item:hover {
-            background: #f8fafc !important;
-        }
-        body.light .live-match-card {
-            background: #ffffff !important;
-            border-color: #e2e8f0 !important;
-        }
-
-        body.dark {
-            background: #0d1117;
-            color: #e6edf3;
-        }
-        body.dark input,
-        body.dark select,
-        body.dark .card {
-            background: #161b22 !important;
-            color: #e6edf3 !important;
-            border-color: #30363d !important;
-        }
-        body.dark .mode-btn {
-            background: #161b22 !important;
-            color: #8b949e !important;
-            border-color: #30363d !important;
-        }
-        body.dark .mode-btn.active {
-            background: #f7931a !important;
-            color: #0d1117 !important;
-            border-color: #f7931a !important;
-        }
-        body.dark .header {
-            background: #0d1117;
-            border-bottom-color: #30363d;
-        }
-        body.dark .bottom-nav {
-            background: #0d1117;
-            border-top-color: #30363d;
-        }
-        body.dark .bottom-nav .nav-btn {
-            color: #8b949e !important;
-        }
-        body.dark .bottom-nav .nav-btn.active {
-            color: #f7931a !important;
-        }
-        body.dark .filter-bar {
-            background: #161b22 !important;
-            border-color: #30363d !important;
-        }
-        body.dark .match-row:hover {
-            background: #1c2333 !important;
-        }
-        body.dark .match-row .confidence-high {
-            color: #3fb950;
-        }
-        body.dark .match-row .confidence-medium {
-            color: #d29922;
-        }
-        body.dark .match-row .confidence-low {
-            color: #f85149;
-        }
-        body.dark .status-badge.live {
-            background: rgba(248, 81, 73, 0.15);
-            color: #f85149;
-        }
-        body.dark .status-badge.upcoming {
-            background: rgba(247, 147, 26, 0.12);
-            color: #f7931a;
-        }
-        body.dark .status-badge.finished {
-            background: rgba(139, 148, 158, 0.1);
-            color: #8b949e;
-        }
-        body.dark .card {
-            background: #161b22 !important;
-            border-color: #30363d !important;
-        }
-        body.dark .total-display {
-            background: #161b22 !important;
-            border-color: #30363d !important;
-        }
-        body.dark .search-input {
-            background: #161b22 !important;
-            border-color: #30363d !important;
-            color: #e6edf3 !important;
-        }
-        body.dark .popular-tag {
-            background: #21262d !important;
-            color: #e6edf3 !important;
-        }
-        body.dark .popular-tag:hover {
-            background: #30363d !important;
-        }
-        body.dark .kpi-card {
-            background: #161b22 !important;
-            border-color: #30363d !important;
-        }
-        body.dark .history-item {
-            background: #161b22 !important;
-            border-color: #30363d !important;
-        }
-        body.dark .history-item:hover {
-            background: #1c2333 !important;
-        }
-        body.dark .settings-item {
-            border-bottom-color: #30363d !important;
-        }
-        body.dark .toggle-btn {
-            background: #30363d !important;
-            color: #e6edf3 !important;
-        }
-        body.dark .toggle-btn.active {
-            background: #f7931a !important;
-            color: #0d1117 !important;
-        }
-        body.dark .modal-box {
-            background: #161b22 !important;
-            border-color: #30363d !important;
-        }
-        body.dark .modal-box .modal-result {
-            background: #0d1117 !important;
-        }
-        body.dark .toast {
-            background: #161b22 !important;
-            color: #e6edf3 !important;
-            border-color: #30363d !important;
-        }
-        body.dark .toast.success {
-            background: #161b22 !important;
-            color: #3fb950 !important;
-            border-color: #2ea043 !important;
-        }
-        body.dark .toast.error {
-            background: #161b22 !important;
-            color: #f85149 !important;
-            border-color: #da3633 !important;
-        }
-        body.dark .disclaimer {
-            border-top-color: #30363d !important;
-        }
-        body.dark .table-header {
-            background: #161b22 !important;
-            border-color: #30363d !important;
-            color: #8b949e !important;
-        }
-        body.dark .turbo-details {
-            background: #161b22 !important;
-            border-color: #30363d !important;
-            color: #8b949e !important;
-        }
-        body.dark .weather-card {
-            background: #161b22 !important;
-            border-color: #30363d !important;
-        }
-        body.dark .weather-input {
-            background: #161b22 !important;
-            border-color: #30363d !important;
-            color: #e6edf3 !important;
-        }
-        body.dark .weather-input-btn {
-            background: #f7931a !important;
-            color: #0d1117 !important;
-        }
-        body.dark .btn-calc {
-            background: #f7931a !important;
-            color: #0d1117 !important;
-        }
-        body.dark .btn-save {
-            background: #2ea043 !important;
-            color: #ffffff !important;
-        }
-        body.dark .btn-clear {
-            background: #161b22 !important;
-            color: #f85149 !important;
-            border-color: #30363d !important;
-        }
-        body.dark .btn-api {
-            background: #f7931a !important;
-            color: #0d1117 !important;
-        }
-        body.dark .search-result-item {
-            background: #161b22 !important;
-            border-color: #30363d !important;
-        }
-        body.dark .search-result-item:hover {
-            background: #1c2333 !important;
-        }
-        body.dark .live-match-card {
-            background: #161b22 !important;
-            border-color: #30363d !important;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 14px 8px;
-            background: #0b0e14;
-            border-bottom: 1px solid #1e2430;
-            flex-shrink: 0;
-            z-index: 10;
-            padding-top: env(safe-area-inset-top, 10px);
-        }
-        .header h1 {
-            font-size: 17px;
-            font-weight: 600;
-            color: #f7931a;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .header h1 span {
-            font-size: 8px;
-            color: #8b93a7;
-            font-weight: 400;
-        }
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .header-actions button {
-            background: transparent;
-            border: none;
-            color: #8b93a7;
-            font-size: 15px;
-            cursor: pointer;
-            padding: 4px 6px;
-            border-radius: 6px;
-            transition: color 0.2s;
-        }
-        .header-actions button:hover {
-            color: #f7931a;
-        }
-        .header-weather {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 11px;
-            color: #8b93a7;
-            cursor: pointer;
-            padding: 3px 8px;
-            border-radius: 8px;
-            transition: background 0.2s;
-            white-space: nowrap;
-        }
-        .header-weather:hover {
-            background: rgba(255, 255, 255, 0.04);
-        }
-        .header-weather .weather-icon {
-            font-size: 13px;
-        }
-        .header-weather .weather-temp {
-            font-weight: 500;
-            color: #f7931a;
-        }
-
-        .filter-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            padding: 6px 10px;
-            background: #0b0e14;
-            border-bottom: 1px solid #1e2430;
-            flex-shrink: 0;
-            align-items: center;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        .filter-bar::-webkit-scrollbar {
-            display: none;
-        }
-        .filter-bar .date-scroll {
-            display: flex;
-            gap: 4px;
-            flex: 1;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            padding: 2px 0;
-        }
-        .filter-bar .date-scroll::-webkit-scrollbar {
-            display: none;
-        }
-        .filter-bar .date-btn {
-            flex: 0 0 auto;
-            padding: 4px 10px;
-            border-radius: 8px;
-            border: 1px solid #1e2430;
-            background: transparent;
-            color: #8b93a7;
-            font-size: 9px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            min-width: 44px;
-            font-weight: 500;
-        }
-        .filter-bar .date-btn .day {
-            font-size: 7px;
-            color: #6b7280;
-            display: block;
-        }
-        .filter-bar .date-btn .number {
-            font-size: 13px;
-            font-weight: 600;
-            display: block;
-        }
-        .filter-bar .date-btn.active {
-            background: #f7931a;
-            color: #0b0e14;
-            border-color: #f7931a;
-        }
-        .filter-bar .date-btn.active .day {
-            color: #0b0e14;
-        }
-        .filter-bar .date-btn:hover {
-            border-color: #f7931a;
-        }
-        .filter-bar .filter-status {
-            font-size: 8px;
-            color: #16a34a;
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            white-space: nowrap;
-            margin-left: 4px;
-        }
-        .filter-bar .filter-status .dot {
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: #16a34a;
-            display: inline-block;
-        }
-
-        .main-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 0;
-            -webkit-overflow-scrolling: touch;
-            padding-bottom: 60px;
-        }
-        .main-content::-webkit-scrollbar {
-            width: 2px;
-        }
-        .main-content::-webkit-scrollbar-thumb {
-            background: #1e2430;
-            border-radius: 2px;
-        }
-        .screen {
-            display: none;
-            animation: fadeIn 0.2s ease;
-        }
-        .screen.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .table-header {
-            display: grid;
-            grid-template-columns: 2fr 1.2fr 0.7fr 0.8fr 0.8fr;
-            padding: 4px 10px;
-            background: #13171f;
-            border-bottom: 1px solid #1e2430;
-            font-size: 7px;
-            font-weight: 600;
-            color: #8b93a7;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            flex-shrink: 0;
-            position: sticky;
-            top: 0;
-            z-index: 5;
-        }
-
-        /* КОМПАКТНАЯ СТРОКА МАТЧА */
-        .match-row {
-            display: grid;
-            grid-template-columns: 2fr 1.2fr 0.7fr 0.8fr 0.8fr;
-            padding: 4px 8px;
-            border-bottom: 1px solid #1e2430;
-            background: transparent;
-            transition: background 0.15s;
-            cursor: pointer;
-            align-items: center;
-            gap: 2px;
-            position: relative;
-            min-height: 32px;
-        }
-        .match-row:hover {
-            background: rgba(255, 255, 255, 0.03);
-        }
-        .match-row .col-teams {
-            display: flex;
-            flex-direction: column;
-            gap: 0px;
-            line-height: 1.2;
-        }
-        .match-row .col-teams .team-home {
-            font-size: 10px;
-            font-weight: 600;
-            color: #e6e8ec;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .match-row .col-teams .team-away {
-            font-size: 9px;
-            color: #8b93a7;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .match-row .col-teams .league {
-            font-size: 6px;
-            color: #6b7280;
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            margin-top: 1px;
-        }
-        .match-row .col-prediction {
-            display: flex;
-            flex-direction: column;
-            gap: 0px;
-            line-height: 1.2;
-        }
-        .match-row .col-prediction .prediction {
-            font-size: 9px;
-            font-weight: 600;
-            color: #f7931a;
-            white-space: nowrap;
-        }
-        .match-row .col-prediction .odds {
-            font-size: 7px;
-            color: #8b93a7;
-        }
-        .match-row .col-prediction .odds .value {
-            color: #f7931a;
-            font-weight: 600;
-        }
-        .match-row .col-confidence {
-            font-size: 12px;
-            font-weight: 700;
-            text-align: center;
-            white-space: nowrap;
-        }
-        .match-row .col-confidence .confidence-high {
-            color: #16a34a;
-        }
-        .match-row .col-confidence .confidence-medium {
-            color: #ca8a04;
-        }
-        .match-row .col-confidence .confidence-low {
-            color: #dc2626;
-        }
-        .match-row .col-time {
-            font-size: 7px;
-            color: #8b93a7;
-            text-align: center;
-            line-height: 1.2;
-            white-space: nowrap;
-        }
-        .match-row .col-time .date {
-            display: block;
-            font-size: 6px;
-            color: #6b7280;
-        }
-        .match-row .col-status {
-            text-align: right;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 1px;
-        }
-        .match-row .status-badge {
-            font-size: 6px;
-            padding: 1px 5px;
-            border-radius: 8px;
-            white-space: nowrap;
-            display: inline-block;
-        }
-        .match-row .status-badge.live {
-            background: rgba(220, 38, 38, 0.12);
-            color: #dc2626;
-            border: 1px solid rgba(220, 38, 38, 0.2);
-            animation: pulse-minimal 1.5s ease-in-out infinite;
-        }
-        .match-row .status-badge.upcoming {
-            background: rgba(247, 147, 26, 0.1);
-            color: #f7931a;
-            border: 1px solid rgba(247, 147, 26, 0.15);
-        }
-        .match-row .status-badge.finished {
-            background: rgba(139, 147, 167, 0.08);
-            color: #8b93a7;
-            border: 1px solid rgba(139, 147, 167, 0.1);
-        }
-        .match-row .value-tag {
-            font-size: 5px;
-            padding: 0px 4px;
-            border-radius: 6px;
-            background: #16a34a;
-            color: #ffffff;
-            display: inline-block;
-            font-weight: 600;
-            margin-left: 2px;
-        }
-        .match-row .turbo-indicator {
-            font-size: 7px;
-            color: #8b93a7;
-            cursor: pointer;
-            padding: 1px 4px;
-            border-radius: 3px;
-            background: rgba(247, 147, 26, 0.06);
-            transition: all 0.2s;
-            line-height: 1;
-        }
-        .match-row .turbo-indicator:hover {
-            background: rgba(247, 147, 26, 0.15);
-            color: #f7931a;
-        }
-        .match-row .turbo-indicator.active {
-            color: #f7931a;
-        }
-        .match-row .turbo-indicator .spinner-tiny {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border: 1.5px solid rgba(247, 147, 26, 0.2);
-            border-radius: 50%;
-            border-top-color: #f7931a;
-            animation: spin 0.6s linear infinite;
-            vertical-align: middle;
-        }
-        @keyframes pulse-minimal {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .turbo-details {
-            display: none;
-            padding: 4px 10px 4px 16px;
-            background: #13171f;
-            border-bottom: 1px solid #1e2430;
-            font-size: 8px;
-            color: #8b93a7;
-            line-height: 1.4;
-        }
-        .turbo-details.open {
-            display: block;
-        }
-        .turbo-details .detail-row {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-        .turbo-details .detail-row .item {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-        }
-        .turbo-details .detail-row .item .label {
-            color: #8b93a7;
-        }
-        .turbo-details .detail-row .item .value.good {
-            color: #16a34a;
-            font-weight: 600;
-        }
-        .turbo-details .detail-row .item .value.warn {
-            color: #ca8a04;
-            font-weight: 600;
-        }
-        .turbo-details .detail-row .item .value.bad {
-            color: #dc2626;
-            font-weight: 600;
-        }
-        .turbo-details .detail-row .item .value.accent {
-            color: #f7931a;
-            font-weight: 600;
-        }
-        .turbo-details .progress-mini {
-            height: 2px;
-            background: #1e2430;
-            border-radius: 2px;
-            margin-top: 2px;
-            overflow: hidden;
-        }
-        .turbo-details .progress-mini .fill {
-            height: 100%;
-            background: #f7931a;
-            border-radius: 2px;
-            transition: width 0.4s ease;
-        }
-
-        .live-match-card {
-            background: transparent;
-            border: 1px solid #1e2430;
-            border-radius: 10px;
-            padding: 10px 12px;
-            margin: 4px 10px;
-            transition: border-color 0.2s;
-            cursor: pointer;
-        }
-        .live-match-card:hover {
-            border-color: #f7931a;
-        }
-        .live-match-card .live-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 4px;
-        }
-        .live-match-card .live-header .time {
-            font-size: 12px;
-            font-weight: 700;
-            color: #dc2626;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .live-match-card .live-header .time .dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #dc2626;
-            display: inline-block;
-            animation: pulse-minimal 1s infinite;
-        }
-        .live-match-card .live-header .league {
-            font-size: 8px;
-            color: #8b93a7;
-        }
-        .live-match-card .live-score {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            padding: 6px 0;
-            font-size: 20px;
-            font-weight: 700;
-        }
-        .live-match-card .live-score .home {
-            color: #f7931a;
-        }
-        .live-match-card .live-score .away {
-            color: #8b93a7;
-        }
-        .live-match-card .live-score .vs {
-            color: #6b7280;
-            font-size: 14px;
-        }
-        .live-match-card .live-details {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            font-size: 9px;
-            color: #8b93a7;
-            justify-content: center;
-            padding-top: 4px;
-            border-top: 1px solid #1e2430;
-        }
-        .live-match-card .live-details span {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-        .live-match-card .live-details .highlight {
-            color: #f7931a;
-            font-weight: 600;
-        }
-
-        .search-container {
-            padding: 0 10px;
-        }
-        .search-input-wrap {
-            display: flex;
-            gap: 6px;
-            margin: 6px 0;
-        }
-        .search-input-wrap .search-input {
-            flex: 1;
-            padding: 10px 14px;
-            border-radius: 10px;
-            border: 1px solid #1e2430;
-            background: transparent;
-            color: #e6e8ec;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        .search-input-wrap .search-input:focus {
-            border-color: #f7931a;
-        }
-        .search-input-wrap .search-input::placeholder {
-            color: #6b7280;
-        }
-        .search-input-wrap .search-btn {
-            padding: 10px 16px;
-            border-radius: 10px;
-            border: none;
-            background: #f7931a;
-            color: #0b0e14;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .search-input-wrap .search-btn:hover {
-            background: #e8850a;
-        }
-        .popular-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            margin: 4px 0 8px;
-        }
-        .popular-tag {
-            padding: 4px 12px;
-            border-radius: 16px;
-            background: #13171f;
-            color: #e6e8ec;
-            font-size: 10px;
-            cursor: pointer;
-            border: 1px solid #1e2430;
-            transition: all 0.2s;
-        }
-        .popular-tag:hover {
-            border-color: #f7931a;
-            background: rgba(247, 147, 26, 0.08);
-        }
-        .search-results {
-            margin-top: 6px;
-        }
-        .search-result-item {
-            background: transparent;
-            border: 1px solid #1e2430;
-            border-radius: 8px;
-            padding: 8px 10px;
-            margin: 4px 0;
-            cursor: pointer;
-            transition: border-color 0.2s;
-        }
-        .search-result-item:hover {
-            border-color: #f7931a;
-        }
-        .search-result-item .teams {
-            font-size: 13px;
-            font-weight: 600;
-        }
-        .search-result-item .info {
-            font-size: 9px;
-            color: #8b93a7;
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 2px;
-        }
-        .search-empty {
-            text-align: center;
-            padding: 20px 0;
-            color: #6b7280;
-            font-size: 13px;
-        }
-
-        .card {
-            background: transparent;
-            border: 1px solid #1e2430;
-            border-radius: 10px;
-            padding: 12px 14px;
-            margin: 4px 10px;
-        }
-        .card-title {
-            font-size: 9px;
-            font-weight: 600;
-            color: #8b93a7;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6px;
-            margin: 4px 10px;
-        }
-        .kpi-card {
-            background: transparent;
-            border: 1px solid #1e2430;
-            border-radius: 8px;
-            padding: 10px 12px;
-        }
-        .kpi-card .value {
-            font-size: 20px;
-            font-weight: 700;
-            color: #f7931a;
-        }
-        .kpi-card .label {
-            font-size: 7px;
-            color: #8b93a7;
-        }
-        .kpi-card .trend {
-            font-size: 7px;
-            color: #6b7280;
-            margin-top: 2px;
-        }
-        .chart-container {
-            background: transparent;
-            border: 1px solid #1e2430;
-            border-radius: 8px;
-            padding: 10px;
-            margin: 4px 10px;
-        }
-        .chart-controls {
-            display: flex;
-            gap: 3px;
-            margin-top: 4px;
-            justify-content: center;
-        }
-        .chart-controls button {
-            background: transparent;
-            border: 1px solid #1e2430;
-            color: #8b93a7;
-            padding: 2px 8px;
-            border-radius: 8px;
-            font-size: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .chart-controls button.active {
-            background: #f7931a;
-            color: #0b0e14;
-            border-color: #f7931a;
-        }
-
-        .history-item {
-            background: transparent;
-            border: 1px solid #1e2430;
-            border-radius: 6px;
-            padding: 6px 8px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 10px;
-            margin: 2px 0;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .history-item:hover {
-            background: rgba(255, 255, 255, 0.03);
-        }
-        .history-item .win {
-            color: #16a34a;
-        }
-        .history-item .loss {
-            color: #dc2626;
-        }
-        .history-item .pending {
-            color: #ca8a04;
-        }
-
-        .settings-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #1e2430;
-        }
-        .settings-item .label {
-            font-size: 12px;
-            color: #8b93a7;
-        }
-        .settings-item input {
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #1e2430;
-            background: transparent;
-            color: #e6e8ec;
-            outline: none;
-            font-size: 11px;
-            width: 100%;
-        }
-        .settings-item input:focus {
-            border-color: #f7931a;
-        }
-        .toggle-btn {
-            background: #1e2430;
-            border: none;
-            color: #e6e8ec;
-            padding: 3px 12px;
-            border-radius: 8px;
-            font-size: 10px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .toggle-btn.active {
-            background: #f7931a;
-            color: #0b0e14;
-        }
-
-        .bottom-nav {
-            display: flex;
-            background: #0b0e14;
-            border-top: 1px solid #1e2430;
-            flex-shrink: 0;
-            padding: 4px 0 env(safe-area-inset-bottom, 4px);
-            position: sticky;
-            bottom: 0;
-            z-index: 20;
-            justify-content: space-around;
-            padding-bottom: env(safe-area-inset-bottom, 6px);
-        }
-        .bottom-nav .nav-btn {
-            flex: 0 0 auto;
-            padding: 4px 8px 3px;
-            font-size: 7px;
-            font-weight: 500;
-            color: #6b7280;
-            cursor: pointer;
-            background: transparent;
-            border: none;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1px;
-            transition: color 0.2s;
-            min-width: 40px;
-            border-radius: 6px;
-        }
-        .bottom-nav .nav-btn .nav-icon {
-            font-size: 18px;
-            line-height: 1.2;
-        }
-        .bottom-nav .nav-btn .nav-label {
-            font-size: 6px;
-        }
-        .bottom-nav .nav-btn.active {
-            color: #f7931a;
-        }
-        .bottom-nav .nav-btn .badge {
-            background: #dc2626;
-            color: #ffffff;
-            font-size: 5px;
-            padding: 1px 4px;
-            border-radius: 6px;
-            margin-left: 2px;
-        }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            animation: fadeIn 0.2s ease;
-        }
-        .modal-overlay.active {
-            display: flex;
-        }
-        .modal-box {
-            background: #13171f;
-            border: 1px solid #1e2430;
-            border-radius: 12px;
-            padding: 20px;
-            max-width: 380px;
-            width: 100%;
-            animation: slideUp 0.2s ease;
-        }
-        .modal-box h3 {
-            color: #e6e8ec;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            text-align: center;
-        }
-        .modal-box .modal-result {
-            background: #0b0e14;
-            border-radius: 6px;
-            padding: 8px;
-            margin: 4px 0;
-            font-size: 11px;
-            line-height: 1.5;
-        }
-        .modal-box .modal-result .label {
-            color: #8b93a7;
-        }
-        .modal-box .modal-result .value {
-            color: #f7931a;
-            font-weight: 600;
-        }
-        .modal-box .modal-actions {
-            display: flex;
-            gap: 6px;
-            margin-top: 10px;
-        }
-        .modal-box .modal-actions button {
-            flex: 1;
-            padding: 10px;
-            border-radius: 6px;
-            border: none;
-            font-weight: 600;
-            font-size: 12px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .modal-box .modal-actions button:active {
-            transform: scale(0.98);
-        }
-        .modal-box .modal-actions .btn-save-modal {
-            background: #16a34a;
-            color: #ffffff;
-        }
-        .modal-box .modal-actions .btn-save-modal:hover {
-            background: #15803d;
-        }
-        .modal-box .modal-actions .btn-skip-modal {
-            background: #1e2430;
-            color: #8b93a7;
-            border: 1px solid #1e2430;
-        }
-        .modal-box .modal-actions .btn-skip-modal:hover {
-            background: #2a3342;
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 64px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 6px 16px;
-            border-radius: 8px;
-            font-weight: 500;
-            font-size: 11px;
-            z-index: 999;
-            background: #13171f;
-            color: #e6e8ec;
-            border: 1px solid #1e2430;
-            animation: slideUp 0.2s ease;
-            max-width: 90%;
-            text-align: center;
-        }
-        .toast.success {
-            background: #13171f;
-            color: #16a34a;
-            border-color: #1e2430;
-        }
-        .toast.error {
-            background: #13171f;
-            color: #dc2626;
-            border-color: #1e2430;
-        }
-
-        .disclaimer {
-            font-size: 8px;
-            color: #6b7280;
-            text-align: center;
-            padding: 4px 10px 3px;
-            border-top: 1px solid #1e2430;
-            margin-top: 4px;
-            line-height: 1.3;
-        }
-
-        .text-muted {
-            color: #8b93a7;
-        }
-        .text-center {
-            text-align: center;
-        }
-        .spinner {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            border: 2px solid #1e2430;
-            border-radius: 50%;
-            border-top-color: #f7931a;
-            animation: spin 0.8s linear infinite;
-        }
-        .swipe-indicator {
-            position: fixed;
-            bottom: 58px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 12px;
-            padding: 3px 12px;
-            font-size: 8px;
-            color: #6b7280;
-            backdrop-filter: blur(8px);
-            border: 1px solid #1e2430;
-            opacity: 0.5;
-            pointer-events: none;
-            display: none;
-        }
-        .swipe-indicator.show {
-            display: block;
-        }
-        @media (pointer: coarse) {
-            .swipe-indicator.show {
-                display: block;
-            }
-        }
-
-        .weather-card {
-            background: transparent;
-            border: 1px solid #1e2430;
-            border-radius: 8px;
-            padding: 10px 12px;
-            margin: 4px 10px;
-        }
-        .weather-card .card-title {
-            color: #8b93a7;
-        }
-        .weather-card .weather-main .temp-big {
-            color: #f7931a;
-            font-weight: 700;
-            font-size: 20px;
-        }
-        .weather-input-row {
-            display: flex;
-            gap: 4px;
-            margin-bottom: 4px;
-        }
-        .weather-input {
-            flex: 1;
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #1e2430;
-            background: transparent;
-            color: #e6e8ec;
-            font-size: 12px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        .weather-input:focus {
-            border-color: #f7931a;
-        }
-        .weather-input-btn {
-            padding: 8px 14px;
-            border-radius: 6px;
-            border: none;
-            background: #f7931a;
-            color: #0b0e14;
-            font-weight: 600;
-            font-size: 12px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .weather-input-btn:hover {
-            background: #e8850a;
-        }
-
-        .h2h-summary {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            font-size: 10px;
-            padding: 4px 0;
-            border-bottom: 1px solid #1e2430;
-            margin-bottom: 4px;
-        }
-        .h2h-summary .item {
-            background: rgba(255,255,255,0.04);
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-        .h2h-summary .num {
-            color: #f7931a;
-            font-weight: 600;
-        }
-        .h2h-item {
-            font-size: 9px;
-            padding: 3px 0;
-            border-bottom: 1px solid #1e2430;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .h2h-item .score {
-            font-weight: 600;
-            color: #f7931a;
-        }
-        .h2h-input-row {
-            display: flex;
-            gap: 4px;
-            margin: 4px 0;
-            flex-wrap: wrap;
-        }
-        .h2h-input-row input {
-            flex: 1;
-            min-width: 80px;
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #1e2430;
-            background: transparent;
-            color: #e6e8ec;
-            font-size: 11px;
-            outline: none;
-        }
-        .h2h-input-row input:focus {
-            border-color: #f7931a;
-        }
-        .h2h-input-row button {
-            padding: 8px 14px;
-            border-radius: 6px;
-            border: none;
-            background: #f7931a;
-            color: #0b0e14;
-            font-weight: 600;
-            font-size: 11px;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        .h2h-input-row button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .h2h-status {
-            font-size: 10px;
-            color: #8b93a7;
-            margin: 4px 0;
-        }
-        .h2h-data-status {
-            font-size: 8px;
-            color: #8b93a7;
-        }
-
-        .btn-row {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-        }
-        .btn-row button {
-            padding: 4px 12px;
-            border-radius: 4px;
-            border: 1px solid #1e2430;
-            background: transparent;
-            color: #e6e8ec;
-            cursor: pointer;
-            font-size: 10px;
-            transition: all 0.2s;
-        }
-        .btn-row button:hover {
-            border-color: #f7931a;
-            color: #f7931a;
-        }
-
-        @media (max-width: 420px) {
-            .table-header {
-                font-size: 6px;
-                grid-template-columns: 1.8fr 1fr 0.6fr 0.7fr 0.7fr;
-            }
-            .match-row {
-                grid-template-columns: 1.8fr 1fr 0.6fr 0.7fr 0.7fr;
-                padding: 3px 4px;
-            }
-            .match-row .col-teams .team-home {
-                font-size: 9px;
-            }
-            .match-row .col-teams .team-away {
-                font-size: 8px;
-            }
-            .match-row .col-confidence {
-                font-size: 10px;
-            }
-            .match-row .col-prediction .prediction {
-                font-size: 8px;
-            }
-            .match-row .col-time {
-                font-size: 6px;
-            }
-            .modal-box {
-                padding: 14px;
-                margin: 10px;
-            }
-            .header h1 {
-                font-size: 14px;
-            }
-        }
+        /* ===== ВСЕ СТИЛИ (полные, как в предыдущей версии) ===== */
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif; background: #0b0e14; color: #e6e8ec; max-width: 480px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; height: 100vh; overflow: hidden; transition: background 0.3s, color 0.3s; }
+        body.light { background: #f0f2f5; color: #1a202c; }
+        body.light input, body.light select, body.light .card { background: #ffffff !important; color: #1a202c !important; border-color: #e2e8f0 !important; }
+        body.light .mode-btn { background: #f0f2f5 !important; color: #64748b !important; border-color: #e2e8f0 !important; }
+        body.light .mode-btn.active { background: #f7931a !important; color: #ffffff !important; border-color: #f7931a !important; }
+        body.light .header { background: #ffffff; border-bottom-color: #e2e8f0; }
+        body.light .bottom-nav { background: #ffffff; border-top-color: #e2e8f0; }
+        body.light .bottom-nav .nav-btn { color: #94a3b8 !important; }
+        body.light .bottom-nav .nav-btn.active { color: #f7931a !important; }
+        body.light .filter-bar { background: #ffffff !important; border-color: #e2e8f0 !important; }
+        body.light .match-row:hover { background: #f8fafc !important; }
+        body.light .match-row .confidence-high { color: #16a34a; }
+        body.light .match-row .confidence-medium { color: #ca8a04; }
+        body.light .match-row .confidence-low { color: #dc2626; }
+        body.light .status-badge.live { background: #fef2f2; color: #dc2626; }
+        body.light .status-badge.upcoming { background: #fff7ed; color: #f7931a; }
+        body.light .status-badge.finished { background: #f1f5f9; color: #94a3b8; }
+        body.light .card { background: #ffffff !important; border-color: #e2e8f0 !important; }
+        body.light .total-display { background: #ffffff !important; border-color: #e2e8f0 !important; }
+        body.light .search-input { background: #ffffff !important; border-color: #e2e8f0 !important; color: #1a202c !important; }
+        body.light .popular-tag { background: #f1f5f9 !important; color: #1a202c !important; }
+        body.light .popular-tag:hover { background: #e2e8f0 !important; }
+        body.light .kpi-card { background: #ffffff !important; border-color: #e2e8f0 !important; }
+        body.light .history-item { background: #ffffff !important; border-color: #e2e8f0 !important; }
+        body.light .history-item:hover { background: #f8fafc !important; }
+        body.light .settings-item { border-bottom-color: #e2e8f0 !important; }
+        body.light .toggle-btn { background: #e2e8f0 !important; color: #1a202c !important; }
+        body.light .toggle-btn.active { background: #f7931a !important; color: #ffffff !important; }
+        body.light .modal-box { background: #ffffff !important; border-color: #e2e8f0 !important; }
+        body.light .modal-box .modal-result { background: #f8fafc !important; }
+        body.light .toast { background: #ffffff !important; color: #1a202c !important; border-color: #e2e8f0 !important; }
+        body.light .toast.success { background: #f0fdf4 !important; color: #16a34a !important; border-color: #bbf7d0 !important; }
+        body.light .toast.error { background: #fef2f2 !important; color: #dc2626 !important; border-color: #fecaca !important; }
+        body.light .disclaimer { border-top-color: #e2e8f0 !important; }
+        body.light .table-header { background: #f8fafc !important; border-color: #e2e8f0 !important; color: #94a3b8 !important; }
+        body.light .turbo-details { background: #f8fafc !important; border-color: #e2e8f0 !important; color: #64748b !important; }
+        body.light .weather-card { background: #ffffff !important; border-color: #e2e8f0 !important; }
+        body.light .weather-input { background: #ffffff !important; border-color: #e2e8f0 !important; color: #1a202c !important; }
+        body.light .weather-input-btn { background: #f7931a !important; color: #ffffff !important; }
+        body.light .btn-calc { background: #f7931a !important; color: #ffffff !important; }
+        body.light .btn-save { background: #16a34a !important; color: #ffffff !important; }
+        body.light .btn-clear { background: #ffffff !important; color: #dc2626 !important; border-color: #e2e8f0 !important; }
+        body.light .btn-api { background: #f7931a !important; color: #ffffff !important; }
+        body.light .search-result-item { background: #ffffff !important; border-color: #e2e8f0 !important; }
+        body.light .search-result-item:hover { background: #f8fafc !important; }
+        body.light .live-match-card { background: #ffffff !important; border-color: #e2e8f0 !important; }
+        body.dark { background: #0d1117; color: #e6edf3; }
+        body.dark input, body.dark select, body.dark .card { background: #161b22 !important; color: #e6edf3 !important; border-color: #30363d !important; }
+        body.dark .mode-btn { background: #161b22 !important; color: #8b949e !important; border-color: #30363d !important; }
+        body.dark .mode-btn.active { background: #f7931a !important; color: #0d1117 !important; border-color: #f7931a !important; }
+        body.dark .header { background: #0d1117; border-bottom-color: #30363d; }
+        body.dark .bottom-nav { background: #0d1117; border-top-color: #30363d; }
+        body.dark .bottom-nav .nav-btn { color: #8b949e !important; }
+        body.dark .bottom-nav .nav-btn.active { color: #f7931a !important; }
+        body.dark .filter-bar { background: #161b22 !important; border-color: #30363d !important; }
+        body.dark .match-row:hover { background: #1c2333 !important; }
+        body.dark .match-row .confidence-high { color: #3fb950; }
+        body.dark .match-row .confidence-medium { color: #d29922; }
+        body.dark .match-row .confidence-low { color: #f85149; }
+        body.dark .status-badge.live { background: rgba(248, 81, 73, 0.15); color: #f85149; }
+        body.dark .status-badge.upcoming { background: rgba(247, 147, 26, 0.12); color: #f7931a; }
+        body.dark .status-badge.finished { background: rgba(139, 148, 158, 0.1); color: #8b949e; }
+        body.dark .card { background: #161b22 !important; border-color: #30363d !important; }
+        body.dark .total-display { background: #161b22 !important; border-color: #30363d !important; }
+        body.dark .search-input { background: #161b22 !important; border-color: #30363d !important; color: #e6edf3 !important; }
+        body.dark .popular-tag { background: #21262d !important; color: #e6edf3 !important; }
+        body.dark .popular-tag:hover { background: #30363d !important; }
+        body.dark .kpi-card { background: #161b22 !important; border-color: #30363d !important; }
+        body.dark .history-item { background: #161b22 !important; border-color: #30363d !important; }
+        body.dark .history-item:hover { background: #1c2333 !important; }
+        body.dark .settings-item { border-bottom-color: #30363d !important; }
+        body.dark .toggle-btn { background: #30363d !important; color: #e6edf3 !important; }
+        body.dark .toggle-btn.active { background: #f7931a !important; color: #0d1117 !important; }
+        body.dark .modal-box { background: #161b22 !important; border-color: #30363d !important; }
+        body.dark .modal-box .modal-result { background: #0d1117 !important; }
+        body.dark .toast { background: #161b22 !important; color: #e6edf3 !important; border-color: #30363d !important; }
+        body.dark .toast.success { background: #161b22 !important; color: #3fb950 !important; border-color: #2ea043 !important; }
+        body.dark .toast.error { background: #161b22 !important; color: #f85149 !important; border-color: #da3633 !important; }
+        body.dark .disclaimer { border-top-color: #30363d !important; }
+        body.dark .table-header { background: #161b22 !important; border-color: #30363d !important; color: #8b949e !important; }
+        body.dark .turbo-details { background: #161b22 !important; border-color: #30363d !important; color: #8b949e !important; }
+        body.dark .weather-card { background: #161b22 !important; border-color: #30363d !important; }
+        body.dark .weather-input { background: #161b22 !important; border-color: #30363d !important; color: #e6edf3 !important; }
+        body.dark .weather-input-btn { background: #f7931a !important; color: #0d1117 !important; }
+        body.dark .btn-calc { background: #f7931a !important; color: #0d1117 !important; }
+        body.dark .btn-save { background: #2ea043 !important; color: #ffffff !important; }
+        body.dark .btn-clear { background: #161b22 !important; color: #f85149 !important; border-color: #30363d !important; }
+        body.dark .btn-api { background: #f7931a !important; color: #0d1117 !important; }
+        body.dark .search-result-item { background: #161b22 !important; border-color: #30363d !important; }
+        body.dark .search-result-item:hover { background: #1c2333 !important; }
+        body.dark .live-match-card { background: #161b22 !important; border-color: #30363d !important; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px 8px; background: #0b0e14; border-bottom: 1px solid #1e2430; flex-shrink: 0; z-index: 10; padding-top: env(safe-area-inset-top, 10px); }
+        .header h1 { font-size: 17px; font-weight: 600; color: #f7931a; display: flex; align-items: center; gap: 6px; }
+        .header h1 span { font-size: 8px; color: #8b93a7; font-weight: 400; }
+        .header-actions { display: flex; align-items: center; gap: 4px; }
+        .header-actions button { background: transparent; border: none; color: #8b93a7; font-size: 15px; cursor: pointer; padding: 4px 6px; border-radius: 6px; transition: color 0.2s; }
+        .header-actions button:hover { color: #f7931a; }
+        .header-weather { display: flex; align-items: center; gap: 4px; font-size: 11px; color: #8b93a7; cursor: pointer; padding: 3px 8px; border-radius: 8px; transition: background 0.2s; white-space: nowrap; }
+        .header-weather:hover { background: rgba(255, 255, 255, 0.04); }
+        .header-weather .weather-icon { font-size: 13px; }
+        .header-weather .weather-temp { font-weight: 500; color: #f7931a; }
+        .filter-bar { display: flex; flex-wrap: wrap; gap: 4px; padding: 6px 10px; background: #0b0e14; border-bottom: 1px solid #1e2430; flex-shrink: 0; align-items: center; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .filter-bar::-webkit-scrollbar { display: none; }
+        .filter-bar .date-scroll { display: flex; gap: 4px; flex: 1; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 2px 0; }
+        .filter-bar .date-scroll::-webkit-scrollbar { display: none; }
+        .filter-bar .date-btn { flex: 0 0 auto; padding: 4px 10px; border-radius: 8px; border: 1px solid #1e2430; background: transparent; color: #8b93a7; font-size: 9px; cursor: pointer; transition: all 0.2s; text-align: center; min-width: 44px; font-weight: 500; }
+        .filter-bar .date-btn .day { font-size: 7px; color: #6b7280; display: block; }
+        .filter-bar .date-btn .number { font-size: 13px; font-weight: 600; display: block; }
+        .filter-bar .date-btn.active { background: #f7931a; color: #0b0e14; border-color: #f7931a; }
+        .filter-bar .date-btn.active .day { color: #0b0e14; }
+        .filter-bar .date-btn:hover { border-color: #f7931a; }
+        .filter-bar .filter-status { font-size: 8px; color: #16a34a; display: flex; align-items: center; gap: 3px; white-space: nowrap; margin-left: 4px; }
+        .filter-bar .filter-status .dot { width: 4px; height: 4px; border-radius: 50%; background: #16a34a; display: inline-block; }
+        .main-content { flex: 1; overflow-y: auto; padding: 0; -webkit-overflow-scrolling: touch; padding-bottom: 60px; }
+        .main-content::-webkit-scrollbar { width: 2px; }
+        .main-content::-webkit-scrollbar-thumb { background: #1e2430; border-radius: 2px; }
+        .screen { display: none; animation: fadeIn 0.2s ease; }
+        .screen.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+        .table-header { display: grid; grid-template-columns: 2fr 1.2fr 0.7fr 0.8fr 0.8fr; padding: 4px 10px; background: #13171f; border-bottom: 1px solid #1e2430; font-size: 7px; font-weight: 600; color: #8b93a7; text-transform: uppercase; letter-spacing: 0.3px; flex-shrink: 0; position: sticky; top: 0; z-index: 5; }
+        .match-row { display: grid; grid-template-columns: 2fr 1.2fr 0.7fr 0.8fr 0.8fr; padding: 4px 8px; border-bottom: 1px solid #1e2430; background: transparent; transition: background 0.15s; cursor: pointer; align-items: center; gap: 2px; position: relative; min-height: 32px; }
+        .match-row:hover { background: rgba(255, 255, 255, 0.03); }
+        .match-row .col-teams { display: flex; flex-direction: column; gap: 0px; line-height: 1.2; }
+        .match-row .col-teams .team-home { font-size: 10px; font-weight: 600; color: #e6e8ec; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .match-row .col-teams .team-away { font-size: 9px; color: #8b93a7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .match-row .col-teams .league { font-size: 6px; color: #6b7280; display: flex; align-items: center; gap: 3px; margin-top: 1px; }
+        .match-row .col-prediction { display: flex; flex-direction: column; gap: 0px; line-height: 1.2; }
+        .match-row .col-prediction .prediction { font-size: 9px; font-weight: 600; color: #f7931a; white-space: nowrap; }
+        .match-row .col-prediction .odds { font-size: 7px; color: #8b93a7; }
+        .match-row .col-prediction .odds .value { color: #f7931a; font-weight: 600; }
+        .match-row .col-confidence { font-size: 12px; font-weight: 700; text-align: center; white-space: nowrap; }
+        .match-row .col-confidence .confidence-high { color: #16a34a; }
+        .match-row .col-confidence .confidence-medium { color: #ca8a04; }
+        .match-row .col-confidence .confidence-low { color: #dc2626; }
+        .match-row .col-time { font-size: 7px; color: #8b93a7; text-align: center; line-height: 1.2; white-space: nowrap; }
+        .match-row .col-time .date { display: block; font-size: 6px; color: #6b7280; }
+        .match-row .col-status { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+        .match-row .status-badge { font-size: 6px; padding: 1px 5px; border-radius: 8px; white-space: nowrap; display: inline-block; }
+        .match-row .status-badge.live { background: rgba(220, 38, 38, 0.12); color: #dc2626; border: 1px solid rgba(220, 38, 38, 0.2); animation: pulse-minimal 1.5s ease-in-out infinite; }
+        .match-row .status-badge.upcoming { background: rgba(247, 147, 26, 0.1); color: #f7931a; border: 1px solid rgba(247, 147, 26, 0.15); }
+        .match-row .status-badge.finished { background: rgba(139, 147, 167, 0.08); color: #8b93a7; border: 1px solid rgba(139, 147, 167, 0.1); }
+        .match-row .value-tag { font-size: 5px; padding: 0px 4px; border-radius: 6px; background: #16a34a; color: #ffffff; display: inline-block; font-weight: 600; margin-left: 2px; }
+        .match-row .turbo-indicator { font-size: 7px; color: #8b93a7; cursor: pointer; padding: 1px 4px; border-radius: 3px; background: rgba(247, 147, 26, 0.06); transition: all 0.2s; line-height: 1; }
+        .match-row .turbo-indicator:hover { background: rgba(247, 147, 26, 0.15); color: #f7931a; }
+        .match-row .turbo-indicator.active { color: #f7931a; }
+        .match-row .turbo-indicator .spinner-tiny { display: inline-block; width: 8px; height: 8px; border: 1.5px solid rgba(247, 147, 26, 0.2); border-radius: 50%; border-top-color: #f7931a; animation: spin 0.6s linear infinite; vertical-align: middle; }
+        @keyframes pulse-minimal { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .turbo-details { display: none; padding: 4px 10px 4px 16px; background: #13171f; border-bottom: 1px solid #1e2430; font-size: 8px; color: #8b93a7; line-height: 1.4; }
+        .turbo-details.open { display: block; }
+        .turbo-details .detail-row { display: flex; gap: 6px; flex-wrap: wrap; }
+        .turbo-details .detail-row .item { display: flex; align-items: center; gap: 2px; }
+        .turbo-details .detail-row .item .label { color: #8b93a7; }
+        .turbo-details .detail-row .item .value.good { color: #16a34a; font-weight: 600; }
+        .turbo-details .detail-row .item .value.warn { color: #ca8a04; font-weight: 600; }
+        .turbo-details .detail-row .item .value.bad { color: #dc2626; font-weight: 600; }
+        .turbo-details .detail-row .item .value.accent { color: #f7931a; font-weight: 600; }
+        .turbo-details .progress-mini { height: 2px; background: #1e2430; border-radius: 2px; margin-top: 2px; overflow: hidden; }
+        .turbo-details .progress-mini .fill { height: 100%; background: #f7931a; border-radius: 2px; transition: width 0.4s ease; }
+        .live-match-card { background: transparent; border: 1px solid #1e2430; border-radius: 10px; padding: 10px 12px; margin: 4px 10px; transition: border-color 0.2s; cursor: pointer; }
+        .live-match-card:hover { border-color: #f7931a; }
+        .live-match-card .live-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .live-match-card .live-header .time { font-size: 12px; font-weight: 700; color: #dc2626; display: flex; align-items: center; gap: 4px; }
+        .live-match-card .live-header .time .dot { width: 6px; height: 6px; border-radius: 50%; background: #dc2626; display: inline-block; animation: pulse-minimal 1s infinite; }
+        .live-match-card .live-header .league { font-size: 8px; color: #8b93a7; }
+        .live-match-card .live-score { display: flex; justify-content: center; align-items: center; gap: 12px; padding: 6px 0; font-size: 20px; font-weight: 700; }
+        .live-match-card .live-score .home { color: #f7931a; }
+        .live-match-card .live-score .away { color: #8b93a7; }
+        .live-match-card .live-score .vs { color: #6b7280; font-size: 14px; }
+        .live-match-card .live-details { display: flex; flex-wrap: wrap; gap: 6px; font-size: 9px; color: #8b93a7; justify-content: center; padding-top: 4px; border-top: 1px solid #1e2430; }
+        .live-match-card .live-details span { display: flex; align-items: center; gap: 3px; }
+        .live-match-card .live-details .highlight { color: #f7931a; font-weight: 600; }
+        .search-container { padding: 0 10px; }
+        .search-input-wrap { display: flex; gap: 6px; margin: 6px 0; }
+        .search-input-wrap .search-input { flex: 1; padding: 10px 14px; border-radius: 10px; border: 1px solid #1e2430; background: transparent; color: #e6e8ec; font-size: 14px; outline: none; transition: border-color 0.2s; }
+        .search-input-wrap .search-input:focus { border-color: #f7931a; }
+        .search-input-wrap .search-input::placeholder { color: #6b7280; }
+        .search-input-wrap .search-btn { padding: 10px 16px; border-radius: 10px; border: none; background: #f7931a; color: #0b0e14; font-weight: 600; font-size: 14px; cursor: pointer; transition: background 0.2s; }
+        .search-input-wrap .search-btn:hover { background: #e8850a; }
+        .popular-tags { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0 8px; }
+        .popular-tag { padding: 4px 12px; border-radius: 16px; background: #13171f; color: #e6e8ec; font-size: 10px; cursor: pointer; border: 1px solid #1e2430; transition: all 0.2s; }
+        .popular-tag:hover { border-color: #f7931a; background: rgba(247, 147, 26, 0.08); }
+        .search-results { margin-top: 6px; }
+        .search-result-item { background: transparent; border: 1px solid #1e2430; border-radius: 8px; padding: 8px 10px; margin: 4px 0; cursor: pointer; transition: border-color 0.2s; }
+        .search-result-item:hover { border-color: #f7931a; }
+        .search-result-item .teams { font-size: 13px; font-weight: 600; }
+        .search-result-item .info { font-size: 9px; color: #8b93a7; display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+        .search-empty { text-align: center; padding: 20px 0; color: #6b7280; font-size: 13px; }
+        .card { background: transparent; border: 1px solid #1e2430; border-radius: 10px; padding: 12px 14px; margin: 4px 10px; }
+        .card-title { font-size: 9px; font-weight: 600; color: #8b93a7; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 4px 10px; }
+        .kpi-card { background: transparent; border: 1px solid #1e2430; border-radius: 8px; padding: 10px 12px; }
+        .kpi-card .value { font-size: 20px; font-weight: 700; color: #f7931a; }
+        .kpi-card .label { font-size: 7px; color: #8b93a7; }
+        .kpi-card .trend { font-size: 7px; color: #6b7280; margin-top: 2px; }
+        .chart-container { background: transparent; border: 1px solid #1e2430; border-radius: 8px; padding: 10px; margin: 4px 10px; }
+        .chart-controls { display: flex; gap: 3px; margin-top: 4px; justify-content: center; }
+        .chart-controls button { background: transparent; border: 1px solid #1e2430; color: #8b93a7; padding: 2px 8px; border-radius: 8px; font-size: 8px; cursor: pointer; transition: all 0.2s; }
+        .chart-controls button.active { background: #f7931a; color: #0b0e14; border-color: #f7931a; }
+        .history-item { background: transparent; border: 1px solid #1e2430; border-radius: 6px; padding: 6px 8px; display: flex; justify-content: space-between; font-size: 10px; margin: 2px 0; cursor: pointer; transition: background 0.2s; }
+        .history-item:hover { background: rgba(255, 255, 255, 0.03); }
+        .history-item .win { color: #16a34a; }
+        .history-item .loss { color: #dc2626; }
+        .history-item .pending { color: #ca8a04; }
+        .settings-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #1e2430; }
+        .settings-item .label { font-size: 12px; color: #8b93a7; }
+        .settings-item input { padding: 8px; border-radius: 6px; border: 1px solid #1e2430; background: transparent; color: #e6e8ec; outline: none; font-size: 11px; width: 100%; }
+        .settings-item input:focus { border-color: #f7931a; }
+        .toggle-btn { background: #1e2430; border: none; color: #e6e8ec; padding: 3px 12px; border-radius: 8px; font-size: 10px; cursor: pointer; transition: background 0.2s; }
+        .toggle-btn.active { background: #f7931a; color: #0b0e14; }
+        .bottom-nav { display: flex; background: #0b0e14; border-top: 1px solid #1e2430; flex-shrink: 0; padding: 4px 0 env(safe-area-inset-bottom, 4px); position: sticky; bottom: 0; z-index: 20; justify-content: space-around; padding-bottom: env(safe-area-inset-bottom, 6px); }
+        .bottom-nav .nav-btn { flex: 0 0 auto; padding: 4px 8px 3px; font-size: 7px; font-weight: 500; color: #6b7280; cursor: pointer; background: transparent; border: none; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1px; transition: color 0.2s; min-width: 40px; border-radius: 6px; }
+        .bottom-nav .nav-btn .nav-icon { font-size: 18px; line-height: 1.2; }
+        .bottom-nav .nav-btn .nav-label { font-size: 6px; }
+        .bottom-nav .nav-btn.active { color: #f7931a; }
+        .bottom-nav .nav-btn .badge { background: #dc2626; color: #ffffff; font-size: 5px; padding: 1px 4px; border-radius: 6px; margin-left: 2px; }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 16px; animation: fadeIn 0.2s ease; }
+        .modal-overlay.active { display: flex; }
+        .modal-box { background: #13171f; border: 1px solid #1e2430; border-radius: 12px; padding: 20px; max-width: 380px; width: 100%; animation: slideUp 0.2s ease; }
+        .modal-box h3 { color: #e6e8ec; font-size: 16px; font-weight: 600; margin-bottom: 8px; text-align: center; }
+        .modal-box .modal-result { background: #0b0e14; border-radius: 6px; padding: 8px; margin: 4px 0; font-size: 11px; line-height: 1.5; }
+        .modal-box .modal-result .label { color: #8b93a7; }
+        .modal-box .modal-result .value { color: #f7931a; font-weight: 600; }
+        .modal-box .modal-actions { display: flex; gap: 6px; margin-top: 10px; }
+        .modal-box .modal-actions button { flex: 1; padding: 10px; border-radius: 6px; border: none; font-weight: 600; font-size: 12px; cursor: pointer; transition: background 0.2s; }
+        .modal-box .modal-actions button:active { transform: scale(0.98); }
+        .modal-box .modal-actions .btn-save-modal { background: #16a34a; color: #ffffff; }
+        .modal-box .modal-actions .btn-save-modal:hover { background: #15803d; }
+        .modal-box .modal-actions .btn-skip-modal { background: #1e2430; color: #8b93a7; border: 1px solid #1e2430; }
+        .modal-box .modal-actions .btn-skip-modal:hover { background: #2a3342; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .toast { position: fixed; bottom: 64px; left: 50%; transform: translateX(-50%); padding: 6px 16px; border-radius: 8px; font-weight: 500; font-size: 11px; z-index: 999; background: #13171f; color: #e6e8ec; border: 1px solid #1e2430; animation: slideUp 0.2s ease; max-width: 90%; text-align: center; }
+        .toast.success { background: #13171f; color: #16a34a; border-color: #1e2430; }
+        .toast.error { background: #13171f; color: #dc2626; border-color: #1e2430; }
+        .disclaimer { font-size: 8px; color: #6b7280; text-align: center; padding: 4px 10px 3px; border-top: 1px solid #1e2430; margin-top: 4px; line-height: 1.3; }
+        .text-muted { color: #8b93a7; }
+        .text-center { text-align: center; }
+        .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid #1e2430; border-radius: 50%; border-top-color: #f7931a; animation: spin 0.8s linear infinite; }
+        .swipe-indicator { position: fixed; bottom: 58px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.6); border-radius: 12px; padding: 3px 12px; font-size: 8px; color: #6b7280; backdrop-filter: blur(8px); border: 1px solid #1e2430; opacity: 0.5; pointer-events: none; display: none; }
+        .swipe-indicator.show { display: block; }
+        @media (pointer: coarse) { .swipe-indicator.show { display: block; } }
+        .weather-card { background: transparent; border: 1px solid #1e2430; border-radius: 8px; padding: 10px 12px; margin: 4px 10px; }
+        .weather-card .card-title { color: #8b93a7; }
+        .weather-card .weather-main .temp-big { color: #f7931a; font-weight: 700; font-size: 20px; }
+        .weather-input-row { display: flex; gap: 4px; margin-bottom: 4px; }
+        .weather-input { flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #1e2430; background: transparent; color: #e6e8ec; font-size: 12px; outline: none; transition: border-color 0.2s; }
+        .weather-input:focus { border-color: #f7931a; }
+        .weather-input-btn { padding: 8px 14px; border-radius: 6px; border: none; background: #f7931a; color: #0b0e14; font-weight: 600; font-size: 12px; cursor: pointer; transition: background 0.2s; }
+        .weather-input-btn:hover { background: #e8850a; }
+        .h2h-summary { display: flex; flex-wrap: wrap; gap: 6px; font-size: 10px; padding: 4px 0; border-bottom: 1px solid #1e2430; margin-bottom: 4px; }
+        .h2h-summary .item { background: rgba(255,255,255,0.04); padding: 2px 8px; border-radius: 4px; }
+        .h2h-summary .num { color: #f7931a; font-weight: 600; }
+        .h2h-item { font-size: 9px; padding: 3px 0; border-bottom: 1px solid #1e2430; display: flex; justify-content: space-between; align-items: center; }
+        .h2h-item .score { font-weight: 600; color: #f7931a; }
+        .h2h-input-row { display: flex; gap: 4px; margin: 4px 0; flex-wrap: wrap; }
+        .h2h-input-row input { flex: 1; min-width: 80px; padding: 8px; border-radius: 6px; border: 1px solid #1e2430; background: transparent; color: #e6e8ec; font-size: 11px; outline: none; }
+        .h2h-input-row input:focus { border-color: #f7931a; }
+        .h2h-input-row button { padding: 8px 14px; border-radius: 6px; border: none; background: #f7931a; color: #0b0e14; font-weight: 600; font-size: 11px; cursor: pointer; white-space: nowrap; }
+        .h2h-input-row button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .h2h-status { font-size: 10px; color: #8b93a7; margin: 4px 0; }
+        .h2h-data-status { font-size: 8px; color: #8b93a7; }
+        .btn-row { display: flex; gap: 4px; flex-wrap: wrap; }
+        .btn-row button { padding: 4px 12px; border-radius: 4px; border: 1px solid #1e2430; background: transparent; color: #e6e8ec; cursor: pointer; font-size: 10px; transition: all 0.2s; }
+        .btn-row button:hover { border-color: #f7931a; color: #f7931a; }
+        @media (max-width: 420px) { .table-header { font-size: 6px; grid-template-columns: 1.8fr 1fr 0.6fr 0.7fr 0.7fr; } .match-row { grid-template-columns: 1.8fr 1fr 0.6fr 0.7fr 0.7fr; padding: 3px 4px; } .match-row .col-teams .team-home { font-size: 9px; } .match-row .col-teams .team-away { font-size: 8px; } .match-row .col-confidence { font-size: 10px; } .match-row .col-prediction .prediction { font-size: 8px; } .match-row .col-time { font-size: 6px; } .modal-box { padding: 14px; margin: 10px; } .header h1 { font-size: 14px; } }
     </style>
 </head>
 <body>
@@ -1729,6 +507,7 @@
     <script>
         // ================================================================
         // КВАНТУМ v6.0 — ПОЛНАЯ JAVASCRIPT ЛОГИКА
+        // С ЗАЩИТОЙ ОТ ПАДЕНИЙ ПРИ ОТСУТСТВИИ ДАННЫХ
         // ================================================================
 
         const CACHE_CONFIG = {
@@ -1780,7 +559,7 @@
             if (old) old.remove();
             const t = document.createElement('div');
             t.className = 'toast ' + type;
-            t.textContent = msg;
+            t.textContent = msg || '👀';
             document.body.appendChild(t);
             setTimeout(() => { if (t.parentNode) t.remove(); }, 3000);
         }
@@ -1858,7 +637,7 @@
         }
 
         let state = {
-            bets: JSON.parse(localStorage.getItem('quantum_bets') || '[]'),
+            bets: (() => { try { return JSON.parse(localStorage.getItem('quantum_bets') || '[]'); } catch { return []; } })(),
             currentLeague: localStorage.getItem('quantum_league') || '39',
             currentMode: 'total',
             h2hData: null,
@@ -1880,7 +659,7 @@
             headerWeatherTimestamp: null,
             currentLeagueData: null,
             chartRange: '30d',
-            valueBets: JSON.parse(localStorage.getItem('quantum_value_bets') || '[]'),
+            valueBets: (() => { try { return JSON.parse(localStorage.getItem('quantum_value_bets') || '[]'); } catch { return []; } })(),
             shapData: null,
             livePredictions: {},
             ultimateModel: null,
@@ -1896,13 +675,14 @@
             notifiedMatches: new Set(),
             turboAnalysisResults: {},
             isTurboRunning: false,
-            searchHistory: JSON.parse(localStorage.getItem('quantum_search_history') || '[]'),
+            searchHistory: (() => { try { return JSON.parse(localStorage.getItem('quantum_search_history') || '[]'); } catch { return []; } })(),
             matchDataCache: {}
         };
 
-        let LEAGUES = JSON.parse(localStorage.getItem('quantum_leagues') || '{}');
+        let LEAGUES = (() => { try { return JSON.parse(localStorage.getItem('quantum_leagues') || '{}'); } catch { return {}; } })();
         let ALL_LEAGUES_LOADED = false;
 
+        // ===== ЗАГРУЗКА ЛИГ (с защитой) =====
         async function loadAllLeagues() {
             if (ALL_LEAGUES_LOADED && Object.keys(LEAGUES).length > 0) return;
             const cached = localStorage.getItem('quantum_leagues_cache');
@@ -1910,7 +690,7 @@
                 try {
                     const data = JSON.parse(cached);
                     if (Date.now() - data.timestamp < CACHE_CONFIG.LEAGUES_TTL) {
-                        LEAGUES = data.leagues;
+                        LEAGUES = data.leagues || {};
                         ALL_LEAGUES_LOADED = true;
                         renderLeagues();
                         return;
@@ -1928,7 +708,7 @@
                     headers: { 'x-apisports-key': apiKey }
                 }, CACHE_CONFIG.LEAGUES_TTL);
                 const leagues = {};
-                const leaguesToProcess = response.response.filter(function(l) {
+                const leaguesToProcess = (response.response || []).filter(function(l) {
                     return TOP_LEAGUES.includes(l.league.id) && l.league.type === 'League' && l.seasons && l.seasons
                         .length > 0;
                 });
@@ -1999,38 +779,14 @@
 
         function getFlag(country) {
             var flags = {
-                'England': '🏴',
-                'Spain': '🇪🇸',
-                'Germany': '🇩🇪',
-                'Italy': '🇮🇹',
-                'France': '🇫🇷',
-                'Netherlands': '🇳🇱',
-                'Portugal': '🇵🇹',
-                'Brazil': '🇧🇷',
-                'Argentina': '🇦🇷',
-                'USA': '🇺🇸',
-                'Mexico': '🇲🇽',
-                'Russia': '🇷🇺',
-                'Japan': '🇯🇵',
-                'South Korea': '🇰🇷',
-                'Australia': '🇦🇺',
-                'China': '🇨🇳',
-                'Saudi Arabia': '🇸🇦',
-                'Turkey': '🇹🇷',
-                'Belgium': '🇧🇪',
-                'Switzerland': '🇨🇭',
-                'Ukraine': '🇺🇦',
-                'Poland': '🇵🇱',
-                'Czech Republic': '🇨🇿',
-                'Austria': '🇦🇹',
-                'Greece': '🇬🇷',
-                'Denmark': '🇩🇰',
-                'Norway': '🇳🇴',
-                'Sweden': '🇸🇪',
-                'Scotland': '🏴',
-                'Wales': '🏴',
-                'Ireland': '🇮🇪',
-                'Northern Ireland': '🇬🇧'
+                'England': '🏴', 'Spain': '🇪🇸', 'Germany': '🇩🇪', 'Italy': '🇮🇹', 'France': '🇫🇷',
+                'Netherlands': '🇳🇱', 'Portugal': '🇵🇹', 'Brazil': '🇧🇷', 'Argentina': '🇦🇷',
+                'USA': '🇺🇸', 'Mexico': '🇲🇽', 'Russia': '🇷🇺', 'Japan': '🇯🇵', 'South Korea': '🇰🇷',
+                'Australia': '🇦🇺', 'China': '🇨🇳', 'Saudi Arabia': '🇸🇦', 'Turkey': '🇹🇷',
+                'Belgium': '🇧🇪', 'Switzerland': '🇨🇭', 'Ukraine': '🇺🇦', 'Poland': '🇵🇱',
+                'Czech Republic': '🇨🇿', 'Austria': '🇦🇹', 'Greece': '🇬🇷', 'Denmark': '🇩🇰',
+                'Norway': '🇳🇴', 'Sweden': '🇸🇪', 'Scotland': '🏴', 'Wales': '🏴',
+                'Ireland': '🇮🇪', 'Northern Ireland': '🇬🇧'
             };
             return flags[country] || '🌍';
         }
@@ -2046,13 +802,13 @@
                 select.appendChild(option);
                 return;
             }
-            var sorted = Object.keys(LEAGUES).sort(function(a, b) { return LEAGUES[a].name.localeCompare(LEAGUES[b]
-                    .name); });
+            var sorted = Object.keys(LEAGUES).sort(function(a, b) { return (LEAGUES[a].name || a).localeCompare(LEAGUES[b]
+                    .name || b); });
             for (var i = 0; i < sorted.length; i++) {
                 var key = sorted[i];
                 var opt = document.createElement('option');
                 opt.value = key;
-                opt.textContent = LEAGUES[key].name;
+                opt.textContent = LEAGUES[key].name || key;
                 if (key === state.currentLeague) opt.selected = true;
                 select.appendChild(opt);
             }
@@ -2063,7 +819,7 @@
             var league = getLeague();
             var info = $('leagueInfo');
             if (info && league.avgGoals) {
-                info.textContent = 'Ср. тотал: ' + league.avgGoals + ' | ОЗ: ' + league.oz + '% | ' + Object.keys(LEAGUES)
+                info.textContent = 'Ср. тотал: ' + (league.avgGoals || '--') + ' | ОЗ: ' + (league.oz || 0) + '% | ' + Object.keys(LEAGUES)
                     .length + ' лиг';
             }
         }
@@ -2096,6 +852,7 @@
             return { name: 'Лига', oz: 60, avgGoals: 2.6, country: 'Мир' };
         }
 
+        // ===== H2H (с защитой) =====
         async function loadH2H() {
             var homeTeamInput = $('homeTeamH2H');
             var awayTeamInput = $('awayTeamH2H');
@@ -2109,10 +866,10 @@
                 try {
                     var data = JSON.parse(cached);
                     if (Date.now() - data.timestamp < CACHE_CONFIG.H2H_TTL) {
-                        state.h2hData = data.matches;
+                        state.h2hData = data.matches || [];
                         state.h2hTimestamp = data.timestamp;
-                        renderH2HData(data.matches);
-                        showToast('✅ Из кэша (' + data.matches.length + ' матчей)', 'success');
+                        renderH2HData(state.h2hData);
+                        showToast('✅ Из кэша (' + state.h2hData.length + ' матчей)', 'success');
                         return;
                     }
                 } catch (e) {}
@@ -2178,13 +935,13 @@
                 for (var k = 0; k < allMatches.length; k++) {
                     var m = allMatches[k];
                     matches.push({
-                        home: m.teams.home.name,
-                        away: m.teams.away.name,
+                        home: m.teams.home.name || '—',
+                        away: m.teams.away.name || '—',
                         homeScore: m.goals.home || 0,
                         awayScore: m.goals.away || 0,
                         oz: (m.goals.home || 0) > 0 && (m.goals.away || 0) > 0,
                         total: (m.goals.home || 0) + (m.goals.away || 0),
-                        date: m.fixture.date,
+                        date: m.fixture.date || new Date().toISOString(),
                         league: m.league || null
                     });
                 }
@@ -2195,7 +952,7 @@
                 showToast('✅ Загружено ' + matches.length + ' матчей', 'success');
             } catch (error) {
                 handleError(error);
-                if (status) status.innerHTML = '❌ ' + error.message;
+                if (status) status.innerHTML = '❌ ' + (error.message || 'Ошибка');
             } finally {
                 state.isLoading = false;
                 resetButtons(btn, btnText, spinner);
@@ -2206,6 +963,11 @@
             var status = $('h2hStatus');
             var results = $('h2hResults');
             var dataStatus = $('h2hDataStatus');
+            if (!matches || matches.length === 0) {
+                if (status) status.innerHTML = '📊 Нет данных';
+                if (results) results.innerHTML = '';
+                return;
+            }
             var total = matches.length;
             var ozCount = 0;
             for (var i = 0; i < total; i++) { if (matches[i].oz) ozCount++; }
@@ -2270,6 +1032,7 @@
             if (spinner) spinner.style.display = 'none';
         }
 
+        // ===== НАВИГАЦИЯ =====
         function switchTab(tab) {
             state.currentTab = tab;
             var screens = document.querySelectorAll('.screen');
@@ -2327,6 +1090,7 @@
             }
         }
 
+        // ===== ФИЛЬТР ПО ДАТАМ =====
         function renderDateFilter() {
             var container = document.getElementById('dateScroll');
             if (!container) return;
@@ -2354,11 +1118,12 @@
         }
 
         function selectDate(dateStr) {
-            state.selectedDate = new Date(dateStr);
+            try { state.selectedDate = new Date(dateStr); } catch (e) { state.selectedDate = new Date(); }
             renderDateFilter();
             renderPredictions();
         }
 
+        // ===== ПОГОДА (с защитой) =====
         var MOSCOW_COORDS = { lat: 55.7558, lon: 37.6173 };
 
         async function loadHeaderWeather() {
@@ -2393,15 +1158,15 @@
                 if (!response.ok) throw new Error('Погода не найдена');
                 var data = await response.json();
                 state.headerWeather = {
-                    temp: Math.round(data.main.temp),
-                    feels_like: Math.round(data.main.feels_like),
-                    humidity: data.main.humidity,
-                    wind_speed: data.wind.speed,
-                    weather: data.weather[0].main,
-                    description: data.weather[0].description,
-                    icon: data.weather[0].icon,
-                    city: data.name,
-                    country: data.sys.country
+                    temp: Math.round(data.main.temp || 0),
+                    feels_like: Math.round(data.main.feels_like || 0),
+                    humidity: data.main.humidity || 0,
+                    wind_speed: data.wind.speed || 0,
+                    weather: data.weather[0].main || 'Clear',
+                    description: data.weather[0].description || '—',
+                    icon: data.weather[0].icon || '01d',
+                    city: data.name || '—',
+                    country: data.sys.country || '—'
                 };
                 state.headerWeatherTimestamp = Date.now();
                 localStorage.setItem(weatherCacheKey, JSON.stringify({ weather: state.headerWeather, timestamp: Date
@@ -2417,15 +1182,16 @@
         function updateHeaderWeatherDisplay() {
             var iconEl = document.getElementById('weatherIconHeader');
             var tempEl = document.getElementById('weatherTempHeader');
-            if (!state.headerWeather) return;
+            if (!state.headerWeather) { iconEl.textContent = '❌';
+                tempEl.textContent = '--°C'; return; }
             var w = state.headerWeather;
             iconEl.textContent = getWeatherEmoji(w);
-            tempEl.textContent = w.temp + '°C';
+            tempEl.textContent = (w.temp || '--') + '°C';
         }
 
         function getWeatherEmoji(weather) {
             if (!weather) return '🌤️';
-            var condition = weather.weather.toLowerCase();
+            var condition = (weather.weather || '').toLowerCase();
             if (condition.includes('rain') || condition.includes('drizzle')) return '🌧️';
             if (condition.includes('snow')) return '❄️';
             if (condition.includes('cloud')) return '☁️';
@@ -2438,6 +1204,7 @@
         function refreshWeather() { loadHeaderWeather();
             showToast('🔄 Обновление погоды', 'info'); }
 
+        // ===== ТЕМА =====
         function toggleTheme() {
             var isDark = document.body.classList.contains('dark');
             document.body.classList.toggle('dark');
@@ -2470,6 +1237,7 @@
             }
         }
 
+        // ===== API КЛЮЧИ =====
         function saveApiKey() {
             var key = document.getElementById('apiKeyInput').value.trim();
             if (!key) { showToast('⚠️ Введите API ключ', 'error'); return; }
@@ -2491,15 +1259,16 @@
             loadHeaderWeather();
         }
 
+        // ===== МОДАЛЬНОЕ ОКНО =====
         var pendingTurboBet = null;
 
         function showSaveModal(data) {
-            pendingTurboBet = data;
-            document.getElementById('modalPrediction').textContent = data.prediction || '—';
-            document.getElementById('modalConfidence').textContent = data.confidence + '%' || '—';
-            document.getElementById('modalValue').textContent = data.value || '—';
-            document.getElementById('modalDetective').textContent = data.detective || '—';
-            document.getElementById('modalWeather').textContent = data.weather || '—';
+            pendingTurboBet = data || {};
+            document.getElementById('modalPrediction').textContent = (data && data.prediction) || '—';
+            document.getElementById('modalConfidence').textContent = (data && data.confidence) ? data.confidence + '%' : '—';
+            document.getElementById('modalValue').textContent = (data && data.value) || '—';
+            document.getElementById('modalDetective').textContent = (data && data.detective) || '—';
+            document.getElementById('modalWeather').textContent = (data && data.weather) || '—';
             document.getElementById('saveModal').classList.add('active');
         }
 
@@ -2548,7 +1317,7 @@
                 home_pressing_intensity: 5,
                 away_pressing_intensity: 5,
                 league_avg: getLeague().avgGoals || 2.5,
-                h2h_avg: state.h2hData ? state.h2hData.reduce(function(s, m) { return s + m.total; }, 0) / state.h2hData
+                h2h_avg: state.h2hData && state.h2hData.length > 0 ? state.h2hData.reduce(function(s, m) { return s + (m.total || 0); }, 0) / state.h2hData
                     .length : 2.5,
                 weather_factor: 1.0,
                 home_xGA: 1.0,
@@ -2566,11 +1335,14 @@
             showToast('✅ Ставка сохранена', 'success');
         }
 
+        // ===== ТУРБО АНАЛИЗ (с защитой) =====
         async function turboAnalyze(matchId) {
             if (state.isTurboRunning) { showToast('⏳ Анализ уже идёт', 'info'); return; }
             var match = null;
-            for (var i = 0; i < state.predictions.length; i++) {
-                if (state.predictions[i].id === matchId) { match = state.predictions[i]; break; }
+            if (state.predictions) {
+                for (var i = 0; i < state.predictions.length; i++) {
+                    if (state.predictions[i].id === matchId) { match = state.predictions[i]; break; }
+                }
             }
             if (!match) { showToast('❌ Матч не найден', 'error'); return; }
 
@@ -2587,11 +1359,11 @@
 
             await delay(1500);
 
-            var homeGoals = match.homeScore !== null ? match.homeScore : 1;
-            var awayGoals = match.awayScore !== null ? match.awayScore : 1;
+            var homeGoals = match.homeScore !== null && match.homeScore !== undefined ? match.homeScore : 1;
+            var awayGoals = match.awayScore !== null && match.awayScore !== undefined ? match.awayScore : 1;
 
-            var homeTeamName = match.home;
-            var awayTeamName = match.away;
+            var homeTeamName = match.home || 'Хозяева';
+            var awayTeamName = match.away || 'Гости';
             var league = getLeague();
             var avgGoals = league.avgGoals || 2.5;
             var lambdaHome = avgGoals / 2;
@@ -2601,8 +1373,8 @@
                 var sumHome = 0,
                     sumAway = 0;
                 for (var j = 0; j < state.h2hData.length; j++) {
-                    sumHome += state.h2hData[j].homeScore;
-                    sumAway += state.h2hData[j].awayScore;
+                    sumHome += state.h2hData[j].homeScore || 0;
+                    sumAway += state.h2hData[j].awayScore || 0;
                 }
                 lambdaHome = (lambdaHome + sumHome / state.h2hData.length) / 2;
                 lambdaAway = (lambdaAway + sumAway / state.h2hData.length) / 2;
@@ -2627,8 +1399,8 @@
                 var wins = 0,
                     awayWins = 0;
                 for (var k = 0; k < state.h2hData.length; k++) {
-                    if (state.h2hData[k].homeScore > state.h2hData[k].awayScore) wins++;
-                    else if (state.h2hData[k].awayScore > state.h2hData[k].homeScore) awayWins++;
+                    if ((state.h2hData[k].homeScore || 0) > (state.h2hData[k].awayScore || 0)) wins++;
+                    else if ((state.h2hData[k].awayScore || 0) > (state.h2hData[k].homeScore || 0)) awayWins++;
                 }
                 homeForm = Math.round((wins / state.h2hData.length) * 100);
                 awayForm = Math.round((awayWins / state.h2hData.length) * 100);
@@ -2665,12 +1437,12 @@
             }
 
             var modalData = {
-                match: match.home + ' vs ' + match.away,
+                match: (match.home || '—') + ' vs ' + (match.away || '—'),
                 prediction: prediction,
                 confidence: aiConfidence,
                 value: valueResult.evPercent,
                 detective: detectiveResult.summary || 'Нет данных',
-                weather: state.weatherData ? state.weatherData.temp + '°C, ' + state.weatherData.description :
+                weather: state.weatherData ? (state.weatherData.temp || '--') + '°C, ' + (state.weatherData.description || '—') :
                     'Нет данных',
                 home: homeGoals,
                 away: awayGoals,
@@ -2679,12 +1451,12 @@
                 awayXG: aiAwayXG,
                 homeForm: homeForm,
                 awayForm: awayForm,
-                motivationHome: detectiveResult.motivation ? detectiveResult.motivation.factor : 1.0,
-                motivationAway: detectiveResult.motivation ? detectiveResult.motivation.factor : 1.0,
+                motivationHome: detectiveResult.motivation ? detectiveResult.motivation.factor || 1.0 : 1.0,
+                motivationAway: detectiveResult.motivation ? detectiveResult.motivation.factor || 1.0 : 1.0,
                 isDerby: detectiveResult.derby ? 1 : 0,
-                temperature: state.weatherData ? state.weatherData.temp : 15,
-                windSpeed: state.weatherData ? state.weatherData.wind_speed : 5,
-                humidity: state.weatherData ? state.weatherData.humidity : 60,
+                temperature: state.weatherData ? state.weatherData.temp || 15 : 15,
+                windSpeed: state.weatherData ? state.weatherData.wind_speed || 5 : 5,
+                humidity: state.weatherData ? state.weatherData.humidity || 60 : 60,
                 precipitation: state.weatherData && state.weatherData.weather && state.weatherData.weather.toLowerCase()
                     .includes('rain') ? 1 : 0,
                 league: match.league || null
@@ -2700,11 +1472,14 @@
             showToast('✅ Турбо-анализ готов', 'success');
         }
 
+        // ===== РАСЧЁТЫ =====
         function calculate() {
             renderPredictions();
         }
 
         function calculateValueBet(aiProb, odds) {
+            if (!aiProb || aiProb <= 0) aiProb = 0.5;
+            if (!odds || odds <= 1) odds = 1.85;
             var ev = (aiProb * odds) - 1;
             var b = odds - 1;
             var q = 1 - aiProb;
@@ -2747,7 +1522,7 @@
                 confidenceModifier = 1.0;
             if (result.derby) { summary += '⚔️ ДЕРБИ! ';
                 confidenceModifier *= 0.8; }
-            if (result.motivation && result.motivation.factor > 1.2) { summary += result.motivation.reason + '. ';
+            if (result.motivation && result.motivation.factor > 1.2) { summary += (result.motivation.reason || '') + '. ';
                 confidenceModifier *= 1.1; }
             if (result.homeUnpredictability && result.homeUnpredictability.level === 'high' || result
                 .awayUnpredictability && result.awayUnpredictability.level === 'high') {
@@ -2763,7 +1538,7 @@
                 summary += '✅ Команды стабильны. ';
                 confidenceModifier *= 1.05;
             }
-            if (weatherData) {
+            if (weatherData && weatherData.weather) {
                 var condition = weatherData.weather.toLowerCase();
                 if (condition.includes('rain') || condition.includes('snow')) { summary += '🌧️ Погода влияет. ';
                     confidenceModifier *= 0.9; } else if (condition.includes('clear')) { summary += '☀️ Отличная погода. ';
@@ -2805,8 +1580,8 @@
                 var homeWins = 0,
                     awayWins = 0;
                 for (var i = 0; i < matches.length; i++) {
-                    if (matches[i].homeScore > matches[i].awayScore) homeWins++;
-                    else if (matches[i].awayScore > matches[i].homeScore) awayWins++;
+                    if ((matches[i].homeScore || 0) > (matches[i].awayScore || 0)) homeWins++;
+                    else if ((matches[i].awayScore || 0) > (matches[i].homeScore || 0)) awayWins++;
                 }
                 var total = matches.length;
                 if (total > 0) {
@@ -2832,7 +1607,7 @@
                 anomalies: 0 };
             var anomalies = 0;
             var avgTotal = 0;
-            for (var i = 0; i < matches.length; i++) { avgTotal += matches[i].total; }
+            for (var i = 0; i < matches.length; i++) { avgTotal += (matches[i].total || 0); }
             avgTotal = avgTotal / matches.length;
             var teamMatches = [];
             for (var j = 0; j < matches.length; j++) {
@@ -2841,13 +1616,13 @@
             if (teamMatches.length === 0) return { level: 'low', factor: 1.0, advice: '✅ Нет данных', anomalies: 0 };
             var teamAvg = 0;
             for (var k = 0; k < teamMatches.length; k++) {
-                var scored = teamMatches[k].home === team ? teamMatches[k].homeScore : teamMatches[k].awayScore;
+                var scored = teamMatches[k].home === team ? (teamMatches[k].homeScore || 0) : (teamMatches[k].awayScore || 0);
                 teamAvg += scored;
             }
             teamAvg = teamAvg / teamMatches.length;
             for (var l = 0; l < teamMatches.length; l++) {
-                var scored2 = teamMatches[l].home === team ? teamMatches[l].homeScore : teamMatches[l].awayScore;
-                if (Math.abs(teamMatches[l].total - avgTotal) > 2) anomalies++;
+                var scored2 = teamMatches[l].home === team ? (teamMatches[l].homeScore || 0) : (teamMatches[l].awayScore || 0);
+                if (Math.abs((teamMatches[l].total || 0) - avgTotal) > 2) anomalies++;
                 if (Math.abs(scored2 - teamAvg) > 1.5) anomalies++;
             }
             var anomalyRate = anomalies / teamMatches.length;
@@ -2862,10 +1637,10 @@
             }
         }
 
+        // ===== ПРОГНОЗЫ (с защитой) =====
         async function generateTestPredictions() {
             var apiKey = localStorage.getItem('quantum_api_key');
             if (!apiKey) {
-                showToast('⚠️ Введите API ключ', 'error');
                 return getFallbackMatches();
             }
             var predictionsCacheKey = 'predictions_' + new Date().toISOString().split('T')[0];
@@ -2874,7 +1649,7 @@
                 try {
                     var data = JSON.parse(cached);
                     if (Date.now() - data.timestamp < CACHE_CONFIG.PREDICTIONS_TTL) {
-                        return data.matches;
+                        return data.matches || [];
                     }
                 } catch (e) {}
             }
@@ -2898,19 +1673,18 @@
                     } catch (e) { console.log('Ошибка загрузки лиги:', e); }
                 }
                 if (allMatches.length === 0) {
-                    showToast('⚠️ Нет матчей', 'info');
                     return getFallbackMatches();
                 }
                 var predictions = [];
                 for (var m = 0; m < allMatches.length; m++) {
                     var match = allMatches[m];
-                    var homeTeam = match.teams.home.name;
-                    var awayTeam = match.teams.away.name;
-                    var status = match.fixture.status.short;
+                    var homeTeam = match.teams.home.name || '—';
+                    var awayTeam = match.teams.away.name || '—';
+                    var status = match.fixture.status.short || 'NS';
                     var avgGoals = 2.5;
                     var lambdaHome = avgGoals / 2;
                     var lambdaAway = avgGoals / 2;
-                    if (match.goals && match.goals.home !== null) {
+                    if (match.goals && match.goals.home !== null && match.goals.home !== undefined) {
                         lambdaHome = (lambdaHome + match.goals.home) / 2;
                         lambdaAway = (lambdaAway + match.goals.away) / 2;
                     }
@@ -2953,7 +1727,7 @@
                     var odds = 1.85;
                     if (match.odds && match.odds[0] && match.odds[0].values) {
                         var oddValue = match.odds[0].values[0] ? match.odds[0].values[0].odd : null;
-                        if (oddValue) odds = parseFloat(oddValue);
+                        if (oddValue) odds = parseFloat(oddValue) || 1.85;
                     }
 
                     predictions.push({
@@ -2963,8 +1737,8 @@
                         league: match.league.name || 'Лига',
                         country: match.league.country || 'Мир',
                         startTime: new Date(match.fixture.date),
-                        homeScore: match.goals && match.goals.home !== null ? match.goals.home : null,
-                        awayScore: match.goals && match.goals.away !== null ? match.goals.away : null,
+                        homeScore: match.goals && match.goals.home !== null && match.goals.home !== undefined ? match.goals.home : null,
+                        awayScore: match.goals && match.goals.away !== null && match.goals.away !== undefined ? match.goals.away : null,
                         status: status === 'FT' ? 'finished' : (status === '1H' || status === '2H' ? 'live' :
                             'upcoming'),
                         prediction: prediction,
@@ -2985,7 +1759,6 @@
                 return predictions;
             } catch (error) {
                 console.error('Ошибка загрузки:', error);
-                showToast('⚠️ Ошибка, тестовые', 'error');
                 return getFallbackMatches();
             }
         }
@@ -3053,6 +1826,7 @@
         }
 
         function getMatchStatusInfo(match) {
+            if (!match) return { status: 'upcoming', label: '—', badgeClass: 'upcoming', emoji: '🟢' };
             var now = new Date();
             var start = new Date(match.startTime);
             var diff = start - now;
@@ -3074,33 +1848,38 @@
         }
 
         function filterByDate(matches, date) {
+            if (!matches || matches.length === 0) return [];
             var target = new Date(date);
             var result = [];
             for (var i = 0; i < matches.length; i++) {
-                var start = new Date(matches[i].startTime);
-                if (start.toDateString() === target.toDateString()) result.push(matches[i]);
+                try {
+                    var start = new Date(matches[i].startTime);
+                    if (start.toDateString() === target.toDateString()) result.push(matches[i]);
+                } catch (e) {}
             }
             return result;
         }
 
         function filterByConfidence(matches, minConf) {
+            if (!matches || matches.length === 0) return [];
             if (minConf === 0) return matches;
             var result = [];
             for (var i = 0; i < matches.length; i++) {
-                if (matches[i].confidence >= minConf) result.push(matches[i]);
+                if ((matches[i].confidence || 0) >= minConf) result.push(matches[i]);
             }
             return result;
         }
 
         function sortByPriority(matches) {
+            if (!matches || matches.length === 0) return [];
             return matches.sort(function(a, b) {
                 var now = new Date();
                 var timeA = Math.max(1, (new Date(a.startTime) - now) / (1000 * 60));
                 var timeB = Math.max(1, (new Date(b.startTime) - now) / (1000 * 60));
                 var getWeight = function(m) {
                     if (m.status === 'finished') return 0;
-                    if (m.status === 'live') return m.confidence * 100;
-                    return m.confidence * (1 / timeA);
+                    if (m.status === 'live') return (m.confidence || 0) * 100;
+                    return (m.confidence || 0) * (1 / timeA);
                 };
                 return getWeight(b) - getWeight(a);
             });
@@ -3113,11 +1892,11 @@
             if (!state.predictions || state.predictions.length === 0) {
                 state.predictions = await generateTestPredictions();
             }
-            var matches = state.predictions;
+            var matches = state.predictions || [];
 
             var selectedDate = state.selectedDate || new Date();
             matches = filterByDate(matches, selectedDate);
-            matches = filterByConfidence(matches, state.confidenceFilter);
+            matches = filterByConfidence(matches, state.confidenceFilter || 0);
             matches = sortByPriority(matches);
 
             var count = document.getElementById('predictionsCount');
@@ -3151,24 +1930,26 @@
                 for (var k = 0; k < upcoming.length; k++) {
                     var m = upcoming[k];
                     var statusInfo = getMatchStatusInfo(m);
-                    var confidenceClass = m.confidence >= 70 ? 'confidence-high' :
-                        (m.confidence >= 50 ? 'confidence-medium' : 'confidence-low');
-                    var timeStr = new Date(m.startTime).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                    var dateStr = new Date(m.startTime).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
-                    var isValue = m.confidence >= 70 && Math.random() > 0.5;
+                    var confidenceClass = (m.confidence || 0) >= 70 ? 'confidence-high' :
+                        ((m.confidence || 0) >= 50 ? 'confidence-medium' : 'confidence-low');
+                    var timeStr = '--:--';
+                    try { timeStr = new Date(m.startTime).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); } catch (e) {}
+                    var dateStr = '--.--';
+                    try { dateStr = new Date(m.startTime).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }); } catch (e) {}
+                    var isValue = (m.confidence || 0) >= 70 && Math.random() > 0.5;
                     html +=
-                        '<div class="match-row" data-match-id="' + m.id + '">' +
+                        '<div class="match-row" data-match-id="' + (m.id || '') + '">' +
                         '<div class="col-teams">' +
-                        '<div class="team-home">' + sanitizeHTML(m.home) + '</div>' +
-                        '<div class="team-away">' + sanitizeHTML(m.away) + '</div>' +
-                        '<div class="league">' + m.league + ' • ' + (m.country || '') + '</div>' +
+                        '<div class="team-home">' + sanitizeHTML(m.home || '—') + '</div>' +
+                        '<div class="team-away">' + sanitizeHTML(m.away || '—') + '</div>' +
+                        '<div class="league">' + (m.league || 'Лига') + ' • ' + (m.country || '') + '</div>' +
                         '</div>' +
                         '<div class="col-prediction">' +
-                        '<div class="prediction">' + m.prediction + '</div>' +
+                        '<div class="prediction">' + (m.prediction || '—') + '</div>' +
                         '<div class="odds">📊 <span class="value">' + (m.odds ? m.odds.toFixed(2) : '—') + '</span></div>' +
                         '</div>' +
                         '<div class="col-confidence">' +
-                        '<span class="' + confidenceClass + '">' + m.confidence + '%</span>' +
+                        '<span class="' + confidenceClass + '">' + (m.confidence || 0) + '%</span>' +
                         (isValue ? '<span class="value-tag">V</span>' : '') +
                         '</div>' +
                         '<div class="col-time">' +
@@ -3178,10 +1959,10 @@
                         '<div class="col-status">' +
                         '<span class="status-badge ' + statusInfo.badgeClass + '">' + statusInfo.emoji + ' ' +
                         statusInfo.label + '</span>' +
-                        '<div class="turbo-indicator" onclick="turboAnalyze(' + m.id + ')">⚡</div>' +
+                        '<div class="turbo-indicator" onclick="turboAnalyze(' + (m.id || '') + ')">⚡</div>' +
                         '</div>' +
                         '</div>' +
-                        '<div class="turbo-details" id="turbo-details-' + m.id + '"></div>';
+                        '<div class="turbo-details" id="turbo-details-' + (m.id || '') + '"></div>';
                 }
                 list.innerHTML = html;
             }
@@ -3195,7 +1976,7 @@
             var container = document.getElementById('historyPredictionsContainer');
             var list = document.getElementById('historyPredictionsList');
             if (!container || !list) return;
-            if (finished.length === 0) {
+            if (!finished || finished.length === 0) {
                 container.innerHTML =
                     '<div style="text-align:center;padding:8px 0;color:#8b93a7;font-size:11px;">Нет сыгранных</div>';
                 return;
@@ -3209,12 +1990,12 @@
                 var color = isWin ? '#16a34a' : '#dc2626';
                 html +=
                     '<div style="display:grid;grid-template-columns:2fr 1.2fr 0.7fr 0.7fr;padding:4px 0;border-bottom:1px solid #1e2430;font-size:9px;align-items:center;">' +
-                    '<div><strong>' + sanitizeHTML(m.home) + ' vs ' + sanitizeHTML(m.away) +
-                    '</strong><br><span style="color:#8b93a7;font-size:7px;">' + m.league + '</span></div>' +
-                    '<div>' + m.prediction + '</div>' +
+                    '<div><strong>' + sanitizeHTML(m.home || '—') + ' vs ' + sanitizeHTML(m.away || '—') +
+                    '</strong><br><span style="color:#8b93a7;font-size:7px;">' + (m.league || '') + '</span></div>' +
+                    '<div>' + (m.prediction || '—') + '</div>' +
                     '<div style="font-weight:600;color:' + color + ';">' + (isWin ? '✅' : '❌') + '</div>' +
-                    '<div style="text-align:right;font-size:8px;color:#8b93a7;">' + new Date(m.startTime)
-                    .toLocaleDateString() + '</div>' +
+                    '<div style="text-align:right;font-size:8px;color:#8b93a7;">' + (m.startTime ? new Date(m.startTime)
+                        .toLocaleDateString() : '—') + '</div>' +
                     '</div>';
             }
             list.innerHTML = html;
@@ -3223,9 +2004,11 @@
         function updateHistoryStats(finished) {
             var wins = 0,
                 losses = 0;
-            for (var i = 0; i < finished.length; i++) {
-                if (finished[i].actualOutcome === 'win') wins++;
-                else if (finished[i].actualOutcome === 'loss') losses++;
+            if (finished) {
+                for (var i = 0; i < finished.length; i++) {
+                    if (finished[i].actualOutcome === 'win') wins++;
+                    else if (finished[i].actualOutcome === 'loss') losses++;
+                }
             }
             var total = wins + losses;
             var accuracy = total > 0 ? Math.round((wins / total) * 100) : 0;
@@ -3234,6 +2017,7 @@
             document.getElementById('histAccuracy').textContent = accuracy + '%';
         }
 
+        // ===== LIVE МАТЧИ (с защитой) =====
         async function renderLiveMatches() {
             var container = document.getElementById('liveMatchesList');
             if (!container) return;
@@ -3242,8 +2026,10 @@
                 state.predictions = await generateTestPredictions();
             }
             var liveMatches = [];
-            for (var i = 0; i < state.predictions.length; i++) {
-                if (state.predictions[i].status === 'live') liveMatches.push(state.predictions[i]);
+            if (state.predictions) {
+                for (var i = 0; i < state.predictions.length; i++) {
+                    if (state.predictions[i].status === 'live') liveMatches.push(state.predictions[i]);
+                }
             }
 
             var updateTime = document.getElementById('liveUpdateTime');
@@ -3261,19 +2047,19 @@
             for (var j = 0; j < liveMatches.length; j++) {
                 var m = liveMatches[j];
                 html +=
-                    '<div class="live-match-card" onclick="turboAnalyze(' + m.id + ')">' +
+                    '<div class="live-match-card" onclick="turboAnalyze(' + (m.id || '') + ')">' +
                     '<div class="live-header">' +
                     '<div class="time"><span class="dot"></span> LIVE</div>' +
-                    '<div class="league">' + m.league + ' • ' + (m.country || '') + '</div>' +
+                    '<div class="league">' + (m.league || 'Лига') + ' • ' + (m.country || '') + '</div>' +
                     '</div>' +
                     '<div class="live-score">' +
-                    '<span class="home">' + m.home + '</span>' +
+                    '<span class="home">' + (m.home || '—') + '</span>' +
                     '<span class="vs">vs</span>' +
-                    '<span class="away">' + m.away + '</span>' +
+                    '<span class="away">' + (m.away || '—') + '</span>' +
                     '</div>' +
                     '<div class="live-details">' +
-                    '<span>🎯 ' + m.prediction + '</span>' +
-                    '<span class="highlight">' + m.confidence + '%</span>' +
+                    '<span>🎯 ' + (m.prediction || '—') + '</span>' +
+                    '<span class="highlight">' + (m.confidence || 0) + '%</span>' +
                     '<span>📊 ' + (m.odds ? m.odds.toFixed(2) : '—') + '</span>' +
                     '<span>⚽ ' + (m.homeGoals || 0) + '-' + (m.awayGoals || 0) + '</span>' +
                     '</div>' +
@@ -3282,20 +2068,21 @@
             container.innerHTML = html;
         }
 
+        // ===== ПОИСК (с защитой) =====
         function renderPopularTags() {
             var container = document.getElementById('popularTags');
             if (!container) return;
-            var history = state.searchHistory.length > 0 ? state.searchHistory : POPULAR_TEAMS;
+            var history = state.searchHistory && state.searchHistory.length > 0 ? state.searchHistory : POPULAR_TEAMS;
             var tags = history.slice(0, 10);
             var html = '';
             for (var i = 0; i < tags.length; i++) {
-                html += '<span class="popular-tag" onclick="searchTeam(\'' + tags[i] + '\')">' + tags[i] + '</span>';
+                html += '<span class="popular-tag" onclick="searchTeam(\'' + (tags[i] || '') + '\')">' + (tags[i] || '—') + '</span>';
             }
             container.innerHTML = html;
         }
 
         function searchTeam(team) {
-            document.getElementById('searchInput').value = team;
+            document.getElementById('searchInput').value = team || '';
             searchTeams();
         }
 
@@ -3307,6 +2094,7 @@
                 return;
             }
 
+            if (!state.searchHistory) state.searchHistory = [];
             if (!state.searchHistory.includes(query)) {
                 state.searchHistory.unshift(query);
                 if (state.searchHistory.length > 20) state.searchHistory.pop();
@@ -3320,11 +2108,13 @@
             try {
                 var allMatches = state.predictions || await generateTestPredictions();
                 var found = [];
-                for (var i = 0; i < allMatches.length; i++) {
-                    var m = allMatches[i];
-                    if (m.home.toLowerCase().includes(query.toLowerCase()) ||
-                        m.away.toLowerCase().includes(query.toLowerCase())) {
-                        found.push(m);
+                if (allMatches) {
+                    for (var i = 0; i < allMatches.length; i++) {
+                        var m = allMatches[i];
+                        if ((m.home || '').toLowerCase().includes(query.toLowerCase()) ||
+                            (m.away || '').toLowerCase().includes(query.toLowerCase())) {
+                            found.push(m);
+                        }
                     }
                 }
 
@@ -3339,16 +2129,16 @@
                     var m = found[j];
                     html +=
                         '<div class="search-result-item" onclick="switchTab(\'live\'); setTimeout(function() { var el = document.querySelector(\'[data-match-id="' +
-                        m.id + '"]\'); if(el) el.scrollIntoView({ behavior: \'smooth\' }); }, 300);">' +
-                        '<div class="teams">' + sanitizeHTML(m.home) + ' vs ' + sanitizeHTML(m.away) + '</div>' +
+                        (m.id || '') + '"]\'); if(el) el.scrollIntoView({ behavior: \'smooth\' }); }, 300);">' +
+                        '<div class="teams">' + sanitizeHTML(m.home || '—') + ' vs ' + sanitizeHTML(m.away || '—') + '</div>' +
                         '<div class="info">' +
-                        '<span>🏆 ' + m.league + '</span>' +
-                        '<span>📅 ' + new Date(m.startTime).toLocaleDateString() + '</span>' +
-                        '<span>⏱ ' + new Date(m.startTime).toLocaleTimeString('ru-RU', { hour: '2-digit',
-                            minute: '2-digit' }) + '</span>' +
-                        '<span>🎯 ' + m.prediction + '</span>' +
-                        '<span style="color:' + (m.confidence >= 70 ? '#16a34a' : m.confidence >= 50 ? '#ca8a04' :
-                            '#dc2626') + '">' + m.confidence + '%</span>' +
+                        '<span>🏆 ' + (m.league || 'Лига') + '</span>' +
+                        '<span>📅 ' + (m.startTime ? new Date(m.startTime).toLocaleDateString() : '—') + '</span>' +
+                        '<span>⏱ ' + (m.startTime ? new Date(m.startTime).toLocaleTimeString('ru-RU', { hour: '2-digit',
+                            minute: '2-digit' }) : '—') + '</span>' +
+                        '<span>🎯 ' + (m.prediction || '—') + '</span>' +
+                        '<span style="color:' + ((m.confidence || 0) >= 70 ? '#16a34a' : (m.confidence || 0) >= 50 ? '#ca8a04' :
+                            '#dc2626') + '">' + (m.confidence || 0) + '%</span>' +
                         '</div>' +
                         '</div>';
                 }
@@ -3365,10 +2155,11 @@
             showToast('🗑️ История поиска очищена', 'info');
         }
 
+        // ===== СТАТИСТИКА (с защитой) =====
         function renderHistory() {
             var list = $('historyList');
             if (!list) return;
-            if (state.bets.length === 0) {
+            if (!state.bets || state.bets.length === 0) {
                 list.innerHTML =
                     '<div style="padding:6px 0;color:#8b93a7;font-size:11px;text-align:center;">Нет ставок</div>';
                 return;
@@ -3384,7 +2175,7 @@
                 var emoji = b.outcome === 'win' ? '✅' : (b.outcome === 'loss' ? '❌' : '⏳');
                 html +=
                     '<div class="history-item" onclick="editBet(' + idx + ')">' +
-                    '<div><b>' + (modeNames[b.mode] || b.mode) + '</b>: ' + b.value +
+                    '<div><b>' + (modeNames[b.mode] || b.mode || '—') + '</b>: ' + (b.value || '—') +
                     ' <span style="font-size:8px;color:#6b7280;">' + (b.match || '') + '</span></div>' +
                     '<div><span class="' + cls + '">' + emoji + ' ' + (b.resultText || '⏳') + '</span></div>' +
                     '</div>';
@@ -3393,12 +2184,14 @@
         }
 
         function renderStats() {
-            var total = state.bets.length;
+            var total = state.bets ? state.bets.length : 0;
             var wins = 0,
                 losses = 0;
-            for (var i = 0; i < state.bets.length; i++) {
-                if (state.bets[i].outcome === 'win') wins++;
-                else if (state.bets[i].outcome === 'loss') losses++;
+            if (state.bets) {
+                for (var i = 0; i < state.bets.length; i++) {
+                    if (state.bets[i].outcome === 'win') wins++;
+                    else if (state.bets[i].outcome === 'loss') losses++;
+                }
             }
             var statTotal = $('statTotal');
             var statWinRate = $('statWinRate');
@@ -3410,19 +2203,23 @@
         }
 
         function renderDashboard() {
-            var total = state.bets.length;
+            var total = state.bets ? state.bets.length : 0;
             var wins = 0,
                 losses = 0;
-            for (var i = 0; i < state.bets.length; i++) {
-                if (state.bets[i].outcome === 'win') wins++;
-                else if (state.bets[i].outcome === 'loss') losses++;
+            if (state.bets) {
+                for (var i = 0; i < state.bets.length; i++) {
+                    if (state.bets[i].outcome === 'win') wins++;
+                    else if (state.bets[i].outcome === 'loss') losses++;
+                }
             }
             var streak = 0,
                 maxStreak = 0;
-            for (var j = state.bets.length - 1; j >= 0; j--) {
-                if (state.bets[j].outcome === 'win') { streak++;
-                    maxStreak = Math.max(maxStreak, streak); } else if (state.bets[j].outcome === 'loss') streak = 0;
-                else break;
+            if (state.bets) {
+                for (var j = state.bets.length - 1; j >= 0; j--) {
+                    if (state.bets[j].outcome === 'win') { streak++;
+                        maxStreak = Math.max(maxStreak, streak); } else if (state.bets[j].outcome === 'loss') streak = 0;
+                    else break;
+                }
             }
             var kpiTotal = $('kpiTotal');
             var kpiWinRate = $('kpiWinRate');
@@ -3440,12 +2237,14 @@
         }
 
         function renderUltimateDashboard() {
-            var total = state.bets.length;
+            var total = state.bets ? state.bets.length : 0;
             var wins = 0,
                 losses = 0;
-            for (var i = 0; i < state.bets.length; i++) {
-                if (state.bets[i].outcome === 'win') wins++;
-                else if (state.bets[i].outcome === 'loss') losses++;
+            if (state.bets) {
+                for (var i = 0; i < state.bets.length; i++) {
+                    if (state.bets[i].outcome === 'win') wins++;
+                    else if (state.bets[i].outcome === 'loss') losses++;
+                }
             }
             var roi = total > 0 ? ((wins - losses) / total) * 100 : 0;
             document.getElementById('kpiROIDisplay').textContent = roi.toFixed(1) + '%';
@@ -3468,7 +2267,7 @@
             var width = canvas.width = canvas.parentElement.clientWidth || 400;
             var height = canvas.height = 60;
             var range = state.chartRange || '30d';
-            var data = state.bets;
+            var data = state.bets || [];
             if (range === '7d') data = data.slice(-7);
             else if (range === '30d') data = data.slice(-30);
             else if (range === '90d') data = data.slice(-90);
@@ -3513,7 +2312,7 @@
         }
 
         function setChartRange(range) {
-            state.chartRange = range;
+            state.chartRange = range || '30d';
             var btns = document.querySelectorAll('.chart-controls .time-range');
             for (var i = 0; i < btns.length; i++) {
                 btns[i].classList.toggle('active', btns[i].dataset.range === range);
@@ -3524,7 +2323,7 @@
         function renderInsights() {
             var container = $('insightsContent');
             if (!container) return;
-            if (state.bets.length === 0) {
+            if (!state.bets || state.bets.length === 0) {
                 container.innerHTML =
                     '<div style="padding:3px 0;color:#8b93a7;font-size:11px;text-align:center;">Нет данных</div>';
                 return;
@@ -3554,7 +2353,9 @@
                 '</div>';
         }
 
+        // ===== СТАВКИ =====
         function editBet(idx) {
+            if (!state.bets || idx >= state.bets.length || idx < 0) { showToast('⚠️ Ставка не найдена', 'error'); return; }
             var b = state.bets[idx];
             if (!b) { showToast('⚠️ Ставка не найдена', 'error'); return; }
             var choice = prompt('Исход для "' + (b.match || 'Матч') + '":\n1 - Выиграла ✅\n2 - Проиграла ❌\n3 - Неизвестно ⏳',
@@ -3596,7 +2397,7 @@
         }
 
         function exportData() {
-            var data = { bets: state.bets, leagues: LEAGUES, valueBets: state.valueBets, version: '6.0',
+            var data = { bets: state.bets || [], leagues: LEAGUES || {}, valueBets: state.valueBets || [], version: '6.0',
                 exportDate: new Date().toISOString() };
             var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             var url = URL.createObjectURL(blob);
@@ -3634,17 +2435,19 @@
             event.target.value = '';
         }
 
+        // ===== УВЕДОМЛЕНИЯ =====
         function checkNotifications() {
             var matches = state.predictions || getFallbackMatches();
+            if (!matches) return;
             var now = new Date();
             var threshold = 30 * 60 * 1000;
             for (var i = 0; i < matches.length; i++) {
                 var m = matches[i];
-                if (m.status !== 'upcoming') continue;
+                if (!m || m.status !== 'upcoming') continue;
                 var start = new Date(m.startTime);
                 var diff = start - now;
-                if (diff > 0 && diff <= threshold && m.confidence >= 70) {
-                    var key = m.id + '_' + m.startTime;
+                if (diff > 0 && diff <= threshold && (m.confidence || 0) >= 70) {
+                    var key = (m.id || '') + '_' + (m.startTime || '');
                     if (!state.notifiedMatches.has(key)) {
                         state.notifiedMatches.add(key);
                         showNotification(m);
@@ -3654,11 +2457,12 @@
         }
 
         function showNotification(match) {
-            showToast('🔔 ' + match.home + ' vs ' + match.away + ' через 30 мин!', 'success');
+            if (!match) return;
+            showToast('🔔 ' + (match.home || '—') + ' vs ' + (match.away || '—') + ' через 30 мин!', 'success');
             if (Notification.permission === 'granted') {
                 new Notification('⚛️ Квантум', {
-                    body: match.home + ' vs ' + match.away + '\nПрогноз: ' + match.prediction + ' (' + match
-                        .confidence + '%)',
+                    body: (match.home || '—') + ' vs ' + (match.away || '—') + '\nПрогноз: ' + (match.prediction || '—') + ' (' + (match
+                        .confidence || 0) + '%)',
                     icon: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="45" fill="%23f4f6f9"/%3E%3Ctext x="50" y="72" font-size="60" text-anchor="middle" font-family="Arial"%3E%E2%9A%9B%3C/text%3E%3C/svg%3E'
                 });
             }
@@ -3668,6 +2472,7 @@
             if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
         }
 
+        // ===== ИНИЦИАЛИЗАЦИЯ =====
         document.addEventListener('DOMContentLoaded', async function() {
             initTheme();
             renderDateFilter();
@@ -3689,7 +2494,7 @@
                 document.getElementById('weatherKeyInput').value = savedWeatherKey;
             }
             var matches = await generateTestPredictions();
-            state.predictions = matches;
+            state.predictions = matches || [];
             state.lastUpdate = new Date();
             renderPredictions();
             var savedValueBets = localStorage.getItem('quantum_value_bets');
@@ -3704,7 +2509,7 @@
                 }, CACHE_CONFIG.UPDATE_INTERVAL);
             }
             switchTab('live');
-            console.log('⚛️КВАНТУМ v6.0 — ГОТОВ');
+            console.log('⚛️ КВАНТУМ v6.0 — ГОТОВ (с защитой от падений)');
         });
 
         window.addEventListener('resize', function() {
