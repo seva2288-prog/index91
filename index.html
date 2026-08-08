@@ -1,3 +1,16 @@
+Понял! Ты хочешь, чтобы в строке матча (в таблице прогнозов) информация была более компактной и выровненной:
+
+1. Команды — хозяева сверху, гости снизу (уже так и есть в коде, но визуально можно улучшить).
+2. Прогноз, уверенность, время и статус — чтобы всё было в одну линию, без лишних переносов, и выглядело аккуратно.
+
+Я доработаю:
+
+· Уменьшу шрифты и отступы для плотной компоновки.
+· Сделаю так, чтобы прогноз, уверенность и время были на одной строке.
+· Уберу лишние переносы, чтобы информация читалась компактно.
+
+Вот исправленный HTML-файл с улучшенной компоновкой строки матча:
+
 ```html
 <!DOCTYPE html>
 <html lang="ru">
@@ -11,10 +24,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Квантум">
     <meta name="theme-color" content="#0b0e14">
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* ----- СБРОС И БАЗА ----- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -36,7 +47,6 @@
             transition: background 0.3s, color 0.3s;
         }
 
-        /* ----- СВЕТЛАЯ ТЕМА ----- */
         body.light {
             background: #f0f2f5;
             color: #1a202c;
@@ -219,7 +229,6 @@
             border-color: #e2e8f0 !important;
         }
 
-        /* ----- ТЁМНАЯ ТЕМА ----- */
         body.dark {
             background: #0d1117;
             color: #e6edf3;
@@ -402,7 +411,6 @@
             border-color: #30363d !important;
         }
 
-        /* ----- ШАПКА ----- */
         .header {
             display: flex;
             justify-content: space-between;
@@ -468,7 +476,6 @@
             color: #f7931a;
         }
 
-        /* ----- ФИЛЬТР ПО ДАТАМ ----- */
         .filter-bar {
             display: flex;
             flex-wrap: wrap;
@@ -547,7 +554,6 @@
             display: inline-block;
         }
 
-        /* ----- ОСНОВНОЙ КОНТЕНТ ----- */
         .main-content {
             flex: 1;
             overflow-y: auto;
@@ -574,7 +580,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ----- ТАБЛИЦА ПРОГНОЗОВ ----- */
         .table-header {
             display: grid;
             grid-template-columns: 2fr 1.2fr 0.7fr 0.8fr 0.8fr;
@@ -591,10 +596,12 @@
             top: 0;
             z-index: 5;
         }
+
+        /* КОМПАКТНАЯ СТРОКА МАТЧА */
         .match-row {
             display: grid;
             grid-template-columns: 2fr 1.2fr 0.7fr 0.8fr 0.8fr;
-            padding: 6px 10px;
+            padding: 4px 8px;
             border-bottom: 1px solid #1e2430;
             background: transparent;
             transition: background 0.15s;
@@ -602,6 +609,7 @@
             align-items: center;
             gap: 2px;
             position: relative;
+            min-height: 32px;
         }
         .match-row:hover {
             background: rgba(255, 255, 255, 0.03);
@@ -609,35 +617,46 @@
         .match-row .col-teams {
             display: flex;
             flex-direction: column;
-            gap: 1px;
+            gap: 0px;
+            line-height: 1.2;
         }
-        .match-row .col-teams .teams {
-            font-size: 11px;
+        .match-row .col-teams .team-home {
+            font-size: 10px;
             font-weight: 600;
             color: #e6e8ec;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        .match-row .col-teams .league {
-            font-size: 7px;
+        .match-row .col-teams .team-away {
+            font-size: 9px;
             color: #8b93a7;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .match-row .col-teams .league {
+            font-size: 6px;
+            color: #6b7280;
             display: flex;
             align-items: center;
             gap: 3px;
+            margin-top: 1px;
         }
         .match-row .col-prediction {
             display: flex;
             flex-direction: column;
-            gap: 1px;
+            gap: 0px;
+            line-height: 1.2;
         }
         .match-row .col-prediction .prediction {
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 600;
             color: #f7931a;
+            white-space: nowrap;
         }
         .match-row .col-prediction .odds {
-            font-size: 8px;
+            font-size: 7px;
             color: #8b93a7;
         }
         .match-row .col-prediction .odds .value {
@@ -645,9 +664,10 @@
             font-weight: 600;
         }
         .match-row .col-confidence {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             text-align: center;
+            white-space: nowrap;
         }
         .match-row .col-confidence .confidence-high {
             color: #16a34a;
@@ -659,20 +679,26 @@
             color: #dc2626;
         }
         .match-row .col-time {
-            font-size: 8px;
+            font-size: 7px;
             color: #8b93a7;
             text-align: center;
             line-height: 1.2;
+            white-space: nowrap;
+        }
+        .match-row .col-time .date {
+            display: block;
+            font-size: 6px;
+            color: #6b7280;
         }
         .match-row .col-status {
             text-align: right;
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 2px;
+            gap: 1px;
         }
         .match-row .status-badge {
-            font-size: 7px;
+            font-size: 6px;
             padding: 1px 5px;
             border-radius: 8px;
             white-space: nowrap;
@@ -695,8 +721,8 @@
             border: 1px solid rgba(139, 147, 167, 0.1);
         }
         .match-row .value-tag {
-            font-size: 6px;
-            padding: 1px 4px;
+            font-size: 5px;
+            padding: 0px 4px;
             border-radius: 6px;
             background: #16a34a;
             color: #ffffff;
@@ -740,28 +766,27 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* ----- ТУРБО-ДЕТАЛИ ----- */
         .turbo-details {
             display: none;
-            padding: 6px 10px 6px 16px;
+            padding: 4px 10px 4px 16px;
             background: #13171f;
             border-bottom: 1px solid #1e2430;
-            font-size: 9px;
+            font-size: 8px;
             color: #8b93a7;
-            line-height: 1.5;
+            line-height: 1.4;
         }
         .turbo-details.open {
             display: block;
         }
         .turbo-details .detail-row {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
         }
         .turbo-details .detail-row .item {
             display: flex;
             align-items: center;
-            gap: 3px;
+            gap: 2px;
         }
         .turbo-details .detail-row .item .label {
             color: #8b93a7;
@@ -786,7 +811,7 @@
             height: 2px;
             background: #1e2430;
             border-radius: 2px;
-            margin-top: 3px;
+            margin-top: 2px;
             overflow: hidden;
         }
         .turbo-details .progress-mini .fill {
@@ -796,7 +821,6 @@
             transition: width 0.4s ease;
         }
 
-        /* ----- LIVE-КАРТОЧКИ ----- */
         .live-match-card {
             background: transparent;
             border: 1px solid #1e2430;
@@ -874,7 +898,6 @@
             font-weight: 600;
         }
 
-        /* ----- ПОИСК ----- */
         .search-container {
             padding: 0 10px;
         }
@@ -968,7 +991,6 @@
             font-size: 13px;
         }
 
-        /* ----- КАРТОЧКИ ДЛЯ СТАТИСТИКИ ----- */
         .card {
             background: transparent;
             border: 1px solid #1e2430;
@@ -1064,7 +1086,6 @@
             color: #ca8a04;
         }
 
-        /* ----- НАСТРОЙКИ ----- */
         .settings-item {
             display: flex;
             justify-content: space-between;
@@ -1104,7 +1125,6 @@
             color: #0b0e14;
         }
 
-        /* ----- НИЖНЯЯ НАВИГАЦИЯ ----- */
         .bottom-nav {
             display: flex;
             background: #0b0e14;
@@ -1154,7 +1174,6 @@
             margin-left: 2px;
         }
 
-        /* ----- МОДАЛЬНОЕ ОКНО ----- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -1242,7 +1261,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ----- TOAST ----- */
         .toast {
             position: fixed;
             bottom: 64px;
@@ -1271,7 +1289,6 @@
             border-color: #1e2430;
         }
 
-        /* ----- ДИСКЛЕЙМЕР ----- */
         .disclaimer {
             font-size: 8px;
             color: #6b7280;
@@ -1282,7 +1299,6 @@
             line-height: 1.3;
         }
 
-        /* ----- УТИЛИТЫ ----- */
         .text-muted {
             color: #8b93a7;
         }
@@ -1323,7 +1339,6 @@
             }
         }
 
-        /* ----- ПОГОДА ----- */
         .weather-card {
             background: transparent;
             border: 1px solid #1e2430;
@@ -1373,7 +1388,6 @@
             background: #e8850a;
         }
 
-        /* H2H стили */
         .h2h-summary {
             display: flex;
             flex-wrap: wrap;
@@ -1449,7 +1463,6 @@
             color: #8b93a7;
         }
 
-        /* Кнопки в настройках */
         .btn-row {
             display: flex;
             gap: 4px;
@@ -1470,7 +1483,6 @@
             color: #f7931a;
         }
 
-        /* Адаптив для маленьких экранов */
         @media (max-width: 420px) {
             .table-header {
                 font-size: 6px;
@@ -1478,17 +1490,22 @@
             }
             .match-row {
                 grid-template-columns: 1.8fr 1fr 0.6fr 0.7fr 0.7fr;
-                padding: 5px 6px;
-                font-size: 10px;
+                padding: 3px 4px;
             }
-            .match-row .col-teams .teams {
+            .match-row .col-teams .team-home {
                 font-size: 9px;
             }
+            .match-row .col-teams .team-away {
+                font-size: 8px;
+            }
             .match-row .col-confidence {
-                font-size: 11px;
+                font-size: 10px;
             }
             .match-row .col-prediction .prediction {
                 font-size: 8px;
+            }
+            .match-row .col-time {
+                font-size: 6px;
             }
             .modal-box {
                 padding: 14px;
@@ -1502,9 +1519,6 @@
 </head>
 <body>
 
-    <!-- ============================================================ -->
-    <!-- ШАПКА                                                        -->
-    <!-- ============================================================ -->
     <header class="header">
         <h1>⚛️ Квантум <span>v6.0</span></h1>
         <div class="header-actions">
@@ -1517,9 +1531,6 @@
         </div>
     </header>
 
-    <!-- ============================================================ -->
-    <!-- ФИЛЬТР ПО ДАТАМ                                              -->
-    <!-- ============================================================ -->
     <div class="filter-bar" id="filterBar">
         <div class="date-scroll" id="dateScroll"></div>
         <div class="filter-status">
@@ -1528,12 +1539,8 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- ОСНОВНОЙ КОНТЕНТ                                             -->
-    <!-- ============================================================ -->
     <div class="main-content" id="mainContent">
 
-        <!-- ЭКРАН 1: ПРОГНОЗЫ -->
         <div class="screen active" id="liveScreen">
             <div class="table-header">
                 <span>Матч</span>
@@ -1546,7 +1553,6 @@
                 <div id="predictionsList"></div>
             </div>
 
-            <!-- Блок H2H -->
             <div style="padding:0 10px;margin-top:6px;">
                 <div class="card">
                     <div class="card-title">📊 H2H анализ</div>
@@ -1564,7 +1570,6 @@
                 </div>
             </div>
 
-            <!-- Информация о лиге -->
             <div style="padding:0 10px;margin-top:4px;">
                 <div class="card" id="leagueInfoCard" style="display:none;">
                     <div class="card-title">🏆 Информация о лиге</div>
@@ -1596,7 +1601,6 @@
             <div class="disclaimer">Это аналитический инструмент, не рекомендация к ставкам.</div>
         </div>
 
-        <!-- ЭКРАН 2: LIVE -->
         <div class="screen" id="liveOnlyScreen">
             <div style="padding:6px 10px;">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
@@ -1610,7 +1614,6 @@
             <div class="disclaimer">Это аналитический инструмент, не рекомендация к ставкам.</div>
         </div>
 
-        <!-- ЭКРАН 3: ПОИСК -->
         <div class="screen" id="searchScreen">
             <div class="search-container">
                 <div class="search-input-wrap">
@@ -1629,7 +1632,6 @@
             <div class="disclaimer">Это аналитический инструмент, не рекомендация к ставкам.</div>
         </div>
 
-        <!-- ЭКРАН 4: СТАТИСТИКА -->
         <div class="screen" id="statsScreen">
             <div style="padding:0 10px;">
                 <div class="kpi-grid">
@@ -1656,7 +1658,6 @@
             <div class="disclaimer">Это аналитический инструмент, не рекомендация к ставкам.</div>
         </div>
 
-        <!-- ЭКРАН 5: НАСТРОЙКИ -->
         <div class="screen" id="settingsScreen">
             <div style="padding:0 10px;">
                 <div class="card">
@@ -1695,9 +1696,6 @@
         </div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- НИЖНЯЯ НАВИГАЦИЯ (5 вкладок)                                  -->
-    <!-- ============================================================ -->
     <div class="bottom-nav" id="bottomNav">
         <button class="nav-btn active" data-tab="live" onclick="switchTab('live')">
             <span class="nav-icon">🔮</span>
@@ -1722,9 +1720,6 @@
         </button>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- МОДАЛЬНОЕ ОКНО                                               -->
-    <!-- ============================================================ -->
     <div class="modal-overlay" id="saveModal">
         <div class="modal-box">
             <h3>💾 Сохранить ставку?</h3>
@@ -1745,15 +1740,11 @@
 
     <div class="swipe-indicator show" id="swipeIndicator">👆 Свайп</div>
 
-    <!-- ============================================================ -->
-    <!-- JAVASCRIPT (ПОЛНАЯ ЛОГИКА)                                    -->
-    <!-- ============================================================ -->
     <script>
         // ================================================================
         // КВАНТУМ v6.0 — ПОЛНАЯ JAVASCRIPT ЛОГИКА
         // ================================================================
 
-        // ===== КОНФИГУРАЦИЯ =====
         const CACHE_CONFIG = {
             H2H_TTL: 7 * 24 * 60 * 60 * 1000,
             LEAGUES_TTL: 24 * 60 * 60 * 1000,
@@ -1832,7 +1823,6 @@
             return { text: statusText, color: color };
         }
 
-        // ===== API ЗАПРОСЫ =====
         async function fetchWithCache(url, options = {}, ttl = CACHE_CONFIG.API_TTL) {
             const key = url + JSON.stringify(options);
             if (API_CACHE[key] && Date.now() - API_CACHE[key].time < ttl) return API_CACHE[key].data;
@@ -1881,7 +1871,6 @@
             return error.message || fallbackMessage;
         }
 
-        // ===== СТЕЙТ =====
         let state = {
             bets: JSON.parse(localStorage.getItem('quantum_bets') || '[]'),
             currentLeague: localStorage.getItem('quantum_league') || '39',
@@ -1928,7 +1917,6 @@
         let LEAGUES = JSON.parse(localStorage.getItem('quantum_leagues') || '{}');
         let ALL_LEAGUES_LOADED = false;
 
-        // ===== ЗАГРУЗКА ЛИГ =====
         async function loadAllLeagues() {
             if (ALL_LEAGUES_LOADED && Object.keys(LEAGUES).length > 0) return;
             const cached = localStorage.getItem('quantum_leagues_cache');
@@ -2122,7 +2110,6 @@
             return { name: 'Лига', oz: 60, avgGoals: 2.6, country: 'Мир' };
         }
 
-        // ===== H2H =====
         async function loadH2H() {
             var homeTeamInput = $('homeTeamH2H');
             var awayTeamInput = $('awayTeamH2H');
@@ -2297,7 +2284,6 @@
             if (spinner) spinner.style.display = 'none';
         }
 
-        // ===== НАВИГАЦИЯ =====
         function switchTab(tab) {
             state.currentTab = tab;
             var screens = document.querySelectorAll('.screen');
@@ -2355,7 +2341,6 @@
             }
         }
 
-        // ===== ФИЛЬТР ПО ДАТАМ =====
         function renderDateFilter() {
             var container = document.getElementById('dateScroll');
             if (!container) return;
@@ -2388,7 +2373,6 @@
             renderPredictions();
         }
 
-        // ===== ПОГОДА =====
         var MOSCOW_COORDS = { lat: 55.7558, lon: 37.6173 };
 
         async function loadHeaderWeather() {
@@ -2468,7 +2452,6 @@
         function refreshWeather() { loadHeaderWeather();
             showToast('🔄 Обновление погоды', 'info'); }
 
-        // ===== ТЕМА =====
         function toggleTheme() {
             var isDark = document.body.classList.contains('dark');
             document.body.classList.toggle('dark');
@@ -2501,7 +2484,6 @@
             }
         }
 
-        // ===== API КЛЮЧИ =====
         function saveApiKey() {
             var key = document.getElementById('apiKeyInput').value.trim();
             if (!key) { showToast('⚠️ Введите API ключ', 'error'); return; }
@@ -2523,7 +2505,6 @@
             loadHeaderWeather();
         }
 
-        // ===== МОДАЛЬНОЕ ОКНО =====
         var pendingTurboBet = null;
 
         function showSaveModal(data) {
@@ -2599,7 +2580,6 @@
             showToast('✅ Ставка сохранена', 'success');
         }
 
-        // ===== ТУРБО АНАЛИЗ =====
         async function turboAnalyze(matchId) {
             if (state.isTurboRunning) { showToast('⏳ Анализ уже идёт', 'info'); return; }
             var match = null;
@@ -2734,9 +2714,7 @@
             showToast('✅ Турбо-анализ готов', 'success');
         }
 
-        // ===== РАСЧЁТЫ =====
         function calculate() {
-            // Функция вызывается после загрузки H2H для пересчета прогнозов
             renderPredictions();
         }
 
@@ -2898,7 +2876,6 @@
             }
         }
 
-        // ===== ПРОГНОЗЫ =====
         async function generateTestPredictions() {
             var apiKey = localStorage.getItem('quantum_api_key');
             if (!apiKey) {
@@ -3196,9 +3173,9 @@
                     html +=
                         '<div class="match-row" data-match-id="' + m.id + '">' +
                         '<div class="col-teams">' +
-                        '<div class="teams">' + sanitizeHTML(m.home) + ' vs ' + sanitizeHTML(m.away) + '</div>' +
-                        '<div class="league">' + m.league + ' <span class="country">• ' + (m.country || '') +
-                        '</span></div>' +
+                        '<div class="team-home">' + sanitizeHTML(m.home) + '</div>' +
+                        '<div class="team-away">' + sanitizeHTML(m.away) + '</div>' +
+                        '<div class="league">' + m.league + ' • ' + (m.country || '') + '</div>' +
                         '</div>' +
                         '<div class="col-prediction">' +
                         '<div class="prediction">' + m.prediction + '</div>' +
@@ -3208,7 +3185,10 @@
                         '<span class="' + confidenceClass + '">' + m.confidence + '%</span>' +
                         (isValue ? '<span class="value-tag">V</span>' : '') +
                         '</div>' +
-                        '<div class="col-time">' + dateStr + '<br>' + timeStr + '</div>' +
+                        '<div class="col-time">' +
+                        '<span>' + timeStr + '</span>' +
+                        '<span class="date">' + dateStr + '</span>' +
+                        '</div>' +
                         '<div class="col-status">' +
                         '<span class="status-badge ' + statusInfo.badgeClass + '">' + statusInfo.emoji + ' ' +
                         statusInfo.label + '</span>' +
@@ -3268,7 +3248,6 @@
             document.getElementById('histAccuracy').textContent = accuracy + '%';
         }
 
-        // ===== LIVE МАТЧИ =====
         async function renderLiveMatches() {
             var container = document.getElementById('liveMatchesList');
             if (!container) return;
@@ -3317,7 +3296,6 @@
             container.innerHTML = html;
         }
 
-        // ===== ПОИСК =====
         function renderPopularTags() {
             var container = document.getElementById('popularTags');
             if (!container) return;
@@ -3401,7 +3379,6 @@
             showToast('🗑️ История поиска очищена', 'info');
         }
 
-        // ===== СТАТИСТИКА =====
         function renderHistory() {
             var list = $('historyList');
             if (!list) return;
@@ -3591,7 +3568,6 @@
                 '</div>';
         }
 
-        // ===== СТАВКИ =====
         function editBet(idx) {
             var b = state.bets[idx];
             if (!b) { showToast('⚠️ Ставка не найдена', 'error'); return; }
@@ -3672,7 +3648,6 @@
             event.target.value = '';
         }
 
-        // ===== УВЕДОМЛЕНИЯ =====
         function checkNotifications() {
             var matches = state.predictions || getFallbackMatches();
             var now = new Date();
@@ -3707,32 +3682,18 @@
             if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
         }
 
-        // ===== ИНИЦИАЛИЗАЦИЯ =====
         document.addEventListener('DOMContentLoaded', async function() {
-            // 1. Тема
             initTheme();
-
-            // 2. Фильтр дат
             renderDateFilter();
-
-            // 3. Популярные теги поиска
             renderPopularTags();
-
-            // 4. Статистика
             renderHistory();
             renderStats();
             renderDashboard();
             renderChartCanvas();
             renderInsights();
             renderUltimateDashboard();
-
-            // 5. Загрузка лиг
             await loadAllLeagues();
-
-            // 6. Погода
             await loadHeaderWeather();
-
-            // 7. API ключи из localStorage
             var savedKey = localStorage.getItem('quantum_api_key');
             if (savedKey && savedKey !== '') {
                 document.getElementById('apiKeyInput').value = savedKey;
@@ -3741,38 +3702,23 @@
             if (savedWeatherKey) {
                 document.getElementById('weatherKeyInput').value = savedWeatherKey;
             }
-
-            // 8. Загрузка прогнозов
             var matches = await generateTestPredictions();
             state.predictions = matches;
             state.lastUpdate = new Date();
             renderPredictions();
-
-            // 9. Value bets
             var savedValueBets = localStorage.getItem('quantum_value_bets');
             if (savedValueBets) {
                 try { state.valueBets = JSON.parse(savedValueBets); } catch (e) { state.valueBets = []; }
             }
-
-            // 10. Уведомления
             requestNotificationPermission();
-
-            // 11. Таймер обновления
             if (!state.updateTimer) {
                 state.updateTimer = setInterval(function() {
                     renderPredictions();
                     checkNotifications();
                 }, CACHE_CONFIG.UPDATE_INTERVAL);
             }
-
-            // 12. Активация вкладки
             switchTab('live');
-
-            console.log('⚛️ КВАНТУМ v6.0 — ПОЛНОСТЬЮ ПЕРЕРАБОТАННОЕ ПРИЛОЖЕНИЕ');
-            console.log('✅ 5 вкладок: Прогнозы, LIVE, Поиск, Статистика, Настройки');
-            console.log('✅ Фильтр по датам (горизонтальный скролл)');
-            console.log('✅ Коэффициент 1xBet');
-            console.log('🚀 ГОТОВ К РАБОТЕ!');
+            console.log('⚛️ КВАНТУМ v6.0 — ГОТОВ');
         });
 
         window.addEventListener('resize', function() {
@@ -3781,3 +3727,4 @@
     </script>
 </body>
 </html>
+```
