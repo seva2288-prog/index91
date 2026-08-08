@@ -10,11 +10,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Квантум">
     <meta name="theme-color" content="#0b0e14">
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
-    
-    <!-- ============================================ -->
-    <!-- БЛОК 1: СТИЛИ (CSS)                        -->
-    <!-- ============================================ -->
     <style>
         /* ================================================================
            КВАНТУМ v6.0 — НЕЙТРАЛЬНЫЙ МИНИМАЛИЗМ
@@ -43,7 +38,7 @@
             transition: background 0.3s, color 0.3s;
         }
 
-        /* ----- СВЕТЛАЯ ТЕМА (чистая, минималистичная) ----- */
+        /* ----- СВЕТЛАЯ ТЕМА ----- */
         body.light {
             background: #f0f2f5;
             color: #1a202c;
@@ -279,15 +274,15 @@
             color: #f85149;
         }
         body.dark .status-badge.live {
-            background: rgba(248,81,73,0.15);
+            background: rgba(248, 81, 73, 0.15);
             color: #f85149;
         }
         body.dark .status-badge.upcoming {
-            background: rgba(247,147,26,0.12);
+            background: rgba(247, 147, 26, 0.12);
             color: #f7931a;
         }
         body.dark .status-badge.finished {
-            background: rgba(139,148,158,0.1);
+            background: rgba(139, 148, 158, 0.1);
             color: #8b949e;
         }
         body.dark .card {
@@ -475,7 +470,7 @@
             color: #f7931a;
         }
 
-        /* ----- ФИЛЬТР ПО ДАТАМ (горизонтальный скролл) ----- */
+        /* ----- ФИЛЬТР ПО ДАТАМ ----- */
         .filter-bar {
             display: flex;
             flex-wrap: wrap;
@@ -747,7 +742,7 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* ----- ТУРБО-ДЕТАЛИ (раскрывающаяся строка) ----- */
+        /* ----- ТУРБО-ДЕТАЛИ ----- */
         .turbo-details {
             display: none;
             padding: 6px 10px 6px 16px;
@@ -811,6 +806,7 @@
             padding: 10px 12px;
             margin: 4px 10px;
             transition: border-color 0.2s;
+            cursor: pointer;
         }
         .live-match-card:hover {
             border-color: #f7931a;
@@ -1398,12 +1394,10 @@
     </header>
 
     <!-- ============================================================ -->
-    <!-- ФИЛЬТР ПО ДАТАМ (горизонтальный скролл)                      -->
+    <!-- ФИЛЬТР ПО ДАТАМ                                              -->
     <!-- ============================================================ -->
     <div class="filter-bar" id="filterBar">
-        <div class="date-scroll" id="dateScroll">
-            <!-- Дата-кнопки генерируются JavaScript -->
-        </div>
+        <div class="date-scroll" id="dateScroll"></div>
         <div class="filter-status">
             <span class="dot"></span>
             <span id="predictionsCount">0</span>
@@ -1415,9 +1409,7 @@
     <!-- ============================================================ -->
     <div class="main-content" id="mainContent">
 
-        <!-- ==========================================================
-        ЭКРАН 1: ПРОГНОЗЫ (главный)
-        ========================================================== -->
+        <!-- ЭКРАН 1: ПРОГНОЗЫ -->
         <div class="screen active" id="liveScreen">
             <div class="table-header">
                 <span>Матч</span>
@@ -1446,9 +1438,7 @@
             <div class="disclaimer">Это аналитический инструмент, не рекомендация к ставкам.</div>
         </div>
 
-        <!-- ==========================================================
-        ЭКРАН 2: LIVE
-        ========================================================== -->
+        <!-- ЭКРАН 2: LIVE -->
         <div class="screen" id="liveOnlyScreen">
             <div style="padding:6px 10px;">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
@@ -1462,9 +1452,7 @@
             <div class="disclaimer">Это аналитический инструмент, не рекомендация к ставкам.</div>
         </div>
 
-        <!-- ==========================================================
-        ЭКРАН 3: ПОИСК
-        ========================================================== -->
+        <!-- ЭКРАН 3: ПОИСК -->
         <div class="screen" id="searchScreen">
             <div class="search-container">
                 <div class="search-input-wrap">
@@ -1475,9 +1463,7 @@
                     <span style="font-size:10px;color:#8b93a7;">🔥 Популярные</span>
                     <span style="font-size:8px;color:#6b7280;cursor:pointer;" onclick="clearSearchHistory()">Очистить историю</span>
                 </div>
-                <div class="popular-tags" id="popularTags">
-                    <!-- Генерируется JavaScript -->
-                </div>
+                <div class="popular-tags" id="popularTags"></div>
                 <div class="search-results" id="searchResults">
                     <div class="search-empty">Введите название команды для поиска</div>
                 </div>
@@ -1485,9 +1471,7 @@
             <div class="disclaimer">Это аналитический инструмент, не рекомендация к ставкам.</div>
         </div>
 
-        <!-- ==========================================================
-        ЭКРАН 4: СТАТИСТИКА
-        ========================================================== -->
+        <!-- ЭКРАН 4: СТАТИСТИКА -->
         <div class="screen" id="statsScreen">
             <div style="padding:0 10px;">
                 <div class="kpi-grid">
@@ -1514,9 +1498,7 @@
             <div class="disclaimer">Это аналитический инструмент, не рекомендация к ставкам.</div>
         </div>
 
-        <!-- ==========================================================
-        ЭКРАН 5: НАСТРОЙКИ
-        ========================================================== -->
+        <!-- ЭКРАН 5: НАСТРОЙКИ -->
         <div class="screen" id="settingsScreen">
             <div style="padding:0 10px;">
                 <div class="card">
@@ -1606,11 +1588,12 @@
     <div class="swipe-indicator show" id="swipeIndicator">👆 Свайп</div>
 
     <!-- ============================================================ -->
-    <!-- БЛОК 2: JAVASCRIPT (ЛОГИКА)                                  -->
+    <!-- JAVASCRIPT (ПОЛНАЯ ЛОГИКА)                                    -->
     <!-- ============================================================ -->
     <script>
         // ================================================================
         // КВАНТУМ v6.0 — ПОЛНАЯ JAVASCRIPT ЛОГИКА
+        // Исправленная и полностью рабочая версия
         // ================================================================
 
         // ===== КОНФИГУРАЦИЯ =====
@@ -1628,10 +1611,14 @@
         const PROXY_BASE = 'https://oz-proxy-clean.onrender.com/api/';
         const CURRENT_SEASON = 2026;
         const API_CACHE = {};
-        const POPULAR_TEAMS = ['Спартак', 'Зенит', 'ЦСКА', 'Локомотив', 'Динамо', 'Краснодар', 'Ростов', 'Оренбург', 'Акрон', 'Родина'];
+        const POPULAR_TEAMS = ['Спартак', 'Зенит', 'ЦСКА', 'Локомотив', 'Динамо', 'Краснодар', 'Ростов', 'Оренбург', 'Акрон',
+            'Родина'
+        ];
 
         function $(id) { return document.getElementById(id); }
+
         function safeNum(v) { const n = parseFloat(v); return isNaN(n) ? 0 : n; }
+
         function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
         function factorial(n) {
@@ -1687,19 +1674,22 @@
             const isFresh = age < ttl / 2;
             const isCached = age < ttl;
             const hours = Math.round(age / (60 * 60 * 1000));
-            let statusText = '', color = '#8b93a7';
-            if (isFresh) { statusText = '✅ Свежие'; color = '#16a34a'; }
-            else if (isCached) { statusText = `📦 Кэш (${hours}ч)`; color = '#ca8a04'; }
-            else { statusText = '⚠️ Устарели'; color = '#dc2626'; }
-            if (dataCount !== null && dataCount < minCount) { statusText += ` · Мало (${dataCount})`; color = '#ca8a04'; }
-            return { text: statusText, color };
+            let statusText = '',
+                color = '#8b93a7';
+            if (isFresh) { statusText = '✅ Свежие';
+                color = '#16a34a'; } else if (isCached) { statusText = '📦 Кэш (' + hours + 'ч)';
+                color = '#ca8a04'; } else { statusText = '⚠️ Устарели';
+                color = '#dc2626'; }
+            if (dataCount !== null && dataCount < minCount) { statusText += ' · Мало (' + dataCount + ')';
+                color = '#ca8a04'; }
+            return { text: statusText, color: color };
         }
 
         // ===== API ЗАПРОСЫ =====
         async function fetchWithCache(url, options = {}, ttl = CACHE_CONFIG.API_TTL) {
             const key = url + JSON.stringify(options);
             if (API_CACHE[key] && Date.now() - API_CACHE[key].time < ttl) return API_CACHE[key].data;
-            const storageKey = `api_cache_${btoa(key).slice(0, 50)}`;
+            const storageKey = 'api_cache_' + btoa(key).slice(0, 50);
             const stored = localStorage.getItem(storageKey);
             if (stored) {
                 try {
@@ -1712,10 +1702,12 @@
             }
             try {
                 const response = await fetch(url, options);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                if (!response.ok) throw new Error('HTTP ' + response.status);
                 const data = await response.json();
-                API_CACHE[key] = { data, time: Date.now() };
-                try { localStorage.setItem(storageKey, JSON.stringify({ response: data, timestamp: Date.now() })); } catch (e) {}
+                API_CACHE[key] = { data: data, time: Date.now() };
+                try {
+                    localStorage.setItem(storageKey, JSON.stringify({ response: data, timestamp: Date.now() }));
+                } catch (e) {}
                 return data;
             } catch (error) {
                 if (API_CACHE[key]) return API_CACHE[key].data;
@@ -1727,7 +1719,7 @@
             for (let i = 0; i < retries; i++) {
                 try {
                     const response = await fetch(url, options);
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    if (!response.ok) throw new Error('HTTP ' + response.status);
                     return response;
                 } catch (e) {
                     if (i === retries - 1) throw e;
@@ -1736,9 +1728,9 @@
             }
         }
 
-        function handleError(error, fallbackMessage = '⚠️ Ошибка') {
+        function handleError(error, fallbackMessage) {
             console.error('❌ Ошибка:', error);
-            showToast(error.message || fallbackMessage, 'error');
+            showToast(error.message || fallbackMessage || '⚠️ Ошибка', 'error');
             return error.message || fallbackMessage;
         }
 
@@ -1765,7 +1757,6 @@
             headerWeather: null,
             headerWeatherTimestamp: null,
             currentLeagueData: null,
-            assistantHistory: JSON.parse(localStorage.getItem('quantum_assistant') || '[]'),
             chartRange: '30d',
             valueBets: JSON.parse(localStorage.getItem('quantum_value_bets') || '[]'),
             shapData: null,
@@ -1806,24 +1797,29 @@
                 } catch (e) {}
             }
             const apiKey = localStorage.getItem('quantum_api_key');
-            if (!apiKey) { showToast('⚠️ Введите API ключ', 'error'); return; }
+            if (!apiKey) {
+                showToast('⚠️ Введите API ключ для загрузки лиг', 'error');
+                return;
+            }
             try {
                 showToast('📡 Загрузка лиг...', 'info');
-                const response = await fetchWithCache(`${PROXY_BASE}leagues`, {
+                const response = await fetchWithCache(PROXY_BASE + 'leagues', {
                     headers: { 'x-apisports-key': apiKey }
                 }, CACHE_CONFIG.LEAGUES_TTL);
                 const leagues = {};
-                const leaguesToProcess = response.response.filter(l =>
-                    TOP_LEAGUES.includes(l.league.id) && l.league.type === 'League' && l.seasons?.length > 0
-                );
-                for (const league of leaguesToProcess) {
-                    const id = league.league.id;
-                    const season = league.seasons[0].year;
-                    const leagueCacheKey = `league_stats_${id}`;
-                    const cachedStats = localStorage.getItem(leagueCacheKey);
+                const leaguesToProcess = response.response.filter(function(l) {
+                    return TOP_LEAGUES.includes(l.league.id) && l.league.type === 'League' && l.seasons && l.seasons
+                        .length > 0;
+                });
+                for (var i = 0; i < leaguesToProcess.length; i++) {
+                    var league = leaguesToProcess[i];
+                    var id = league.league.id;
+                    var season = league.seasons[0].year;
+                    var leagueCacheKey = 'league_stats_' + id;
+                    var cachedStats = localStorage.getItem(leagueCacheKey);
                     if (cachedStats) {
                         try {
-                            const stats = JSON.parse(cachedStats);
+                            var stats = JSON.parse(cachedStats);
                             if (Date.now() - stats.timestamp < CACHE_CONFIG.LEAGUES_TTL) {
                                 leagues[id] = stats.data;
                                 continue;
@@ -1831,34 +1827,41 @@
                         } catch (e) {}
                     }
                     try {
-                        const statsRes = await fetchWithCache(
-                            `${PROXY_BASE}leagues/statistics?league=${id}&season=${season}`,
-                            { headers: { 'x-apisports-key': apiKey } },
-                            CACHE_CONFIG.LEAGUES_TTL
-                        );
+                        var statsRes = await fetchWithCache(PROXY_BASE + 'leagues/statistics?league=' + id + '&season=' +
+                            season, {
+                                headers: { 'x-apisports-key': apiKey }
+                            }, CACHE_CONFIG.LEAGUES_TTL);
                         if (statsRes.response) {
-                            const stats = statsRes.response;
-                            let avgGoals = 2.5, ozPercent = 55;
-                            if (stats.goals?.total) avgGoals = parseFloat((stats.goals.total.total / stats.fixtures.total).toFixed(2));
-                            if (stats.goals?.both) ozPercent = Math.round((stats.goals.both.total / stats.fixtures.total) * 100);
+                            var st = statsRes.response;
+                            var avgGoals = 2.5,
+                                ozPercent = 55;
+                            if (st.goals && st.goals.total) {
+                                avgGoals = parseFloat((st.goals.total.total / st.fixtures.total).toFixed(2));
+                            }
+                            if (st.goals && st.goals.both) {
+                                ozPercent = Math.round((st.goals.both.total / st.fixtures.total) * 100);
+                            }
                             leagues[id] = {
-                                name: `${getFlag(league.country.name)} ${league.league.name}`,
+                                name: getFlag(league.country.name) + ' ' + league.league.name,
                                 oz: ozPercent,
                                 avgGoals: avgGoals,
                                 country: league.country.name,
                                 season: season
                             };
-                            localStorage.setItem(leagueCacheKey, JSON.stringify({ data: leagues[id], timestamp: Date.now() }));
+                            localStorage.setItem(leagueCacheKey, JSON.stringify({ data: leagues[id], timestamp: Date
+                                        .now() }));
                         }
                         await delay(200);
-                    } catch (e) { console.log(`⚠️ Ошибка с лигой ${league.league.name}:`, e); }
+                    } catch (e) {
+                        console.log('⚠️ Ошибка с лигой ' + league.league.name + ':', e);
+                    }
                 }
                 LEAGUES = leagues;
                 localStorage.setItem('quantum_leagues', JSON.stringify(leagues));
-                localStorage.setItem('quantum_leagues_cache', JSON.stringify({ leagues, timestamp: Date.now() }));
+                localStorage.setItem('quantum_leagues_cache', JSON.stringify({ leagues: leagues, timestamp: Date.now() }));
                 ALL_LEAGUES_LOADED = true;
                 renderLeagues();
-                showToast(`✅ Загружено ${Object.keys(leagues).length} лиг`, 'success');
+                showToast('✅ Загружено ' + Object.keys(leagues).length + ' лиг', 'success');
             } catch (error) {
                 handleError(error);
                 if (Object.keys(LEAGUES).length === 0) {
@@ -1874,51 +1877,78 @@
         }
 
         function getFlag(country) {
-            const flags = {
-                'England': '🏴', 'Spain': '🇪🇸', 'Germany': '🇩🇪', 'Italy': '🇮🇹',
-                'France': '🇫🇷', 'Netherlands': '🇳🇱', 'Portugal': '🇵🇹', 'Brazil': '🇧🇷',
-                'Argentina': '🇦🇷', 'USA': '🇺🇸', 'Mexico': '🇲🇽', 'Russia': '🇷🇺',
-                'Japan': '🇯🇵', 'South Korea': '🇰🇷', 'Australia': '🇦🇺', 'China': '🇨🇳',
-                'Saudi Arabia': '🇸🇦', 'Turkey': '🇹🇷', 'Belgium': '🇧🇪', 'Switzerland': '🇨🇭',
-                'Ukraine': '🇺🇦', 'Poland': '🇵🇱', 'Czech Republic': '🇨🇿', 'Austria': '🇦🇹',
-                'Greece': '🇬🇷', 'Denmark': '🇩🇰', 'Norway': '🇳🇴', 'Sweden': '🇸🇪',
-                'Scotland': '🏴', 'Wales': '🏴', 'Ireland': '🇮🇪', 'Northern Ireland': '🇬🇧'
+            var flags = {
+                'England': '🏴',
+                'Spain': '🇪🇸',
+                'Germany': '🇩🇪',
+                'Italy': '🇮🇹',
+                'France': '🇫🇷',
+                'Netherlands': '🇳🇱',
+                'Portugal': '🇵🇹',
+                'Brazil': '🇧🇷',
+                'Argentina': '🇦🇷',
+                'USA': '🇺🇸',
+                'Mexico': '🇲🇽',
+                'Russia': '🇷🇺',
+                'Japan': '🇯🇵',
+                'South Korea': '🇰🇷',
+                'Australia': '🇦🇺',
+                'China': '🇨🇳',
+                'Saudi Arabia': '🇸🇦',
+                'Turkey': '🇹🇷',
+                'Belgium': '🇧🇪',
+                'Switzerland': '🇨🇭',
+                'Ukraine': '🇺🇦',
+                'Poland': '🇵🇱',
+                'Czech Republic': '🇨🇿',
+                'Austria': '🇦🇹',
+                'Greece': '🇬🇷',
+                'Denmark': '🇩🇰',
+                'Norway': '🇳🇴',
+                'Sweden': '🇸🇪',
+                'Scotland': '🏴',
+                'Wales': '🏴',
+                'Ireland': '🇮🇪',
+                'Northern Ireland': '🇬🇧'
             };
             return flags[country] || '🌍';
         }
 
         function renderLeagues() {
-            const select = $('leagueSelect');
+            var select = $('leagueSelect');
             if (!select) return;
             select.innerHTML = '';
             if (Object.keys(LEAGUES).length === 0) {
-                const option = document.createElement('option');
+                var option = document.createElement('option');
                 option.value = '39';
                 option.textContent = '🏴 АПЛ (загрузка...)';
                 select.appendChild(option);
                 return;
             }
-            const sorted = Object.keys(LEAGUES).sort((a, b) => LEAGUES[a].name.localeCompare(LEAGUES[b].name));
-            sorted.forEach(key => {
-                const option = document.createElement('option');
-                option.value = key;
-                option.textContent = LEAGUES[key].name;
-                if (key === state.currentLeague) option.selected = true;
-                select.appendChild(option);
-            });
+            var sorted = Object.keys(LEAGUES).sort(function(a, b) { return LEAGUES[a].name.localeCompare(LEAGUES[b]
+                .name); });
+            for (var i = 0; i < sorted.length; i++) {
+                var key = sorted[i];
+                var opt = document.createElement('option');
+                opt.value = key;
+                opt.textContent = LEAGUES[key].name;
+                if (key === state.currentLeague) opt.selected = true;
+                select.appendChild(opt);
+            }
             updateLeagueInfo();
         }
 
         function updateLeagueInfo() {
-            const league = getLeague();
-            const info = $('leagueInfo');
+            var league = getLeague();
+            var info = $('leagueInfo');
             if (info && league.avgGoals) {
-                info.textContent = `Ср. тотал: ${league.avgGoals} | ОЗ: ${league.oz}% | ${Object.keys(LEAGUES).length} лиг`;
+                info.textContent = 'Ср. тотал: ' + league.avgGoals + ' | ОЗ: ' + league.oz + '% | ' + Object.keys(LEAGUES)
+                    .length + ' лиг';
             }
         }
 
         function updateLeagueInfoDisplay(leagueData) {
-            const card = document.getElementById('leagueInfoCard');
+            var card = document.getElementById('leagueInfoCard');
             if (!card) return;
             if (!leagueData) { card.style.display = 'none'; return; }
             card.style.display = 'block';
@@ -1927,10 +1957,10 @@
             document.getElementById('leagueSeason').textContent = leagueData.season || '--';
             document.getElementById('leagueAvgGoals').textContent = leagueData.avgGoals || '--';
             document.getElementById('leagueOz').textContent = (leagueData.oz || 0) + '%';
-            const statusEl = document.getElementById('leagueDataStatus');
+            var statusEl = document.getElementById('leagueDataStatus');
             if (statusEl) {
                 if (leagueData.timestamp) {
-                    const status = getDataStatus(leagueData.timestamp, CACHE_CONFIG.LEAGUES_TTL, leagueData.matches);
+                    var status = getDataStatus(leagueData.timestamp, CACHE_CONFIG.LEAGUES_TTL, leagueData.matches);
                     statusEl.textContent = status.text;
                     statusEl.style.color = status.color;
                 } else {
@@ -1947,34 +1977,34 @@
 
         // ===== H2H =====
         async function loadH2H() {
-            const homeTeamInput = $('homeTeamH2H');
-            const awayTeamInput = $('awayTeamH2H');
+            var homeTeamInput = $('homeTeamH2H');
+            var awayTeamInput = $('awayTeamH2H');
             if (!homeTeamInput || !awayTeamInput) return;
-            const homeTeam = homeTeamInput.value?.trim() || '';
-            const awayTeam = awayTeamInput.value?.trim() || '';
+            var homeTeam = homeTeamInput.value ? homeTeamInput.value.trim() : '';
+            var awayTeam = awayTeamInput.value ? awayTeamInput.value.trim() : '';
             if (!homeTeam || !awayTeam) { showToast('⚠️ Введите обе команды!', 'error'); return; }
-            const cacheKey = `h2h_${homeTeam}_${awayTeam}`;
-            const cached = localStorage.getItem(cacheKey);
+            var cacheKey = 'h2h_' + homeTeam + '_' + awayTeam;
+            var cached = localStorage.getItem(cacheKey);
             if (cached) {
                 try {
-                    const data = JSON.parse(cached);
+                    var data = JSON.parse(cached);
                     if (Date.now() - data.timestamp < CACHE_CONFIG.H2H_TTL) {
                         state.h2hData = data.matches;
                         state.h2hTimestamp = data.timestamp;
                         renderH2HData(data.matches);
-                        showToast(`✅ Из кэша (${data.matches.length} матчей)`, 'success');
+                        showToast('✅ Из кэша (' + data.matches.length + ' матчей)', 'success');
                         return;
                     }
                 } catch (e) {}
             }
             if (state.isLoading) return;
             state.isLoading = true;
-            const btn = $('loadH2HBtn');
-            const btnText = $('loadBtnText');
-            const spinner = $('loadSpinner');
-            const status = $('h2hStatus');
-            const results = $('h2hResults');
-            const dataStatus = $('h2hDataStatus');
+            var btn = $('loadH2HBtn');
+            var btnText = $('loadBtnText');
+            var spinner = $('loadSpinner');
+            var status = $('h2hStatus');
+            var results = $('h2hResults');
+            var dataStatus = $('h2hDataStatus');
             if (btn) btn.disabled = true;
             if (btnText) btnText.textContent = '⏳ Загрузка...';
             if (spinner) spinner.style.display = 'inline-block';
@@ -1982,62 +2012,70 @@
             if (results) results.innerHTML = '';
             if (dataStatus) dataStatus.textContent = '';
             try {
-                const apiKey = localStorage.getItem('quantum_api_key');
+                var apiKey = localStorage.getItem('quantum_api_key');
                 if (!apiKey) throw new Error('Введите API ключ');
-                const url1 = `${PROXY_BASE}teams?search=${encodeURIComponent(homeTeam)}`;
-                const data1 = await fetchWithCache(url1, { headers: { 'x-apisports-key': apiKey } }, CACHE_CONFIG.API_TTL);
+                var url1 = PROXY_BASE + 'teams?search=' + encodeURIComponent(homeTeam);
+                var data1 = await fetchWithCache(url1, { headers: { 'x-apisports-key': apiKey } }, CACHE_CONFIG.API_TTL);
                 if (!data1.response || data1.response.length === 0) {
-                    if (status) status.innerHTML = `❌ Команда "${sanitizeHTML(homeTeam)}" не найдена`;
+                    if (status) status.innerHTML = '❌ Команда "' + sanitizeHTML(homeTeam) + '" не найдена';
                     state.isLoading = false;
                     resetButtons(btn, btnText, spinner);
                     return;
                 }
-                const homeId = data1.response[0].team.id;
-                const url2 = `${PROXY_BASE}teams?search=${encodeURIComponent(awayTeam)}`;
-                const data2 = await fetchWithCache(url2, { headers: { 'x-apisports-key': apiKey } }, CACHE_CONFIG.API_TTL);
+                var homeId = data1.response[0].team.id;
+                var url2 = PROXY_BASE + 'teams?search=' + encodeURIComponent(awayTeam);
+                var data2 = await fetchWithCache(url2, { headers: { 'x-apisports-key': apiKey } }, CACHE_CONFIG.API_TTL);
                 if (!data2.response || data2.response.length === 0) {
-                    if (status) status.innerHTML = `❌ Команда "${sanitizeHTML(awayTeam)}" не найдена`;
+                    if (status) status.innerHTML = '❌ Команда "' + sanitizeHTML(awayTeam) + '" не найдена';
                     state.isLoading = false;
                     resetButtons(btn, btnText, spinner);
                     return;
                 }
-                const awayId = data2.response[0].team.id;
+                var awayId = data2.response[0].team.id;
                 if (status) status.innerHTML = '⏳ Загрузка матчей...';
-                const allMatches = [];
-                for (let i = 0; i < 3; i++) {
-                    const year = CURRENT_SEASON - i;
-                    const h2hUrl = `${PROXY_BASE}fixtures/headtohead?h2h=${homeId}-${awayId}&season=${year}`;
+                var allMatches = [];
+                for (var i = 0; i < 3; i++) {
+                    var year = CURRENT_SEASON - i;
+                    var h2hUrl = PROXY_BASE + 'fixtures/headtohead?h2h=' + homeId + '-' + awayId + '&season=' + year;
                     try {
-                        const h2hResp = await fetchWithRetry(h2hUrl, { headers: { 'x-apisports-key': apiKey } }, 2, 1000);
-                        const h2hData = await h2hResp.json();
-                        if (h2hData.response) allMatches.push(...h2hData.response);
-                    } catch (e) { console.log(`⚠️ Ошибка сезона ${year}:`, e); }
+                        var h2hResp = await fetchWithRetry(h2hUrl, { headers: { 'x-apisports-key': apiKey } }, 2, 1000);
+                        var h2hData = await h2hResp.json();
+                        if (h2hData.response) {
+                            for (var j = 0; j < h2hData.response.length; j++) {
+                                allMatches.push(h2hData.response[j]);
+                            }
+                        }
+                    } catch (e) { console.log('⚠️ Ошибка сезона ' + year + ':', e); }
                     await delay(200);
                 }
                 if (allMatches.length === 0) {
-                    if (status) status.innerHTML = `❌ Нет встреч между командами`;
+                    if (status) status.innerHTML = '❌ Нет встреч между командами';
                     state.isLoading = false;
                     resetButtons(btn, btnText, spinner);
                     return;
                 }
-                const matches = allMatches.map(m => ({
-                    home: m.teams.home.name,
-                    away: m.teams.away.name,
-                    homeScore: m.goals.home || 0,
-                    awayScore: m.goals.away || 0,
-                    oz: (m.goals.home || 0) > 0 && (m.goals.away || 0) > 0,
-                    total: (m.goals.home || 0) + (m.goals.away || 0),
-                    date: m.fixture.date,
-                    league: m.league || null
-                }));
+                var matches = [];
+                for (var k = 0; k < allMatches.length; k++) {
+                    var m = allMatches[k];
+                    matches.push({
+                        home: m.teams.home.name,
+                        away: m.teams.away.name,
+                        homeScore: m.goals.home || 0,
+                        awayScore: m.goals.away || 0,
+                        oz: (m.goals.home || 0) > 0 && (m.goals.away || 0) > 0,
+                        total: (m.goals.home || 0) + (m.goals.away || 0),
+                        date: m.fixture.date,
+                        league: m.league || null
+                    });
+                }
                 state.h2hData = matches;
                 state.h2hTimestamp = Date.now();
-                localStorage.setItem(cacheKey, JSON.stringify({ matches, timestamp: Date.now() }));
+                localStorage.setItem(cacheKey, JSON.stringify({ matches: matches, timestamp: Date.now() }));
                 renderH2HData(matches);
-                showToast(`✅ Загружено ${matches.length} матчей`, 'success');
+                showToast('✅ Загружено ' + matches.length + ' матчей', 'success');
             } catch (error) {
                 handleError(error);
-                if (status) status.innerHTML = `❌ ${error.message}`;
+                if (status) status.innerHTML = '❌ ' + error.message;
             } finally {
                 state.isLoading = false;
                 resetButtons(btn, btnText, spinner);
@@ -2045,18 +2083,26 @@
         }
 
         function renderH2HData(matches) {
-            const status = $('h2hStatus');
-            const results = $('h2hResults');
-            const dataStatus = $('h2hDataStatus');
-            const total = matches.length;
-            const ozCount = matches.filter(m => m.oz).length;
-            const avgTotal = (matches.reduce((s, m) => s + m.total, 0) / total).toFixed(1);
-            const homeWins = matches.filter(m => m.homeScore > m.awayScore).length;
-            const awayWins = matches.filter(m => m.awayScore > m.homeScore).length;
-            const draws = total - homeWins - awayWins;
-            let leagueInfo = {
+            var status = $('h2hStatus');
+            var results = $('h2hResults');
+            var dataStatus = $('h2hDataStatus');
+            var total = matches.length;
+            var ozCount = 0;
+            for (var i = 0; i < total; i++) { if (matches[i].oz) ozCount++; }
+            var avgTotal = 0;
+            for (var j = 0; j < total; j++) { avgTotal += matches[j].total; }
+            avgTotal = (avgTotal / total).toFixed(1);
+            var homeWins = 0,
+                awayWins = 0,
+                draws = 0;
+            for (var k = 0; k < total; k++) {
+                if (matches[k].homeScore > matches[k].awayScore) homeWins++;
+                else if (matches[k].awayScore > matches[k].homeScore) awayWins++;
+                else draws++;
+            }
+            var leagueInfo = {
                 name: 'Лига',
-                country: matches[0]?.league?.country || '--',
+                country: matches[0] && matches[0].league ? matches[0].league.country || '--' : '--',
                 season: CURRENT_SEASON,
                 avgGoals: parseFloat(avgTotal),
                 oz: Math.round((ozCount / total) * 100),
@@ -2066,28 +2112,34 @@
             state.currentLeagueData = leagueInfo;
             updateLeagueInfoDisplay(leagueInfo);
             if (dataStatus) {
-                const statusData = getDataStatus(state.h2hTimestamp, CACHE_CONFIG.H2H_TTL, total);
+                var statusData = getDataStatus(state.h2hTimestamp, CACHE_CONFIG.H2H_TTL, total);
                 dataStatus.textContent = statusData.text;
                 dataStatus.style.color = statusData.color;
             }
-            if (status) status.innerHTML = `✅ Найдено ${total} встреч`;
+            if (status) status.innerHTML = '✅ Найдено ' + total + ' встреч';
             if (results) {
-                results.innerHTML = `
-                    <div class="h2h-summary">
-                        <span class="item">📊 Всего: <span class="num">${total}</span></span>
-                        <span class="item">⚽ ОЗ: <span class="num">${Math.round((ozCount/total)*100)}%</span></span>
-                        <span class="item">📈 Тотал: <span class="num">${avgTotal}</span></span>
-                        <span class="item">🏠 ${homeWins} | ✈️ ${awayWins} | 🤝 ${draws}</span>
-                    </div>
-                    ${matches.slice(0, 15).map(m => `
-                        <div class="h2h-item">
-                            ${sanitizeHTML(m.home)} ${m.homeScore}:${m.awayScore} ${sanitizeHTML(m.away)}
-                            ${m.oz ? '✅' : '❌'}
-                            <span style="color:#6b7280;font-size:7px;">${new Date(m.date).toLocaleDateString()}</span>
-                        </div>
-                    `).join('')}
-                    ${total > 15 ? `<div style="color:#8b93a7;font-size:8px;text-align:center;margin-top:2px;">еще ${total - 15}...</div>` : ''}
-                `;
+                var html = '<div class="h2h-summary">' +
+                    '<span class="item">📊 Всего: <span class="num">' + total + '</span></span>' +
+                    '<span class="item">⚽ ОЗ: <span class="num">' + Math.round((ozCount / total) * 100) +
+                    '%</span></span>' +
+                    '<span class="item">📈 Тотал: <span class="num">' + avgTotal + '</span></span>' +
+                    '<span class="item">🏠 ' + homeWins + ' | ✈️ ' + awayWins + ' | 🤝 ' + draws + '</span>' +
+                    '</div>';
+                var limit = Math.min(15, matches.length);
+                for (var l = 0; l < limit; l++) {
+                    var m = matches[l];
+                    html += '<div class="h2h-item">' +
+                        sanitizeHTML(m.home) + ' ' + m.homeScore + ':' + m.awayScore + ' ' + sanitizeHTML(m.away) +
+                        (m.oz ? ' ✅' : ' ❌') +
+                        '<span style="color:#6b7280;font-size:7px;">' + new Date(m.date).toLocaleDateString() +
+                        '</span>' +
+                        '</div>';
+                }
+                if (total > 15) {
+                    html += '<div style="color:#8b93a7;font-size:8px;text-align:center;margin-top:2px;">еще ' + (total -
+                        15) + '...</div>';
+                }
+                results.innerHTML = html;
             }
             calculate();
         }
@@ -2101,18 +2153,21 @@
         // ===== НАВИГАЦИЯ =====
         function switchTab(tab) {
             state.currentTab = tab;
-            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
-            const map = {
+            var screens = document.querySelectorAll('.screen');
+            for (var i = 0; i < screens.length; i++) { screens[i].classList.remove('active'); }
+            var map = {
                 'live': 'liveScreen',
                 'liveonly': 'liveOnlyScreen',
                 'search': 'searchScreen',
                 'stats': 'statsScreen',
                 'settings': 'settingsScreen'
             };
-            if ($(map[tab])) $(map[tab]).classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-            const target = document.querySelector(`.nav-btn[data-tab="${tab}"]`);
-            if (target) target.classList.add('active');
+            var targetScreen = $(map[tab]);
+            if (targetScreen) targetScreen.classList.add('active');
+            var navBtns = document.querySelectorAll('.nav-btn');
+            for (var j = 0; j < navBtns.length; j++) { navBtns[j].classList.remove('active'); }
+            var targetBtn = document.querySelector('.nav-btn[data-tab="' + tab + '"]');
+            if (targetBtn) targetBtn.classList.add('active');
             if (tab === 'stats') {
                 renderHistory();
                 renderStats();
@@ -2126,25 +2181,27 @@
                 document.getElementById('weatherKeyInput').value = localStorage.getItem('quantum_weather_key') || '';
             }
             if (tab === 'live') {
-                setTimeout(() => renderPredictions(), 100);
+                setTimeout(function() { renderPredictions(); }, 100);
                 if (!state.updateTimer) {
-                    state.updateTimer = setInterval(() => {
+                    state.updateTimer = setInterval(function() {
                         renderPredictions();
                         checkNotifications();
                     }, CACHE_CONFIG.UPDATE_INTERVAL);
                 }
             } else {
-                if (state.updateTimer) { clearInterval(state.updateTimer); state.updateTimer = null; }
+                if (state.updateTimer) { clearInterval(state.updateTimer);
+                    state.updateTimer = null; }
             }
             if (tab === 'liveonly') {
-                setTimeout(() => renderLiveMatches(), 100);
+                setTimeout(function() { renderLiveMatches(); }, 100);
                 if (!state.liveUpdateTimer) {
-                    state.liveUpdateTimer = setInterval(() => {
+                    state.liveUpdateTimer = setInterval(function() {
                         renderLiveMatches();
                     }, CACHE_CONFIG.LIVE_INTERVAL);
                 }
             } else {
-                if (state.liveUpdateTimer) { clearInterval(state.liveUpdateTimer); state.liveUpdateTimer = null; }
+                if (state.liveUpdateTimer) { clearInterval(state.liveUpdateTimer);
+                    state.liveUpdateTimer = null; }
             }
             if (tab === 'search') {
                 renderPopularTags();
@@ -2153,33 +2210,27 @@
 
         // ===== ФИЛЬТР ПО ДАТАМ =====
         function renderDateFilter() {
-            const container = document.getElementById('dateScroll');
+            var container = document.getElementById('dateScroll');
             if (!container) return;
-            const today = new Date();
-            const selected = state.selectedDate || today;
-            
-            // Показываем 14 дней (неделя назад + неделя вперёд)
-            const startDate = new Date(today);
+            var today = new Date();
+            var selected = state.selectedDate || today;
+            var startDate = new Date(today);
             startDate.setDate(today.getDate() - 7);
-            
-            let html = '';
-            for (let i = 0; i < 14; i++) {
-                const date = new Date(startDate);
+            var html = '';
+            for (var i = 0; i < 14; i++) {
+                var date = new Date(startDate);
                 date.setDate(startDate.getDate() + i);
-                const isToday = date.toDateString() === today.toDateString();
-                const isSelected = date.toDateString() === selected.toDateString();
-                const dayNames = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
-                const day = dayNames[date.getDay()];
-                const number = date.getDate();
-                const month = date.getMonth() + 1;
-                const label = isToday ? 'Сегодня' : `${day}`;
-                
-                html += `
-                    <button class="date-btn ${isSelected ? 'active' : ''}" data-date="${date.toISOString()}" onclick="selectDate('${date.toISOString()}')">
-                        <span class="number">${number}</span>
-                        <span class="day">${label}</span>
-                    </button>
-                `;
+                var isToday = date.toDateString() === today.toDateString();
+                var isSelected = date.toDateString() === selected.toDateString();
+                var dayNames = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
+                var day = dayNames[date.getDay()];
+                var number = date.getDate();
+                var label = isToday ? 'Сегодня' : day;
+                html += '<button class="date-btn ' + (isSelected ? 'active' : '') + '" data-date="' + date.toISOString() +
+                    '" onclick="selectDate(\'' + date.toISOString() + '\')">' +
+                    '<span class="number">' + number + '</span>' +
+                    '<span class="day">' + label + '</span>' +
+                    '</button>';
             }
             container.innerHTML = html;
         }
@@ -2191,17 +2242,17 @@
         }
 
         // ===== ПОГОДА =====
-        const MOSCOW_COORDS = { lat: 55.7558, lon: 37.6173 };
+        var MOSCOW_COORDS = { lat: 55.7558, lon: 37.6173 };
 
         async function loadHeaderWeather() {
-            const iconEl = document.getElementById('weatherIconHeader');
-            const tempEl = document.getElementById('weatherTempHeader');
+            var iconEl = document.getElementById('weatherIconHeader');
+            var tempEl = document.getElementById('weatherTempHeader');
             if (!iconEl) return;
-            const weatherCacheKey = 'weather_moscow';
-            const cached = localStorage.getItem(weatherCacheKey);
+            var weatherCacheKey = 'weather_moscow';
+            var cached = localStorage.getItem(weatherCacheKey);
             if (cached) {
                 try {
-                    const data = JSON.parse(cached);
+                    var data = JSON.parse(cached);
                     if (Date.now() - data.timestamp < CACHE_CONFIG.WEATHER_TTL) {
                         state.headerWeather = data.weather;
                         state.headerWeatherTimestamp = data.timestamp;
@@ -2212,17 +2263,18 @@
             }
             iconEl.textContent = '⏳';
             tempEl.textContent = '--°C';
-            const key = localStorage.getItem('quantum_weather_key');
+            var key = localStorage.getItem('quantum_weather_key');
             if (!key) {
                 iconEl.textContent = '❌';
                 tempEl.textContent = '--°C';
                 return;
             }
             try {
-                const url = `https://api.openweathermap.org/data/2.5/weather?lat=${MOSCOW_COORDS.lat}&lon=${MOSCOW_COORDS.lon}&units=metric&appid=${key}`;
-                const response = await fetch(url);
+                var url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + MOSCOW_COORDS.lat + '&lon=' + MOSCOW_COORDS
+                    .lon + '&units=metric&appid=' + key;
+                var response = await fetch(url);
                 if (!response.ok) throw new Error('Погода не найдена');
-                const data = await response.json();
+                var data = await response.json();
                 state.headerWeather = {
                     temp: Math.round(data.main.temp),
                     feels_like: Math.round(data.main.feels_like),
@@ -2235,7 +2287,8 @@
                     country: data.sys.country
                 };
                 state.headerWeatherTimestamp = Date.now();
-                localStorage.setItem(weatherCacheKey, JSON.stringify({ weather: state.headerWeather, timestamp: Date.now() }));
+                localStorage.setItem(weatherCacheKey, JSON.stringify({ weather: state.headerWeather, timestamp: Date
+                        .now() }));
                 updateHeaderWeatherDisplay();
             } catch (e) {
                 console.log('⚠️ Ошибка погоды:', e);
@@ -2245,17 +2298,17 @@
         }
 
         function updateHeaderWeatherDisplay() {
-            const iconEl = document.getElementById('weatherIconHeader');
-            const tempEl = document.getElementById('weatherTempHeader');
+            var iconEl = document.getElementById('weatherIconHeader');
+            var tempEl = document.getElementById('weatherTempHeader');
             if (!state.headerWeather) return;
-            const w = state.headerWeather;
+            var w = state.headerWeather;
             iconEl.textContent = getWeatherEmoji(w);
             tempEl.textContent = w.temp + '°C';
         }
 
         function getWeatherEmoji(weather) {
             if (!weather) return '🌤️';
-            const condition = weather.weather.toLowerCase();
+            var condition = weather.weather.toLowerCase();
             if (condition.includes('rain') || condition.includes('drizzle')) return '🌧️';
             if (condition.includes('snow')) return '❄️';
             if (condition.includes('cloud')) return '☁️';
@@ -2265,13 +2318,14 @@
             return '🌤️';
         }
 
-        function refreshWeather() { loadHeaderWeather(); showToast('🔄 Обновление погоды', 'info'); }
+        function refreshWeather() { loadHeaderWeather();
+            showToast('🔄 Обновление погоды', 'info'); }
 
         // ===== ТЕМА =====
         function toggleTheme() {
-            const isDark = document.body.classList.toggle('dark');
-            const btn = document.getElementById('themeBtn');
-            const toggleBtn = document.getElementById('themeToggle');
+            var isDark = document.body.classList.toggle('dark');
+            var btn = document.getElementById('themeBtn');
+            var toggleBtn = document.getElementById('themeToggle');
             if (btn) btn.textContent = isDark ? '☀️' : '🌙';
             if (toggleBtn) {
                 toggleBtn.textContent = isDark ? '☀️ Светлая' : '🌙 Тёмная';
@@ -2281,19 +2335,20 @@
         }
 
         function initTheme() {
-            const theme = localStorage.getItem('quantum_theme') || 'light';
+            var theme = localStorage.getItem('quantum_theme') || 'light';
             if (theme === 'dark') {
                 document.body.classList.add('dark');
-                const btn = document.getElementById('themeBtn');
-                const toggleBtn = document.getElementById('themeToggle');
+                var btn = document.getElementById('themeBtn');
+                var toggleBtn = document.getElementById('themeToggle');
                 if (btn) btn.textContent = '☀️';
-                if (toggleBtn) { toggleBtn.textContent = '☀️ Светлая'; toggleBtn.classList.add('active'); }
+                if (toggleBtn) { toggleBtn.textContent = '☀️ Светлая';
+                    toggleBtn.classList.add('active'); }
             }
         }
 
         // ===== API КЛЮЧИ =====
         function saveApiKey() {
-            const key = document.getElementById('apiKeyInput').value.trim();
+            var key = document.getElementById('apiKeyInput').value.trim();
             if (!key) { showToast('⚠️ Введите API ключ', 'error'); return; }
             localStorage.setItem('quantum_api_key', key);
             state.apiKey = key;
@@ -2304,7 +2359,7 @@
         }
 
         function saveWeatherKey() {
-            const key = document.getElementById('weatherKeyInput').value.trim();
+            var key = document.getElementById('weatherKeyInput').value.trim();
             if (!key) { showToast('⚠️ Введите ключ погоды', 'error'); return; }
             localStorage.setItem('quantum_weather_key', key);
             document.getElementById('weatherStatus').textContent = '✅ Ключ погоды сохранен';
@@ -2314,7 +2369,7 @@
         }
 
         // ===== МОДАЛЬНОЕ ОКНО =====
-        let pendingTurboBet = null;
+        var pendingTurboBet = null;
 
         function showSaveModal(data) {
             pendingTurboBet = data;
@@ -2333,7 +2388,7 @@
 
         function confirmSaveBet() {
             if (!pendingTurboBet) return;
-            const bet = {
+            var bet = {
                 id: Date.now(),
                 date: new Date().toISOString(),
                 match: pendingTurboBet.match || 'Матч',
@@ -2371,7 +2426,8 @@
                 home_pressing_intensity: 5,
                 away_pressing_intensity: 5,
                 league_avg: getLeague().avgGoals || 2.5,
-                h2h_avg: state.h2hData ? state.h2hData.reduce((s, m) => s + m.total, 0) / state.h2hData.length : 2.5,
+                h2h_avg: state.h2hData ? state.h2hData.reduce(function(s, m) { return s + m.total; }, 0) / state.h2hData
+                    .length : 2.5,
                 weather_factor: 1.0,
                 home_xGA: 1.0,
                 away_xGA: 1.0
@@ -2391,95 +2447,110 @@
         // ===== ТУРБО АНАЛИЗ =====
         async function turboAnalyze(matchId) {
             if (state.isTurboRunning) { showToast('⏳ Анализ уже идёт', 'info'); return; }
-            const match = state.predictions.find(m => m.id === matchId);
+            var match = null;
+            for (var i = 0; i < state.predictions.length; i++) {
+                if (state.predictions[i].id === matchId) { match = state.predictions[i]; break; }
+            }
             if (!match) { showToast('❌ Матч не найден', 'error'); return; }
 
             state.isTurboRunning = true;
-            const card = document.querySelector(`.match-row[data-match-id="${matchId}"]`);
-            const details = card?.nextElementSibling;
+            var card = document.querySelector('.match-row[data-match-id="' + matchId + '"]');
+            var details = card ? card.nextElementSibling : null;
             if (details) details.classList.toggle('open');
 
-            const indicator = card?.querySelector('.turbo-indicator');
+            var indicator = card ? card.querySelector('.turbo-indicator') : null;
             if (indicator) {
                 indicator.innerHTML = '<span class="spinner-tiny"></span>';
                 indicator.classList.add('active');
             }
 
-            // Имитация загрузки
             await delay(1500);
 
-            // === РАСЧЁТ ===
-            const homeGoals = match.homeScore !== null ? match.homeScore : 1;
-            const awayGoals = match.awayScore !== null ? match.awayScore : 1;
-            
-            // Генерируем прогноз
-            const homeTeamName = match.home;
-            const awayTeamName = match.away;
-            const league = getLeague();
-            const avgGoals = league.avgGoals || 2.5;
-            let lambdaHome = avgGoals / 2;
-            let lambdaAway = avgGoals / 2;
-            
-            // Используем H2H если есть
+            var homeGoals = match.homeScore !== null ? match.homeScore : 1;
+            var awayGoals = match.awayScore !== null ? match.awayScore : 1;
+
+            var homeTeamName = match.home;
+            var awayTeamName = match.away;
+            var league = getLeague();
+            var avgGoals = league.avgGoals || 2.5;
+            var lambdaHome = avgGoals / 2;
+            var lambdaAway = avgGoals / 2;
+
             if (state.h2hData && state.h2hData.length > 0) {
-                const avgHome = state.h2hData.reduce((sum, m) => sum + m.homeScore, 0) / state.h2hData.length;
-                const avgAway = state.h2hData.reduce((sum, m) => sum + m.awayScore, 0) / state.h2hData.length;
-                lambdaHome = (lambdaHome + avgHome) / 2;
-                lambdaAway = (lambdaAway + avgAway) / 2;
+                var sumHome = 0,
+                    sumAway = 0;
+                for (var j = 0; j < state.h2hData.length; j++) {
+                    sumHome += state.h2hData[j].homeScore;
+                    sumAway += state.h2hData[j].awayScore;
+                }
+                lambdaHome = (lambdaHome + sumHome / state.h2hData.length) / 2;
+                lambdaAway = (lambdaAway + sumAway / state.h2hData.length) / 2;
             }
-            
-            const aiHomeXG = lambdaHome;
-            const aiAwayXG = lambdaAway;
-            const aiConfidence = Math.min(90, Math.max(10, Math.round(50 + (Math.random() * 30))));
-            const probOz = 1 - Math.exp(-lambdaHome) * Math.exp(-lambdaAway);
-            
-            let prediction = '';
+
+            var aiHomeXG = lambdaHome;
+            var aiAwayXG = lambdaAway;
+            var aiConfidence = Math.min(90, Math.max(10, Math.round(50 + (Math.random() * 30))));
+            var probOz = 1 - Math.exp(-lambdaHome) * Math.exp(-lambdaAway);
+
+            var prediction = '';
             if (probOz > 0.6) prediction = 'ОЗ - ДА';
             else if (probOz < 0.4) prediction = 'ОЗ - НЕТ';
             else if ((lambdaHome + lambdaAway) > 2.5) prediction = 'Тотал > 2.5';
             else prediction = 'Тотал < 2.5';
-            
-            const valueResult = calculateValueBet(aiConfidence / 100, 1.85);
-            
-            let homeForm = 50, awayForm = 50;
+
+            var valueResult = calculateValueBet(aiConfidence / 100, 1.85);
+
+            var homeForm = 50,
+                awayForm = 50;
             if (state.h2hData && state.h2hData.length > 0) {
-                const wins = state.h2hData.filter(m => m.homeScore > m.awayScore).length;
-                const awayWins = state.h2hData.filter(m => m.awayScore > m.homeScore).length;
+                var wins = 0,
+                    awayWins = 0;
+                for (var k = 0; k < state.h2hData.length; k++) {
+                    if (state.h2hData[k].homeScore > state.h2hData[k].awayScore) wins++;
+                    else if (state.h2hData[k].awayScore > state.h2hData[k].homeScore) awayWins++;
+                }
                 homeForm = Math.round((wins / state.h2hData.length) * 100);
                 awayForm = Math.round((awayWins / state.h2hData.length) * 100);
             }
-            const detectiveResult = runAIDetective(homeTeamName, awayTeamName, homeForm, awayForm, state.h2hData, state.weatherData);
+            var detectiveResult = runAIDetective(homeTeamName, awayTeamName, homeForm, awayForm, state.h2hData, state
+                .weatherData);
 
-            const finalRec = aiConfidence >= 70 && valueResult.isValue ? '✅ Хороший сигнал + Value' :
-                           aiConfidence >= 60 ? '🟡 Можно рассмотреть' :
-                           aiConfidence >= 50 ? '🟠 С осторожностью' : '🔴 Лучше пропустить';
+            var finalRec = aiConfidence >= 70 && valueResult.isValue ? '✅ Хороший сигнал + Value' :
+                aiConfidence >= 60 ? '🟡 Можно рассмотреть' :
+                aiConfidence >= 50 ? '🟠 С осторожностью' : '🔴 Лучше пропустить';
 
             if (details) {
-                details.innerHTML = `
-                    <div class="detail-row">
-                        <div class="item"><span class="label">🎯 Прогноз:</span><span class="value accent">${prediction}</span></div>
-                        <div class="item"><span class="label">📊 Уверенность:</span><span class="value good">${aiConfidence}%</span></div>
-                        <div class="item"><span class="label">💰 Value:</span><span class="value ${valueResult.isValue ? 'good' : 'warn'}">${valueResult.evPercent}</span></div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="item"><span class="label">🧠 xG:</span><span class="value accent">${aiHomeXG.toFixed(2)} - ${aiAwayXG.toFixed(2)}</span></div>
-                        <div class="item"><span class="label">🕵️ Анализ:</span><span class="value">${detectiveResult.summary || 'Нет данных'}</span></div>
-                    </div>
-                    <div class="detail-row" style="margin-top:2px;font-weight:600;color:${aiConfidence >= 70 ? '#16a34a' : aiConfidence >= 60 ? '#ca8a04' : '#dc2626'}">
-                        ${finalRec}
-                    </div>
-                    <div class="progress-mini"><div class="fill" style="width:${aiConfidence}%"></div></div>
-                `;
+                details.innerHTML =
+                    '<div class="detail-row">' +
+                    '<div class="item"><span class="label">🎯 Прогноз:</span><span class="value accent">' + prediction +
+                    '</span></div>' +
+                    '<div class="item"><span class="label">📊 Уверенность:</span><span class="value good">' +
+                    aiConfidence + '%</span></div>' +
+                    '<div class="item"><span class="label">💰 Value:</span><span class="value ' + (valueResult.isValue ?
+                        'good' : 'warn') + '">' + valueResult.evPercent + '</span></div>' +
+                    '</div>' +
+                    '<div class="detail-row">' +
+                    '<div class="item"><span class="label">🧠 xG:</span><span class="value accent">' + aiHomeXG
+                    .toFixed(2) + ' - ' + aiAwayXG.toFixed(2) + '</span></div>' +
+                    '<div class="item"><span class="label">🕵️ Анализ:</span><span class="value">' + (detectiveResult
+                        .summary || 'Нет данных') + '</span></div>' +
+                    '</div>' +
+                    '<div class="detail-row" style="margin-top:2px;font-weight:600;color:' + (aiConfidence >= 70 ?
+                        '#16a34a' : aiConfidence >= 60 ? '#ca8a04' : '#dc2626') + '">' +
+                    finalRec +
+                    '</div>' +
+                    '<div class="progress-mini"><div class="fill" style="width:' + aiConfidence + '%"></div></div>';
                 details.classList.add('open');
             }
 
-            const modalData = {
-                match: `${match.home} vs ${match.away}`,
+            var modalData = {
+                match: match.home + ' vs ' + match.away,
                 prediction: prediction,
                 confidence: aiConfidence,
                 value: valueResult.evPercent,
                 detective: detectiveResult.summary || 'Нет данных',
-                weather: state.weatherData ? `${state.weatherData.temp}°C, ${state.weatherData.description}` : 'Нет данных',
+                weather: state.weatherData ? state.weatherData.temp + '°C, ' + state.weatherData.description :
+                    'Нет данных',
                 home: homeGoals,
                 away: awayGoals,
                 mode: 'total',
@@ -2487,20 +2558,21 @@
                 awayXG: aiAwayXG,
                 homeForm: homeForm,
                 awayForm: awayForm,
-                motivationHome: detectiveResult.motivation?.factor || 1.0,
-                motivationAway: detectiveResult.motivation?.factor || 1.0,
+                motivationHome: detectiveResult.motivation ? detectiveResult.motivation.factor : 1.0,
+                motivationAway: detectiveResult.motivation ? detectiveResult.motivation.factor : 1.0,
                 isDerby: detectiveResult.derby ? 1 : 0,
-                temperature: state.weatherData?.temp || 15,
-                windSpeed: state.weatherData?.wind_speed || 5,
-                humidity: state.weatherData?.humidity || 60,
-                precipitation: state.weatherData?.weather?.toLowerCase().includes('rain') ? 1 : 0,
+                temperature: state.weatherData ? state.weatherData.temp : 15,
+                windSpeed: state.weatherData ? state.weatherData.wind_speed : 5,
+                humidity: state.weatherData ? state.weatherData.humidity : 60,
+                precipitation: state.weatherData && state.weatherData.weather && state.weatherData.weather.toLowerCase()
+                    .includes('rain') ? 1 : 0,
                 league: match.league || null
             };
             showSaveModal(modalData);
 
             if (indicator) {
                 indicator.innerHTML = '✅';
-                setTimeout(() => { indicator.innerHTML = '⚡'; }, 2000);
+                setTimeout(function() { indicator.innerHTML = '⚡'; }, 2000);
             }
 
             state.isTurboRunning = false;
@@ -2509,26 +2581,29 @@
 
         // ===== РАСЧЁТЫ =====
         function calculateValueBet(aiProb, odds) {
-            const ev = (aiProb * odds) - 1;
-            const b = odds - 1;
-            const q = 1 - aiProb;
-            const kelly = (aiProb * b - q) / b;
-            const kellyPercent = Math.max(0, Math.round(kelly * 100));
-            const evPercent = (ev * 100).toFixed(1) + '%';
-            const isValue = ev > 0.05;
-            let reasoning = '', recommendation = '';
+            var ev = (aiProb * odds) - 1;
+            var b = odds - 1;
+            var q = 1 - aiProb;
+            var kelly = (aiProb * b - q) / b;
+            var kellyPercent = Math.max(0, Math.round(kelly * 100));
+            var evPercent = (ev * 100).toFixed(1) + '%';
+            var isValue = ev > 0.05;
+            var reasoning = '',
+                recommendation = '';
             if (isValue) {
-                reasoning = `AI ${Math.round(aiProb * 100)}%, коэф ${odds}, EV ${evPercent}`;
+                reasoning = 'AI ' + Math.round(aiProb * 100) + '%, коэф ' + odds + ', EV ' + evPercent;
                 recommendation = '✅ VALUE BET! ' + Math.min(10, Math.round(kelly * 100)) + '% банка';
             } else {
-                reasoning = `AI ${Math.round(aiProb * 100)}%, коэф ${odds}, EV ${evPercent}`;
+                reasoning = 'AI ' + Math.round(aiProb * 100) + '%, коэф ' + odds + ', EV ' + evPercent;
                 recommendation = '❌ Нет value, пропустить';
             }
-            return { ev, evPercent, kelly, kellyPercent: kellyPercent + '%', isValue, reasoning, recommendation };
+            return { ev: ev, evPercent: evPercent, kelly: kelly, kellyPercent: kellyPercent + '%', isValue: isValue,
+                reasoning: reasoning, recommendation: recommendation };
         }
 
         function runAIDetective(homeTeam, awayTeam, homeForm, awayForm, h2hData, weatherData) {
-            const result = { homeUnpredictability: null, awayUnpredictability: null, derby: false, motivation: null, overall: 'neutral', summary: '', confidenceModifier: 100, formAnalysis: '' };
+            var result = { homeUnpredictability: null, awayUnpredictability: null, derby: false, motivation: null,
+                overall: 'neutral', summary: '', confidenceModifier: 100, formAnalysis: '' };
             result.derby = isDerby(homeTeam, awayTeam);
             if (h2hData && h2hData.length > 0) {
                 result.homeUnpredictability = calculateUnpredictability(homeTeam, h2hData);
@@ -2538,27 +2613,37 @@
                 result.awayUnpredictability = { level: 'low', factor: 1.0, advice: '✅ Нет данных', anomalies: 0 };
             }
             result.motivation = calculateMotivation(homeTeam, awayTeam, getLeague(), h2hData);
-            let formAnalysis = '';
+            var formAnalysis = '';
             if (homeForm > 60 && awayForm < 40) formAnalysis = '🏠 Хозяева в форме, гости слабы';
             else if (homeForm < 40 && awayForm > 60) formAnalysis = '✈️ Гости в форме, хозяева слабы';
             else if (homeForm > 60 && awayForm > 60) formAnalysis = '⚔️ Обе в хорошей форме';
             else if (homeForm < 40 && awayForm < 40) formAnalysis = '🟡 Обе в плохой форме';
             else formAnalysis = '📊 Форма примерно равна';
-            let summary = '', confidenceModifier = 1.0;
-            if (result.derby) { summary += '⚔️ ДЕРБИ! '; confidenceModifier *= 0.8; }
-            if (result.motivation.factor > 1.2) { summary += result.motivation.reason + '. '; confidenceModifier *= 1.1; }
-            if (result.homeUnpredictability.level === 'high' || result.awayUnpredictability.level === 'high') {
-                summary += '⚠️ Команда непредсказуема. '; confidenceModifier *= 0.8;
-            } else if (result.homeUnpredictability.level === 'medium' || result.awayUnpredictability.level === 'medium') {
-                summary += '🟡 Есть риск. '; confidenceModifier *= 0.9;
+            var summary = '',
+                confidenceModifier = 1.0;
+            if (result.derby) { summary += '⚔️ ДЕРБИ! ';
+                confidenceModifier *= 0.8; }
+            if (result.motivation && result.motivation.factor > 1.2) { summary += result.motivation.reason + '. ';
+                confidenceModifier *= 1.1; }
+            if (result.homeUnpredictability && result.homeUnpredictability.level === 'high' || result
+                .awayUnpredictability && result.awayUnpredictability.level === 'high') {
+                summary += '⚠️ Команда непредсказуема. ';
+                confidenceModifier *= 0.8;
+            } else if (result.homeUnpredictability && result.homeUnpredictability.level === 'medium' || result
+                .awayUnpredictability && result.awayUnpredictability.level === 'medium') {
+                summary += '🟡 Есть риск. ';
+                confidenceModifier *= 0.9;
             }
-            if (result.homeUnpredictability.level === 'low' && result.awayUnpredictability.level === 'low' && !result.derby) {
-                summary += '✅ Команды стабильны. '; confidenceModifier *= 1.05;
+            if (result.homeUnpredictability && result.homeUnpredictability.level === 'low' && result
+                .awayUnpredictability && result.awayUnpredictability.level === 'low' && !result.derby) {
+                summary += '✅ Команды стабильны. ';
+                confidenceModifier *= 1.05;
             }
             if (weatherData) {
-                const condition = weatherData.weather.toLowerCase();
-                if (condition.includes('rain') || condition.includes('snow')) { summary += '🌧️ Погода влияет. '; confidenceModifier *= 0.9; }
-                else if (condition.includes('clear')) { summary += '☀️ Отличная погода. '; confidenceModifier *= 1.05; }
+                var condition = weatherData.weather.toLowerCase();
+                if (condition.includes('rain') || condition.includes('snow')) { summary += '🌧️ Погода влияет. ';
+                    confidenceModifier *= 0.9; } else if (condition.includes('clear')) { summary += '☀️ Отличная погода. ';
+                    confidenceModifier *= 1.05; }
             }
             result.summary = summary || '📊 Нейтральный прогноз';
             result.confidenceModifier = Math.round(confidenceModifier * 100);
@@ -2568,9 +2653,9 @@
 
         function isDerby(homeTeam, awayTeam) {
             if (!homeTeam || !awayTeam) return false;
-            const h = homeTeam.toLowerCase().trim();
-            const a = awayTeam.toLowerCase().trim();
-            const pairs = [
+            var h = homeTeam.toLowerCase().trim();
+            var a = awayTeam.toLowerCase().trim();
+            var pairs = [
                 ['real madrid', 'barcelona'],
                 ['liverpool', 'manchester united'],
                 ['manchester city', 'manchester united'],
@@ -2583,96 +2668,147 @@
                 ['sevilla', 'real betis'],
                 ['boca juniors', 'river plate']
             ];
-            return pairs.some(pair => (pair[0] === h && pair[1] === a) || (pair[1] === h && pair[0] === a));
+            for (var i = 0; i < pairs.length; i++) {
+                if ((pairs[i][0] === h && pairs[i][1] === a) || (pairs[i][1] === h && pairs[i][0] === a)) return true;
+            }
+            return false;
         }
 
         function calculateMotivation(homeTeam, awayTeam, league, matches) {
-            let homePos = 10, awayPos = 10;
+            var homePos = 10,
+                awayPos = 10;
             if (matches && matches.length > 0) {
-                const homeWins = matches.filter(m => m.homeScore > m.awayScore).length;
-                const awayWins = matches.filter(m => m.awayScore > m.homeScore).length;
-                const total = matches.length;
+                var homeWins = 0,
+                    awayWins = 0;
+                for (var i = 0; i < matches.length; i++) {
+                    if (matches[i].homeScore > matches[i].awayScore) homeWins++;
+                    else if (matches[i].awayScore > matches[i].homeScore) awayWins++;
+                }
+                var total = matches.length;
                 if (total > 0) {
                     homePos = Math.round(20 - (homeWins / total) * 20) + 1;
                     awayPos = Math.round(20 - (awayWins / total) * 20) + 1;
                 }
             }
-            let motivation = 1.0, reason = 'Средняя';
-            if (homePos <= 3) { motivation = 1.25; reason = '🔥 Борьба за чемпионство'; }
-            else if (awayPos <= 3) { motivation = 1.2; reason = '🔥 Борьба за чемпионство (гости)'; }
-            if (homePos >= 17) { motivation = 1.3; reason = '🔥 Борьба за выживание'; }
-            else if (awayPos >= 17) { motivation = 1.25; reason = '🔥 Борьба за выживание (гости)'; }
-            if (isDerby(homeTeam, awayTeam)) { motivation = 1.35; reason = '⚔️ Дерби!'; }
-            return { factor: motivation, reason, homePos, awayPos };
+            var motivation = 1.0,
+                reason = 'Средняя';
+            if (homePos <= 3) { motivation = 1.25;
+                reason = '🔥 Борьба за чемпионство'; } else if (awayPos <= 3) { motivation = 1.2;
+                reason = '🔥 Борьба за чемпионство (гости)'; }
+            if (homePos >= 17) { motivation = 1.3;
+                reason = '🔥 Борьба за выживание'; } else if (awayPos >= 17) { motivation = 1.25;
+                reason = '🔥 Борьба за выживание (гости)'; }
+            if (isDerby(homeTeam, awayTeam)) { motivation = 1.35;
+                reason = '⚔️ Дерби!'; }
+            return { factor: motivation, reason: reason, homePos: homePos, awayPos: awayPos };
         }
 
         function calculateUnpredictability(team, matches) {
-            if (!matches || matches.length < 5) return { level: 'low', factor: 1.0, advice: '✅ Недостаточно данных', anomalies: 0 };
-            let anomalies = 0;
-            const avgTotal = matches.reduce((s, m) => s + m.total, 0) / matches.length;
-            const teamMatches = matches.filter(m => m.home === team || m.away === team);
+            if (!matches || matches.length < 5) return { level: 'low', factor: 1.0, advice: '✅ Недостаточно данных',
+                anomalies: 0 };
+            var anomalies = 0;
+            var avgTotal = 0;
+            for (var i = 0; i < matches.length; i++) { avgTotal += matches[i].total; }
+            avgTotal = avgTotal / matches.length;
+            var teamMatches = [];
+            for (var j = 0; j < matches.length; j++) {
+                if (matches[j].home === team || matches[j].away === team) teamMatches.push(matches[j]);
+            }
             if (teamMatches.length === 0) return { level: 'low', factor: 1.0, advice: '✅ Нет данных', anomalies: 0 };
-            const teamAvg = teamMatches.reduce((s, m) => s + (m.home === team ? m.homeScore : m.awayScore), 0) / teamMatches.length;
-            teamMatches.forEach(m => {
-                const scored = m.home === team ? m.homeScore : m.awayScore;
-                if (Math.abs(m.total - avgTotal) > 2) anomalies++;
-                if (Math.abs(scored - teamAvg) > 1.5) anomalies++;
-            });
-            const anomalyRate = anomalies / teamMatches.length;
-            if (anomalyRate > 0.3) return { level: 'high', factor: 0.65, advice: '⚠️ Крайне непредсказуема', anomalies: Math.round(anomalyRate * 100) };
-            else if (anomalyRate > 0.15) return { level: 'medium', factor: 0.85, advice: '🟡 Слегка непредсказуема', anomalies: Math.round(anomalyRate * 100) };
-            else return { level: 'low', factor: 1.0, advice: '✅ Стабильна', anomalies: Math.round(anomalyRate * 100) };
+            var teamAvg = 0;
+            for (var k = 0; k < teamMatches.length; k++) {
+                var scored = teamMatches[k].home === team ? teamMatches[k].homeScore : teamMatches[k].awayScore;
+                teamAvg += scored;
+            }
+            teamAvg = teamAvg / teamMatches.length;
+            for (var l = 0; l < teamMatches.length; l++) {
+                var scored2 = teamMatches[l].home === team ? teamMatches[l].homeScore : teamMatches[l].awayScore;
+                if (Math.abs(teamMatches[l].total - avgTotal) > 2) anomalies++;
+                if (Math.abs(scored2 - teamAvg) > 1.5) anomalies++;
+            }
+            var anomalyRate = anomalies / teamMatches.length;
+            if (anomalyRate > 0.3) {
+                return { level: 'high', factor: 0.65, advice: '⚠️ Крайне непредсказуема', anomalies: Math.round(
+                        anomalyRate * 100) };
+            } else if (anomalyRate > 0.15) {
+                return { level: 'medium', factor: 0.85, advice: '🟡 Слегка непредсказуема', anomalies: Math.round(
+                        anomalyRate * 100) };
+            } else {
+                return { level: 'low', factor: 1.0, advice: '✅ Стабильна', anomalies: Math.round(anomalyRate * 100) };
+            }
         }
 
-        // ===== ПРОГНОЗЫ =====
+        // ===== ПРОГНОЗЫ (ИСПРАВЛЕННАЯ ВЕРСИЯ) =====
         async function generateTestPredictions() {
-            const apiKey = localStorage.getItem('quantum_api_key');
-            if (!apiKey) { showToast('⚠️ Введите API ключ', 'error'); return getFallbackMatches(); }
-            const predictionsCacheKey = `predictions_${new Date().toISOString().split('T')[0]}`;
-            const cached = localStorage.getItem(predictionsCacheKey);
+            var apiKey = localStorage.getItem('quantum_api_key');
+            if (!apiKey) {
+                showToast('⚠️ Введите API ключ', 'error');
+                return getFallbackMatches();
+            }
+            var predictionsCacheKey = 'predictions_' + new Date().toISOString().split('T')[0];
+            var cached = localStorage.getItem(predictionsCacheKey);
             if (cached) {
                 try {
-                    const data = JSON.parse(cached);
+                    var data = JSON.parse(cached);
                     if (Date.now() - data.timestamp < CACHE_CONFIG.PREDICTIONS_TTL) {
                         return data.matches;
                     }
                 } catch (e) {}
             }
             try {
-                const today = new Date();
-                const dateStr = today.toISOString().split('T')[0];
-                let allMatches = [];
-                for (const leagueId of TOP_LEAGUES) {
+                var today = new Date();
+                var dateStr = today.toISOString().split('T')[0];
+                var allMatches = [];
+                for (var idx = 0; idx < TOP_LEAGUES.length; idx++) {
+                    var leagueId = TOP_LEAGUES[idx];
                     try {
-                        const url = `${PROXY_BASE}fixtures?league=${leagueId}&season=${CURRENT_SEASON}&date=${dateStr}`;
-                        const response = await fetch(url, { headers: { 'x-apisports-key': apiKey } });
-                        const data = await response.json();
-                        if (data.response && data.response.length > 0) allMatches = allMatches.concat(data.response);
+                        var url = PROXY_BASE + 'fixtures?league=' + leagueId + '&season=' + CURRENT_SEASON + '&date=' +
+                            dateStr;
+                        var response = await fetch(url, { headers: { 'x-apisports-key': apiKey } });
+                        var data = await response.json();
+                        if (data.response && data.response.length > 0) {
+                            for (var d = 0; d < data.response.length; d++) {
+                                allMatches.push(data.response[d]);
+                            }
+                        }
                         await delay(150);
                     } catch (e) { console.log('Ошибка загрузки лиги:', e); }
                 }
-                if (allMatches.length === 0) { showToast(`⚠️ Нет матчей`, 'info'); return getFallbackMatches(); }
-                const predictions = allMatches.map(match => {
-                    const homeTeam = match.teams.home.name;
-                    const awayTeam = match.teams.away.name;
-                    const status = match.fixture.status.short;
-                    const avgGoals = 2.5;
-                    let lambdaHome = avgGoals / 2;
-                    let lambdaAway = avgGoals / 2;
+                if (allMatches.length === 0) {
+                    showToast('⚠️ Нет матчей', 'info');
+                    return getFallbackMatches();
+                }
+                var predictions = [];
+                for (var m = 0; m < allMatches.length; m++) {
+                    var match = allMatches[m];
+                    var homeTeam = match.teams.home.name;
+                    var awayTeam = match.teams.away.name;
+                    var status = match.fixture.status.short;
+                    var avgGoals = 2.5;
+                    var lambdaHome = avgGoals / 2;
+                    var lambdaAway = avgGoals / 2;
                     if (match.goals && match.goals.home !== null) {
                         lambdaHome = (lambdaHome + match.goals.home) / 2;
                         lambdaAway = (lambdaAway + match.goals.away) / 2;
                     }
-                    const total = lambdaHome + lambdaAway;
-                    const poissonHome = calculatePoissonDistribution(lambdaHome);
-                    const poissonAway = calculatePoissonDistribution(lambdaAway);
-                    const probHomeWin = poissonHome.distribution.filter(d => d.value > 0).reduce((s, d) => s + d.probability, 0);
-                    const probAwayWin = poissonAway.distribution.filter(d => d.value > 0).reduce((s, d) => s + d.probability, 0);
-                    const probDraw = 1 - probHomeWin - probAwayWin;
-                    const probOz = 1 - Math.exp(-lambdaHome) * Math.exp(-lambdaAway);
-                    
-                    let prediction = 'Тотал > 2.5';
-                    let confidence = 50;
+                    var total = lambdaHome + lambdaAway;
+                    var poissonHome = calculatePoissonDistribution(lambdaHome);
+                    var poissonAway = calculatePoissonDistribution(lambdaAway);
+                    var probHomeWin = 0;
+                    for (var ph = 0; ph < poissonHome.distribution.length; ph++) {
+                        if (poissonHome.distribution[ph].value > 0) probHomeWin += poissonHome.distribution[ph]
+                        .probability;
+                    }
+                    var probAwayWin = 0;
+                    for (var pa = 0; pa < poissonAway.distribution.length; pa++) {
+                        if (poissonAway.distribution[pa].value > 0) probAwayWin += poissonAway.distribution[pa]
+                        .probability;
+                    }
+                    var probDraw = 1 - probHomeWin - probAwayWin;
+                    var probOz = 1 - Math.exp(-lambdaHome) * Math.exp(-lambdaAway);
+
+                    var prediction = 'Тотал > 2.5';
+                    var confidence = 50;
                     if (total > 2.5 && probHomeWin > 0.4) {
                         prediction = '✅ Тотал > 2.5';
                         confidence = Math.round(60 + Math.min((total - 2.5) * 10, 30));
@@ -2690,22 +2826,24 @@
                         confidence = 55;
                     }
                     confidence = Math.min(95, Math.max(45, confidence));
-                    
-                    let odds = 1.85;
+
+                    var odds = 1.85;
                     if (match.odds && match.odds[0] && match.odds[0].values) {
-                        const oddValue = match.odds[0].values[0]?.odd;
+                        var oddValue = match.odds[0].values[0] ? match.odds[0].values[0].odd : null;
                         if (oddValue) odds = parseFloat(oddValue);
                     }
-                    return {
+
+                    predictions.push({
                         id: match.fixture.id || Date.now() + Math.random(),
                         home: homeTeam,
                         away: awayTeam,
                         league: match.league.name || 'Лига',
                         country: match.league.country || 'Мир',
                         startTime: new Date(match.fixture.date),
-                        homeScore: match.goals?.home ?? null,
-                        awayScore: match.goals?.away ?? null,
-                        status: status === 'FT' ? 'finished' : (status === '1H' || status === '2H' ? 'live' : 'upcoming'),
+                        homeScore: match.goals && match.goals.home !== null ? match.goals.home : null,
+                        awayScore: match.goals && match.goals.away !== null ? match.goals.away : null,
+                        status: status === 'FT' ? 'finished' : (status === '1H' || status === '2H' ? 'live' :
+                            'upcoming'),
                         prediction: prediction,
                         confidence: confidence,
                         odds: odds,
@@ -2716,10 +2854,11 @@
                         homeGoals: Math.round(lambdaHome * 10) / 10,
                         awayGoals: Math.round(lambdaAway * 10) / 10,
                         probOz: Math.round(probOz * 100)
-                    };
-                });
-                predictions.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
-                localStorage.setItem(predictionsCacheKey, JSON.stringify({ matches: predictions, timestamp: Date.now() }));
+                    });
+                }
+                predictions.sort(function(a, b) { return new Date(a.startTime) - new Date(b.startTime); });
+                localStorage.setItem(predictionsCacheKey, JSON.stringify({ matches: predictions, timestamp: Date
+                        .now() }));
                 return predictions;
             } catch (error) {
                 console.error('Ошибка загрузки:', error);
@@ -2729,56 +2868,113 @@
         }
 
         function getFallbackMatches() {
-            const now = new Date();
-            return [
-                { id: 1, home: 'Спартак', away: 'Зенит', league: 'РПЛ', country: 'Россия',
-                  startTime: new Date(now.getTime() + 2 * 60 * 60 * 1000), homeScore: null, awayScore: null,
-                  status: 'upcoming', prediction: 'ОЗ - ДА', confidence: 78, odds: 1.95, total: 2.5, oz: true, isLive: false,
-                  homeGoals: 1.5, awayGoals: 1.2, probOz: 78 },
-                { id: 2, home: 'ЦСКА', away: 'Динамо', league: 'РПЛ', country: 'Россия',
-                  startTime: new Date(now.getTime() + 4 * 60 * 60 * 1000), homeScore: null, awayScore: null,
-                  status: 'upcoming', prediction: 'Тотал > 2.5', confidence: 72, odds: 1.80, total: 2.8, oz: true, isLive: false,
-                  homeGoals: 1.8, awayGoals: 1.0, probOz: 65 },
-                { id: 3, home: 'Локомотив', away: 'Краснодар', league: 'РПЛ', country: 'Россия',
-                  startTime: new Date(now.getTime() + 6 * 60 * 60 * 1000), homeScore: null, awayScore: null,
-                  status: 'upcoming', prediction: 'ОЗ - НЕТ', confidence: 65, odds: 1.90, total: 2.2, oz: false, isLive: false,
-                  homeGoals: 1.0, awayGoals: 1.2, probOz: 35 }
-            ];
+            var now = new Date();
+            return [{
+                id: 1,
+                home: 'Спартак',
+                away: 'Зенит',
+                league: 'РПЛ',
+                country: 'Россия',
+                startTime: new Date(now.getTime() + 2 * 60 * 60 * 1000),
+                homeScore: null,
+                awayScore: null,
+                status: 'upcoming',
+                prediction: 'ОЗ - ДА',
+                confidence: 78,
+                odds: 1.95,
+                total: 2.5,
+                oz: true,
+                isLive: false,
+                homeGoals: 1.5,
+                awayGoals: 1.2,
+                probOz: 78
+            }, {
+                id: 2,
+                home: 'ЦСКА',
+                away: 'Динамо',
+                league: 'РПЛ',
+                country: 'Россия',
+                startTime: new Date(now.getTime() + 4 * 60 * 60 * 1000),
+                homeScore: null,
+                awayScore: null,
+                status: 'upcoming',
+                prediction: 'Тотал > 2.5',
+                confidence: 72,
+                odds: 1.80,
+                total: 2.8,
+                oz: true,
+                isLive: false,
+                homeGoals: 1.8,
+                awayGoals: 1.0,
+                probOz: 65
+            }, {
+                id: 3,
+                home: 'Локомотив',
+                away: 'Краснодар',
+                league: 'РПЛ',
+                country: 'Россия',
+                startTime: new Date(now.getTime() + 6 * 60 * 60 * 1000),
+                homeScore: null,
+                awayScore: null,
+                status: 'upcoming',
+                prediction: 'ОЗ - НЕТ',
+                confidence: 65,
+                odds: 1.90,
+                total: 2.2,
+                oz: false,
+                isLive: false,
+                homeGoals: 1.0,
+                awayGoals: 1.2,
+                probOz: 35
+            }];
         }
 
         function getMatchStatusInfo(match) {
-            const now = new Date();
-            const start = new Date(match.startTime);
-            const diff = start - now;
-            if (match.status === 'finished') return { status: 'finished', label: 'Завершён', badgeClass: 'finished', emoji: '🏁' };
-            if (match.status === 'live' || diff <= 0) return { status: 'live', label: 'В прямом эфире', badgeClass: 'live', emoji: '🔴' };
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            if (hours < 1) return { status: 'upcoming', label: `Через ${minutes} мин`, badgeClass: 'upcoming', emoji: '🟢' };
-            if (hours < 24) return { status: 'upcoming', label: `Через ${hours} ч ${minutes} мин`, badgeClass: 'upcoming', emoji: '🟢' };
-            const days = Math.floor(hours / 24);
-            return { status: 'upcoming', label: `Через ${days} д ${hours % 24} ч`, badgeClass: 'upcoming', emoji: '🟢' };
+            var now = new Date();
+            var start = new Date(match.startTime);
+            var diff = start - now;
+            if (match.status === 'finished') {
+                return { status: 'finished', label: 'Завершён', badgeClass: 'finished', emoji: '🏁' };
+            }
+            if (match.status === 'live' || diff <= 0) {
+                return { status: 'live', label: 'В прямом эфире', badgeClass: 'live', emoji: '🔴' };
+            }
+            var hours = Math.floor(diff / (1000 * 60 * 60));
+            var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            if (hours < 1) return { status: 'upcoming', label: 'Через ' + minutes + ' мин', badgeClass: 'upcoming',
+                emoji: '🟢' };
+            if (hours < 24) return { status: 'upcoming', label: 'Через ' + hours + ' ч ' + minutes + ' мин',
+                badgeClass: 'upcoming', emoji: '🟢' };
+            var days = Math.floor(hours / 24);
+            return { status: 'upcoming', label: 'Через ' + days + ' д ' + (hours % 24) + ' ч', badgeClass: 'upcoming',
+                emoji: '🟢' };
         }
 
         function filterByDate(matches, date) {
-            const target = new Date(date);
-            return matches.filter(m => {
-                const start = new Date(m.startTime);
-                return start.toDateString() === target.toDateString();
-            });
+            var target = new Date(date);
+            var result = [];
+            for (var i = 0; i < matches.length; i++) {
+                var start = new Date(matches[i].startTime);
+                if (start.toDateString() === target.toDateString()) result.push(matches[i]);
+            }
+            return result;
         }
 
         function filterByConfidence(matches, minConf) {
             if (minConf === 0) return matches;
-            return matches.filter(m => m.confidence >= minConf);
+            var result = [];
+            for (var i = 0; i < matches.length; i++) {
+                if (matches[i].confidence >= minConf) result.push(matches[i]);
+            }
+            return result;
         }
 
         function sortByPriority(matches) {
-            return matches.sort((a, b) => {
-                const now = new Date();
-                const timeA = Math.max(1, (new Date(a.startTime) - now) / (1000 * 60));
-                const timeB = Math.max(1, (new Date(b.startTime) - now) / (1000 * 60));
-                const getWeight = (m) => {
+            return matches.sort(function(a, b) {
+                var now = new Date();
+                var timeA = Math.max(1, (new Date(a.startTime) - now) / (1000 * 60));
+                var timeB = Math.max(1, (new Date(b.startTime) - now) / (1000 * 60));
+                var getWeight = function(m) {
                     if (m.status === 'finished') return 0;
                     if (m.status === 'live') return m.confidence * 100;
                     return m.confidence * (1 / timeA);
@@ -2788,71 +2984,80 @@
         }
 
         async function renderPredictions() {
-            const list = document.getElementById('predictionsList');
+            var list = document.getElementById('predictionsList');
             if (!list) return;
 
             if (!state.predictions || state.predictions.length === 0) {
                 state.predictions = await generateTestPredictions();
             }
-            let matches = state.predictions;
+            var matches = state.predictions;
 
-            // Фильтр по дате
-            const selectedDate = state.selectedDate || new Date();
+            var selectedDate = state.selectedDate || new Date();
             matches = filterByDate(matches, selectedDate);
             matches = filterByConfidence(matches, state.confidenceFilter);
             matches = sortByPriority(matches);
 
-            const count = document.getElementById('predictionsCount');
+            var count = document.getElementById('predictionsCount');
             if (count) count.textContent = matches.length;
 
-            const badge = document.getElementById('liveBadgeNav');
+            var badge = document.getElementById('liveBadgeNav');
             if (badge) {
-                const live = matches.filter(m => m.status === 'live').length;
-                if (live > 0) { badge.style.display = 'inline'; badge.textContent = live; }
-                else { badge.style.display = 'none'; }
+                var live = 0;
+                for (var i = 0; i < matches.length; i++) { if (matches[i].status === 'live') live++; }
+                if (live > 0) { badge.style.display = 'inline';
+                    badge.textContent = live; } else { badge.style.display = 'none'; }
             }
 
             if (matches.length === 0) {
-                list.innerHTML = '<div style="padding:16px 0;color:#8b93a7;font-size:12px;text-align:center;">🔮 Нет матчей на выбранную дату</div>';
+                list.innerHTML =
+                    '<div style="padding:16px 0;color:#8b93a7;font-size:12px;text-align:center;">🔮 Нет матчей на выбранную дату</div>';
                 return;
             }
 
-            const upcoming = matches.filter(m => m.status !== 'finished');
-            const finished = matches.filter(m => m.status === 'finished');
+            var upcoming = [];
+            var finished = [];
+            for (var j = 0; j < matches.length; j++) {
+                if (matches[j].status !== 'finished') upcoming.push(matches[j]);
+                else finished.push(matches[j]);
+            }
 
             if (upcoming.length === 0) {
                 list.innerHTML = '<div style="padding:16px 0;color:#8b93a7;font-size:12px;text-align:center;">Нет будущих матчей</div>';
             } else {
-                list.innerHTML = upcoming.map(m => {
-                    const statusInfo = getMatchStatusInfo(m);
-                    const confidenceClass = m.confidence >= 70 ? 'confidence-high' :
-                                          (m.confidence >= 50 ? 'confidence-medium' : 'confidence-low');
-                    const timeStr = new Date(m.startTime).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                    const dateStr = new Date(m.startTime).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
-                    const isValue = m.confidence >= 70 && Math.random() > 0.5;
-                    return `
-                        <div class="match-row" data-match-id="${m.id}">
-                            <div class="col-teams">
-                                <div class="teams">${sanitizeHTML(m.home)} vs ${sanitizeHTML(m.away)}</div>
-                                <div class="league">${m.league} <span class="country">• ${m.country || ''}</span></div>
-                            </div>
-                            <div class="col-prediction">
-                                <div class="prediction">${m.prediction}</div>
-                                <div class="odds">📊 <span class="value">${m.odds ? m.odds.toFixed(2) : '—'}</span></div>
-                            </div>
-                            <div class="col-confidence">
-                                <span class="${confidenceClass}">${m.confidence}%</span>
-                                ${isValue ? '<span class="value-tag">V</span>' : ''}
-                            </div>
-                            <div class="col-time">${dateStr}<br>${timeStr}</div>
-                            <div class="col-status">
-                                <span class="status-badge ${statusInfo.badgeClass}">${statusInfo.emoji} ${statusInfo.label}</span>
-                                <div class="turbo-indicator" onclick="turboAnalyze(${m.id})">⚡</div>
-                            </div>
-                        </div>
-                        <div class="turbo-details" id="turbo-details-${m.id}"></div>
-                    `;
-                }).join('');
+                var html = '';
+                for (var k = 0; k < upcoming.length; k++) {
+                    var m = upcoming[k];
+                    var statusInfo = getMatchStatusInfo(m);
+                    var confidenceClass = m.confidence >= 70 ? 'confidence-high' :
+                        (m.confidence >= 50 ? 'confidence-medium' : 'confidence-low');
+                    var timeStr = new Date(m.startTime).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                    var dateStr = new Date(m.startTime).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+                    var isValue = m.confidence >= 70 && Math.random() > 0.5;
+                    html +=
+                        '<div class="match-row" data-match-id="' + m.id + '">' +
+                        '<div class="col-teams">' +
+                        '<div class="teams">' + sanitizeHTML(m.home) + ' vs ' + sanitizeHTML(m.away) + '</div>' +
+                        '<div class="league">' + m.league + ' <span class="country">• ' + (m.country || '') +
+                        '</span></div>' +
+                        '</div>' +
+                        '<div class="col-prediction">' +
+                        '<div class="prediction">' + m.prediction + '</div>' +
+                        '<div class="odds">📊 <span class="value">' + (m.odds ? m.odds.toFixed(2) : '—') + '</span></div>' +
+                        '</div>' +
+                        '<div class="col-confidence">' +
+                        '<span class="' + confidenceClass + '">' + m.confidence + '%</span>' +
+                        (isValue ? '<span class="value-tag">V</span>' : '') +
+                        '</div>' +
+                        '<div class="col-time">' + dateStr + '<br>' + timeStr + '</div>' +
+                        '<div class="col-status">' +
+                        '<span class="status-badge ' + statusInfo.badgeClass + '">' + statusInfo.emoji + ' ' +
+                        statusInfo.label + '</span>' +
+                        '<div class="turbo-indicator" onclick="turboAnalyze(' + m.id + ')">⚡</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="turbo-details" id="turbo-details-' + m.id + '"></div>';
+                }
+                list.innerHTML = html;
             }
 
             renderHistoryPredictions(finished);
@@ -2861,33 +3066,43 @@
         }
 
         function renderHistoryPredictions(finished) {
-            const container = document.getElementById('historyPredictionsContainer');
-            const list = document.getElementById('historyPredictionsList');
+            var container = document.getElementById('historyPredictionsContainer');
+            var list = document.getElementById('historyPredictionsList');
             if (!container || !list) return;
             if (finished.length === 0) {
-                container.innerHTML = '<div style="text-align:center;padding:8px 0;color:#8b93a7;font-size:11px;">Нет сыгранных</div>';
+                container.innerHTML =
+                    '<div style="text-align:center;padding:8px 0;color:#8b93a7;font-size:11px;">Нет сыгранных</div>';
                 return;
             }
             container.innerHTML = '';
-            list.innerHTML = finished.slice(-10).reverse().map(m => {
-                const isWin = m.actualOutcome === 'win';
-                const color = isWin ? '#16a34a' : '#dc2626';
-                return `
-                    <div style="display:grid;grid-template-columns:2fr 1.2fr 0.7fr 0.7fr;padding:4px 0;border-bottom:1px solid #1e2430;font-size:9px;align-items:center;">
-                        <div><strong>${sanitizeHTML(m.home)} vs ${sanitizeHTML(m.away)}</strong><br><span style="color:#8b93a7;font-size:7px;">${m.league}</span></div>
-                        <div>${m.prediction}</div>
-                        <div style="font-weight:600;color:${color};">${isWin ? '✅' : '❌'}</div>
-                        <div style="text-align:right;font-size:8px;color:#8b93a7;">${new Date(m.startTime).toLocaleDateString()}</div>
-                    </div>
-                `;
-            }).join('');
+            var html = '';
+            var limit = Math.min(10, finished.length);
+            for (var i = finished.length - 1; i >= finished.length - limit; i--) {
+                var m = finished[i];
+                var isWin = m.actualOutcome === 'win';
+                var color = isWin ? '#16a34a' : '#dc2626';
+                html +=
+                    '<div style="display:grid;grid-template-columns:2fr 1.2fr 0.7fr 0.7fr;padding:4px 0;border-bottom:1px solid #1e2430;font-size:9px;align-items:center;">' +
+                    '<div><strong>' + sanitizeHTML(m.home) + ' vs ' + sanitizeHTML(m.away) +
+                    '</strong><br><span style="color:#8b93a7;font-size:7px;">' + m.league + '</span></div>' +
+                    '<div>' + m.prediction + '</div>' +
+                    '<div style="font-weight:600;color:' + color + ';">' + (isWin ? '✅' : '❌') + '</div>' +
+                    '<div style="text-align:right;font-size:8px;color:#8b93a7;">' + new Date(m.startTime)
+                    .toLocaleDateString() + '</div>' +
+                    '</div>';
+            }
+            list.innerHTML = html;
         }
 
         function updateHistoryStats(finished) {
-            const wins = finished.filter(m => m.actualOutcome === 'win').length;
-            const losses = finished.filter(m => m.actualOutcome === 'loss').length;
-            const total = wins + losses;
-            const accuracy = total > 0 ? Math.round((wins / total) * 100) : 0;
+            var wins = 0,
+                losses = 0;
+            for (var i = 0; i < finished.length; i++) {
+                if (finished[i].actualOutcome === 'win') wins++;
+                else if (finished[i].actualOutcome === 'loss') losses++;
+            }
+            var total = wins + losses;
+            var accuracy = total > 0 ? Math.round((wins / total) * 100) : 0;
             document.getElementById('histWins').textContent = wins;
             document.getElementById('histLosses').textContent = losses;
             document.getElementById('histAccuracy').textContent = accuracy + '%';
@@ -2895,54 +3110,64 @@
 
         // ===== LIVE МАТЧИ =====
         async function renderLiveMatches() {
-            const container = document.getElementById('liveMatchesList');
+            var container = document.getElementById('liveMatchesList');
             if (!container) return;
 
             if (!state.predictions || state.predictions.length === 0) {
                 state.predictions = await generateTestPredictions();
             }
-            const liveMatches = state.predictions.filter(m => m.status === 'live');
+            var liveMatches = [];
+            for (var i = 0; i < state.predictions.length; i++) {
+                if (state.predictions[i].status === 'live') liveMatches.push(state.predictions[i]);
+            }
 
-            const updateTime = document.getElementById('liveUpdateTime');
+            var updateTime = document.getElementById('liveUpdateTime');
             if (updateTime) {
-                updateTime.textContent = `Обновлено: ${new Date().toLocaleTimeString()}`;
+                updateTime.textContent = 'Обновлено: ' + new Date().toLocaleTimeString();
             }
 
             if (liveMatches.length === 0) {
-                container.innerHTML = '<div class="text-muted text-center" style="padding:20px 0;font-size:12px;">Нет LIVE-матчей</div>';
+                container.innerHTML =
+                    '<div class="text-muted text-center" style="padding:20px 0;font-size:12px;">Нет LIVE-матчей</div>';
                 return;
             }
 
-            container.innerHTML = liveMatches.map(m => `
-                <div class="live-match-card" onclick="turboAnalyze(${m.id})">
-                    <div class="live-header">
-                        <div class="time"><span class="dot"></span> LIVE</div>
-                        <div class="league">${m.league} • ${m.country || ''}</div>
-                    </div>
-                    <div class="live-score">
-                        <span class="home">${m.home}</span>
-                        <span class="vs">vs</span>
-                        <span class="away">${m.away}</span>
-                    </div>
-                    <div class="live-details">
-                        <span>🎯 ${m.prediction}</span>
-                        <span class="highlight">${m.confidence}%</span>
-                        <span>📊 ${m.odds ? m.odds.toFixed(2) : '—'}</span>
-                        <span>⚽ ${m.homeGoals || 0}-${m.awayGoals || 0}</span>
-                    </div>
-                </div>
-            `).join('');
+            var html = '';
+            for (var j = 0; j < liveMatches.length; j++) {
+                var m = liveMatches[j];
+                html +=
+                    '<div class="live-match-card" onclick="turboAnalyze(' + m.id + ')">' +
+                    '<div class="live-header">' +
+                    '<div class="time"><span class="dot"></span> LIVE</div>' +
+                    '<div class="league">' + m.league + ' • ' + (m.country || '') + '</div>' +
+                    '</div>' +
+                    '<div class="live-score">' +
+                    '<span class="home">' + m.home + '</span>' +
+                    '<span class="vs">vs</span>' +
+                    '<span class="away">' + m.away + '</span>' +
+                    '</div>' +
+                    '<div class="live-details">' +
+                    '<span>🎯 ' + m.prediction + '</span>' +
+                    '<span class="highlight">' + m.confidence + '%</span>' +
+                    '<span>📊 ' + (m.odds ? m.odds.toFixed(2) : '—') + '</span>' +
+                    '<span>⚽ ' + (m.homeGoals || 0) + '-' + (m.awayGoals || 0) + '</span>' +
+                    '</div>' +
+                    '</div>';
+            }
+            container.innerHTML = html;
         }
 
         // ===== ПОИСК =====
         function renderPopularTags() {
-            const container = document.getElementById('popularTags');
+            var container = document.getElementById('popularTags');
             if (!container) return;
-            const history = state.searchHistory.length > 0 ? state.searchHistory : POPULAR_TEAMS;
-            const tags = history.slice(0, 10);
-            container.innerHTML = tags.map(tag => `
-                <span class="popular-tag" onclick="searchTeam('${tag}')">${tag}</span>
-            `).join('');
+            var history = state.searchHistory.length > 0 ? state.searchHistory : POPULAR_TEAMS;
+            var tags = history.slice(0, 10);
+            var html = '';
+            for (var i = 0; i < tags.length; i++) {
+                html += '<span class="popular-tag" onclick="searchTeam(\'' + tags[i] + '\')">' + tags[i] + '</span>';
+            }
+            container.innerHTML = html;
         }
 
         function searchTeam(team) {
@@ -2951,14 +3176,13 @@
         }
 
         async function searchTeams() {
-            const input = document.getElementById('searchInput');
-            const query = input.value.trim();
+            var input = document.getElementById('searchInput');
+            var query = input.value.trim();
             if (!query) {
                 document.getElementById('searchResults').innerHTML = '<div class="search-empty">Введите название команды</div>';
                 return;
             }
 
-            // Сохраняем в историю
             if (!state.searchHistory.includes(query)) {
                 state.searchHistory.unshift(query);
                 if (state.searchHistory.length > 20) state.searchHistory.pop();
@@ -2966,34 +3190,45 @@
                 renderPopularTags();
             }
 
-            const results = document.getElementById('searchResults');
+            var results = document.getElementById('searchResults');
             results.innerHTML = '<div style="text-align:center;padding:10px 0;color:#8b93a7;font-size:12px;">⏳ Поиск...</div>';
 
             try {
-                // Ищем матчи с командой
-                const allMatches = state.predictions || await generateTestPredictions();
-                const found = allMatches.filter(m => 
-                    m.home.toLowerCase().includes(query.toLowerCase()) || 
-                    m.away.toLowerCase().includes(query.toLowerCase())
-                );
+                var allMatches = state.predictions || await generateTestPredictions();
+                var found = [];
+                for (var i = 0; i < allMatches.length; i++) {
+                    var m = allMatches[i];
+                    if (m.home.toLowerCase().includes(query.toLowerCase()) ||
+                        m.away.toLowerCase().includes(query.toLowerCase())) {
+                        found.push(m);
+                    }
+                }
 
                 if (found.length === 0) {
                     results.innerHTML = '<div class="search-empty">🔍 Матчей с этой командой не найдено</div>';
                     return;
                 }
 
-                results.innerHTML = found.slice(0, 20).map(m => `
-                    <div class="search-result-item" onclick="switchTab('live'); setTimeout(() => { document.querySelector('[data-match-id="${m.id}"]')?.scrollIntoView({ behavior: 'smooth' }); }, 300);">
-                        <div class="teams">${sanitizeHTML(m.home)} vs ${sanitizeHTML(m.away)}</div>
-                        <div class="info">
-                            <span>🏆 ${m.league}</span>
-                            <span>📅 ${new Date(m.startTime).toLocaleDateString()}</span>
-                            <span>⏱ ${new Date(m.startTime).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</span>
-                            <span>🎯 ${m.prediction}</span>
-                            <span style="color:${m.confidence >= 70 ? '#16a34a' : m.confidence >= 50 ? '#ca8a04' : '#dc2626'}">${m.confidence}%</span>
-                        </div>
-                    </div>
-                `).join('');
+                var html = '';
+                var limit = Math.min(20, found.length);
+                for (var j = 0; j < limit; j++) {
+                    var m = found[j];
+                    html +=
+                        '<div class="search-result-item" onclick="switchTab(\'live\'); setTimeout(function() { var el = document.querySelector(\'[data-match-id="' +
+                        m.id + '"]\'); if(el) el.scrollIntoView({ behavior: \'smooth\' }); }, 300);">' +
+                        '<div class="teams">' + sanitizeHTML(m.home) + ' vs ' + sanitizeHTML(m.away) + '</div>' +
+                        '<div class="info">' +
+                        '<span>🏆 ' + m.league + '</span>' +
+                        '<span>📅 ' + new Date(m.startTime).toLocaleDateString() + '</span>' +
+                        '<span>⏱ ' + new Date(m.startTime).toLocaleTimeString('ru-RU', { hour: '2-digit',
+                            minute: '2-digit' }) + '</span>' +
+                        '<span>🎯 ' + m.prediction + '</span>' +
+                        '<span style="color:' + (m.confidence >= 70 ? '#16a34a' : m.confidence >= 50 ? '#ca8a04' :
+                            '#dc2626') + '">' + m.confidence + '%</span>' +
+                        '</div>' +
+                        '</div>';
+                }
+                results.innerHTML = html;
             } catch (e) {
                 results.innerHTML = '<div class="search-empty">⚠️ Ошибка поиска</div>';
             }
@@ -3008,56 +3243,73 @@
 
         // ===== СТАТИСТИКА =====
         function renderHistory() {
-            const list = $('historyList');
+            var list = $('historyList');
             if (!list) return;
             if (state.bets.length === 0) {
-                list.innerHTML = '<div style="padding:6px 0;color:#8b93a7;font-size:11px;text-align:center;">Нет ставок</div>';
+                list.innerHTML =
+                    '<div style="padding:6px 0;color:#8b93a7;font-size:11px;text-align:center;">Нет ставок</div>';
                 return;
             }
-            const modeNames = { 'total': 'Тотал', 'fora': 'Фора', 'oz': 'ОЗ' };
-            const visibleBets = state.bets.slice(-100).reverse();
-            list.innerHTML = visibleBets.map((b, i) => {
-                const realIdx = state.bets.length - 1 - i;
-                const idx = realIdx >= 0 ? realIdx : i;
-                const cls = b.outcome === 'win' ? 'win' : (b.outcome === 'loss' ? 'loss' : 'pending');
-                const emoji = b.outcome === 'win' ? '✅' : (b.outcome === 'loss' ? '❌' : '⏳');
-                return `<div class="history-item" onclick="editBet(${idx})">
-                    <div><b>${modeNames[b.mode] || b.mode}</b>: ${b.value} <span style="font-size:8px;color:#6b7280;">${b.match || ''}</span></div>
-                    <div><span class="${cls}">${emoji} ${b.resultText || '⏳'}</span></div>
-                </div>`;
-            }).join('');
+            var modeNames = { 'total': 'Тотал', 'fora': 'Фора', 'oz': 'ОЗ' };
+            var visibleBets = state.bets.slice(-100).reverse();
+            var html = '';
+            for (var i = 0; i < visibleBets.length; i++) {
+                var b = visibleBets[i];
+                var realIdx = state.bets.length - 1 - i;
+                var idx = realIdx >= 0 ? realIdx : i;
+                var cls = b.outcome === 'win' ? 'win' : (b.outcome === 'loss' ? 'loss' : 'pending');
+                var emoji = b.outcome === 'win' ? '✅' : (b.outcome === 'loss' ? '❌' : '⏳');
+                html +=
+                    '<div class="history-item" onclick="editBet(' + idx + ')">' +
+                    '<div><b>' + (modeNames[b.mode] || b.mode) + '</b>: ' + b.value +
+                    ' <span style="font-size:8px;color:#6b7280;">' + (b.match || '') + '</span></div>' +
+                    '<div><span class="' + cls + '">' + emoji + ' ' + (b.resultText || '⏳') + '</span></div>' +
+                    '</div>';
+            }
+            list.innerHTML = html;
         }
 
         function renderStats() {
-            const total = state.bets.length;
-            const wins = state.bets.filter(b => b.outcome === 'win').length;
-            const losses = state.bets.filter(b => b.outcome === 'loss').length;
-            const statTotal = $('statTotal');
-            const statWinRate = $('statWinRate');
-            const statROI = $('statROI');
+            var total = state.bets.length;
+            var wins = 0,
+                losses = 0;
+            for (var i = 0; i < state.bets.length; i++) {
+                if (state.bets[i].outcome === 'win') wins++;
+                else if (state.bets[i].outcome === 'loss') losses++;
+            }
+            var statTotal = $('statTotal');
+            var statWinRate = $('statWinRate');
+            var statROI = $('statROI');
             if (statTotal) statTotal.textContent = total;
-            if (statWinRate) statWinRate.textContent = (wins + losses) > 0 ? Math.round((wins / (wins + losses)) * 100) + '%' : '0%';
+            if (statWinRate) statWinRate.textContent = (wins + losses) > 0 ? Math.round((wins / (wins + losses)) * 100) +
+                '%' : '0%';
             if (statROI) statROI.textContent = total > 0 ? Math.round(((wins - losses) / total) * 100) + '%' : '0%';
         }
 
         function renderDashboard() {
-            const total = state.bets.length;
-            const wins = state.bets.filter(b => b.outcome === 'win').length;
-            const losses = state.bets.filter(b => b.outcome === 'loss').length;
-            let streak = 0, maxStreak = 0;
-            for (let i = state.bets.length - 1; i >= 0; i--) {
-                if (state.bets[i].outcome === 'win') { streak++; maxStreak = Math.max(maxStreak, streak); }
-                else if (state.bets[i].outcome === 'loss') streak = 0;
+            var total = state.bets.length;
+            var wins = 0,
+                losses = 0;
+            for (var i = 0; i < state.bets.length; i++) {
+                if (state.bets[i].outcome === 'win') wins++;
+                else if (state.bets[i].outcome === 'loss') losses++;
+            }
+            var streak = 0,
+                maxStreak = 0;
+            for (var j = state.bets.length - 1; j >= 0; j--) {
+                if (state.bets[j].outcome === 'win') { streak++;
+                    maxStreak = Math.max(maxStreak, streak); } else if (state.bets[j].outcome === 'loss') streak = 0;
                 else break;
             }
-            const kpiTotal = $('kpiTotal');
-            const kpiWinRate = $('kpiWinRate');
-            const kpiProfit = $('kpiProfit');
-            const kpiROI = $('kpiROI');
-            const kpiStreak = $('kpiStreak');
-            const kpiBest = $('kpiBest');
+            var kpiTotal = $('kpiTotal');
+            var kpiWinRate = $('kpiWinRate');
+            var kpiProfit = $('kpiProfit');
+            var kpiROI = $('kpiROI');
+            var kpiStreak = $('kpiStreak');
+            var kpiBest = $('kpiBest');
             if (kpiTotal) kpiTotal.textContent = total;
-            if (kpiWinRate) kpiWinRate.textContent = (wins + losses) > 0 ? Math.round((wins / (wins + losses)) * 100) + '%' : '0%';
+            if (kpiWinRate) kpiWinRate.textContent = (wins + losses) > 0 ? Math.round((wins / (wins + losses)) * 100) +
+                '%' : '0%';
             if (kpiProfit) kpiProfit.textContent = wins - losses;
             if (kpiROI) kpiROI.textContent = total > 0 ? Math.round(((wins - losses) / total) * 100) + '%' : '0%';
             if (kpiStreak) kpiStreak.textContent = streak;
@@ -3065,38 +3317,46 @@
         }
 
         function renderUltimateDashboard() {
-            const total = state.bets.length;
-            const wins = state.bets.filter(b => b.outcome === 'win').length;
-            const losses = state.bets.filter(b => b.outcome === 'loss').length;
-            const roi = total > 0 ? ((wins - losses) / total) * 100 : 0;
+            var total = state.bets.length;
+            var wins = 0,
+                losses = 0;
+            for (var i = 0; i < state.bets.length; i++) {
+                if (state.bets[i].outcome === 'win') wins++;
+                else if (state.bets[i].outcome === 'loss') losses++;
+            }
+            var roi = total > 0 ? ((wins - losses) / total) * 100 : 0;
             document.getElementById('kpiROIDisplay').textContent = roi.toFixed(1) + '%';
             document.getElementById('kpiROITrend').textContent = roi > 0 ? '📈' : '📉';
-            const aiAcc = 0;
-            document.getElementById('kpiAIDisplay').textContent = aiAcc + '%';
+            document.getElementById('kpiAIDisplay').textContent = '0%';
             document.getElementById('kpiAITrend').textContent = '⏳';
-            const profit = wins - losses;
+            var profit = wins - losses;
             document.getElementById('kpiProfitDisplay').textContent = profit;
-            document.getElementById('kpiProfitTrend').textContent = `📊 ${total}`;
-            const valueCount = state.valueBets ? state.valueBets.length : 0;
-            const valueRate = total > 0 ? Math.round((valueCount / total) * 100) : 0;
+            document.getElementById('kpiProfitTrend').textContent = '📊 ' + total;
+            var valueCount = state.valueBets ? state.valueBets.length : 0;
+            var valueRate = total > 0 ? Math.round((valueCount / total) * 100) : 0;
             document.getElementById('kpiValueDisplay').textContent = valueRate + '%';
             document.getElementById('kpiValueTrend').textContent = valueRate > 0 ? '✅ +' + valueRate + '%' : '⏳';
         }
 
         function renderChartCanvas() {
-            const canvas = document.getElementById('balanceChart');
+            var canvas = document.getElementById('balanceChart');
             if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const width = canvas.width = canvas.parentElement.clientWidth || 400;
-            const height = canvas.height = 60;
-            const range = state.chartRange || '30d';
-            let data = state.bets;
+            var ctx = canvas.getContext('2d');
+            var width = canvas.width = canvas.parentElement.clientWidth || 400;
+            var height = canvas.height = 60;
+            var range = state.chartRange || '30d';
+            var data = state.bets;
             if (range === '7d') data = data.slice(-7);
             else if (range === '30d') data = data.slice(-30);
             else if (range === '90d') data = data.slice(-90);
-            const lastData = data.slice(-100);
-            let bal = 0;
-            const chartData = lastData.map(b => { if (b.outcome === 'win') bal++; else if (b.outcome === 'loss') bal--; return bal; });
+            var lastData = data.slice(-100);
+            var bal = 0;
+            var chartData = [];
+            for (var i = 0; i < lastData.length; i++) {
+                if (lastData[i].outcome === 'win') bal++;
+                else if (lastData[i].outcome === 'loss') bal--;
+                chartData.push(bal);
+            }
             ctx.clearRect(0, 0, width, height);
             if (chartData.length === 0) {
                 ctx.fillStyle = '#8b93a7';
@@ -3105,18 +3365,20 @@
                 ctx.fillText('Нет данных', width / 2, height / 2 + 4);
                 return;
             }
-            const max = Math.max(1, ...chartData.map(Math.abs));
-            const padding = 3;
-            const chartWidth = width - padding * 2;
-            const chartHeight = height - padding * 2;
-            const barWidth = Math.max(2, chartWidth / chartData.length - 1);
-            chartData.forEach((val, i) => {
-                const x = padding + i * (barWidth + 1);
-                const barHeight = (Math.abs(val) / max) * chartHeight;
-                const y = val >= 0 ? height - padding - barHeight : height - padding;
+            var max = 1;
+            for (var j = 0; j < chartData.length; j++) { if (Math.abs(chartData[j]) > max) max = Math.abs(chartData[j]); }
+            var padding = 3;
+            var chartWidth = width - padding * 2;
+            var chartHeight = height - padding * 2;
+            var barWidth = Math.max(2, chartWidth / chartData.length - 1);
+            for (var k = 0; k < chartData.length; k++) {
+                var val = chartData[k];
+                var x = padding + k * (barWidth + 1);
+                var barHeight = (Math.abs(val) / max) * chartHeight;
+                var y = val >= 0 ? height - padding - barHeight : height - padding;
                 ctx.fillStyle = val >= 0 ? '#f7931a' : '#dc2626';
                 ctx.fillRect(x, y, barWidth, barHeight);
-            });
+            }
             ctx.strokeStyle = '#1e2430';
             ctx.lineWidth = 0.5;
             ctx.setLineDash([2, 2]);
@@ -3129,38 +3391,60 @@
 
         function setChartRange(range) {
             state.chartRange = range;
-            document.querySelectorAll('.chart-controls .time-range').forEach(btn => { btn.classList.toggle('active', btn.dataset.range === range); });
+            var btns = document.querySelectorAll('.chart-controls .time-range');
+            for (var i = 0; i < btns.length; i++) {
+                btns[i].classList.toggle('active', btns[i].dataset.range === range);
+            }
             renderChartCanvas();
         }
 
         function renderInsights() {
-            const container = $('insightsContent');
+            var container = $('insightsContent');
             if (!container) return;
-            if (state.bets.length === 0) { container.innerHTML = '<div style="padding:3px 0;color:#8b93a7;font-size:11px;text-align:center;">Нет данных</div>'; return; }
-            const wins = state.bets.filter(b => b.outcome === 'win').length;
-            const losses = state.bets.filter(b => b.outcome === 'loss').length;
-            const rate = Math.round((wins / (wins + losses)) * 100);
-            const total = wins + losses;
-            const latest10 = state.bets.slice(-10).filter(b => b.outcome !== 'pending');
-            const recentRate = latest10.length > 0 ? Math.round((latest10.filter(b => b.outcome === 'win').length / latest10.length) * 100) : 0;
-            container.innerHTML = `
-                <div style="font-size:10px;">
-                    📊 Всего: ${total}, побед: ${wins} (${rate}%)
-                    <br>🔥 Последние 10: ${recentRate}%
-                    ${rate > 60 ? ' 🚀 Отлично!' : rate > 40 ? ' 📈 Стабильно' : ' 📉 Требуется улучшение'}
-                </div>
-            `;
+            if (state.bets.length === 0) {
+                container.innerHTML =
+                    '<div style="padding:3px 0;color:#8b93a7;font-size:11px;text-align:center;">Нет данных</div>';
+                return;
+            }
+            var wins = 0,
+                losses = 0;
+            for (var i = 0; i < state.bets.length; i++) {
+                if (state.bets[i].outcome === 'win') wins++;
+                else if (state.bets[i].outcome === 'loss') losses++;
+            }
+            var rate = Math.round((wins / (wins + losses)) * 100);
+            var total = wins + losses;
+            var latest10 = [];
+            var count = 0;
+            for (var j = state.bets.length - 1; j >= 0 && count < 10; j--) {
+                if (state.bets[j].outcome !== 'pending') { latest10.push(state.bets[j]);
+                    count++; }
+            }
+            var recentWins = 0;
+            for (var k = 0; k < latest10.length; k++) { if (latest10[k].outcome === 'win') recentWins++; }
+            var recentRate = latest10.length > 0 ? Math.round((recentWins / latest10.length) * 100) : 0;
+            container.innerHTML =
+                '<div style="font-size:10px;">' +
+                '📊 Всего: ' + total + ', побед: ' + wins + ' (' + rate + '%)' +
+                '<br>🔥 Последние 10: ' + recentRate + '%' +
+                (rate > 60 ? ' 🚀 Отлично!' : rate > 40 ? ' 📈 Стабильно' : ' 📉 Требуется улучшение') +
+                '</div>';
         }
 
         // ===== СТАВКИ =====
         function editBet(idx) {
-            const b = state.bets[idx];
+            var b = state.bets[idx];
             if (!b) { showToast('⚠️ Ставка не найдена', 'error'); return; }
-            const choice = prompt(`Исход для "${b.match || 'Матч'}":\n1 - Выиграла ✅\n2 - Проиграла ❌\n3 - Неизвестно ⏳`, '3');
+            var choice = prompt('Исход для "' + (b.match || 'Матч') + '":\n1 - Выиграла ✅\n2 - Проиграла ❌\n3 - Неизвестно ⏳',
+                '3');
             if (choice === null) return;
-            if (choice === '1') { b.outcome = 'win'; b.resultText = '✅ Выигрыш'; showToast('✅ Выигрыш!', 'success'); }
-            else if (choice === '2') { b.outcome = 'loss'; b.resultText = '❌ Проигрыш'; showToast('❌ Проигрыш', 'info'); }
-            else { b.outcome = 'pending'; b.resultText = '⏳ Ожидание'; showToast('⏳ Сброшено', 'info'); }
+            if (choice === '1') { b.outcome = 'win';
+                b.resultText = '✅ Выигрыш';
+                showToast('✅ Выигрыш!', 'success'); } else if (choice === '2') { b.outcome = 'loss';
+                b.resultText = '❌ Проигрыш';
+                showToast('❌ Проигрыш', 'info'); } else { b.outcome = 'pending';
+                b.resultText = '⏳ Ожидание';
+                showToast('⏳ Сброшено', 'info'); }
             localStorage.setItem('quantum_bets', JSON.stringify(state.bets));
             renderHistory();
             renderStats();
@@ -3190,28 +3474,30 @@
         }
 
         function exportData() {
-            const data = { bets: state.bets, leagues: LEAGUES, valueBets: state.valueBets, version: '6.0', exportDate: new Date().toISOString() };
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
+            var data = { bets: state.bets, leagues: LEAGUES, valueBets: state.valueBets, version: '6.0',
+                exportDate: new Date().toISOString() };
+            var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
             a.href = url;
-            a.download = `quantum_backup_${new Date().toISOString().slice(0,10)}.json`;
+            a.download = 'quantum_backup_' + new Date().toISOString().slice(0, 10) + '.json';
             a.click();
             URL.revokeObjectURL(url);
             showToast('📦 Данные экспортированы', 'success');
         }
 
         function importData(event) {
-            const file = event.target.files[0];
+            var file = event.target.files[0];
             if (!file) return;
-            const reader = new FileReader();
+            var reader = new FileReader();
             reader.onload = function(e) {
                 try {
-                    const data = JSON.parse(e.target.result);
+                    var data = JSON.parse(e.target.result);
                     if (data.bets && Array.isArray(data.bets)) {
                         state.bets = data.bets;
                         localStorage.setItem('quantum_bets', JSON.stringify(state.bets));
-                        if (data.valueBets) { state.valueBets = data.valueBets; localStorage.setItem('quantum_value_bets', JSON.stringify(state.valueBets)); }
+                        if (data.valueBets) { state.valueBets = data.valueBets;
+                            localStorage.setItem('quantum_value_bets', JSON.stringify(state.valueBets)); }
                         renderHistory();
                         renderStats();
                         renderDashboard();
@@ -3228,28 +3514,30 @@
 
         // ===== УВЕДОМЛЕНИЯ =====
         function checkNotifications() {
-            const matches = state.predictions || getFallbackMatches();
-            const now = new Date();
-            const threshold = 30 * 60 * 1000;
-            matches.forEach(m => {
-                if (m.status !== 'upcoming') return;
-                const start = new Date(m.startTime);
-                const diff = start - now;
+            var matches = state.predictions || getFallbackMatches();
+            var now = new Date();
+            var threshold = 30 * 60 * 1000;
+            for (var i = 0; i < matches.length; i++) {
+                var m = matches[i];
+                if (m.status !== 'upcoming') continue;
+                var start = new Date(m.startTime);
+                var diff = start - now;
                 if (diff > 0 && diff <= threshold && m.confidence >= 70) {
-                    const key = `${m.id}_${m.startTime}`;
+                    var key = m.id + '_' + m.startTime;
                     if (!state.notifiedMatches.has(key)) {
                         state.notifiedMatches.add(key);
                         showNotification(m);
                     }
                 }
-            });
+            }
         }
 
         function showNotification(match) {
-            showToast(`🔔 ${match.home} vs ${match.away} через 30 мин!`, 'success');
+            showToast('🔔 ' + match.home + ' vs ' + match.away + ' через 30 мин!', 'success');
             if (Notification.permission === 'granted') {
                 new Notification('⚛️ Квантум', {
-                    body: `${match.home} vs ${match.away}\nПрогноз: ${match.prediction} (${match.confidence}%)`,
+                    body: match.home + ' vs ' + match.away + '\nПрогноз: ' + match.prediction + ' (' + match
+                        .confidence + '%)',
                     icon: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="45" fill="%23f4f6f9"/%3E%3Ctext x="50" y="72" font-size="60" text-anchor="middle" font-family="Arial"%3E%E2%9A%9B%3C/text%3E%3C/svg%3E'
                 });
             }
@@ -3261,9 +3549,16 @@
 
         // ===== ИНИЦИАЛИЗАЦИЯ =====
         document.addEventListener('DOMContentLoaded', async function() {
+            // 1. Тема
             initTheme();
+
+            // 2. Фильтр дат
             renderDateFilter();
+
+            // 3. Популярные теги поиска
             renderPopularTags();
+
+            // 4. Статистика
             renderHistory();
             renderStats();
             renderDashboard();
@@ -3271,49 +3566,56 @@
             renderInsights();
             renderUltimateDashboard();
 
-            const savedKey = localStorage.getItem('quantum_api_key');
+            // 5. Загрузка лиг
+            await loadAllLeagues();
+
+            // 6. Погода
+            await loadHeaderWeather();
+
+            // 7. API ключи из localStorage
+            var savedKey = localStorage.getItem('quantum_api_key');
             if (savedKey && savedKey !== '') {
                 document.getElementById('apiKeyInput').value = savedKey;
-                await loadAllLeagues();
-                const matches = await generateTestPredictions();
-                state.predictions = matches;
-                state.lastUpdate = new Date();
-                renderPredictions();
-            } else {
-                const matches = getFallbackMatches();
-                state.predictions = matches;
-                state.lastUpdate = new Date();
-                renderPredictions();
-                showToast('⚠️ Введите API ключ в настройках', 'error');
+            }
+            var savedWeatherKey = localStorage.getItem('quantum_weather_key');
+            if (savedWeatherKey) {
+                document.getElementById('weatherKeyInput').value = savedWeatherKey;
             }
 
-            const savedWeatherKey = localStorage.getItem('quantum_weather_key');
-            if (savedWeatherKey) document.getElementById('weatherKeyInput').value = savedWeatherKey;
+            // 8. Загрузка прогнозов
+            var matches = await generateTestPredictions();
+            state.predictions = matches;
+            state.lastUpdate = new Date();
+            renderPredictions();
 
-            const savedValueBets = localStorage.getItem('quantum_value_bets');
-            if (savedValueBets) { try { state.valueBets = JSON.parse(savedValueBets); } catch (e) { state.valueBets = []; } }
+            // 9. Value bets
+            var savedValueBets = localStorage.getItem('quantum_value_bets');
+            if (savedValueBets) {
+                try { state.valueBets = JSON.parse(savedValueBets); } catch (e) { state.valueBets = []; }
+            }
 
-            await loadHeaderWeather();
+            // 10. Уведомления
             requestNotificationPermission();
 
+            // 11. Таймер обновления
             if (!state.updateTimer) {
-                state.updateTimer = setInterval(() => {
+                state.updateTimer = setInterval(function() {
                     renderPredictions();
                     checkNotifications();
                 }, CACHE_CONFIG.UPDATE_INTERVAL);
             }
 
+            // 12. Активация вкладки
             switchTab('live');
 
-            console.log(`⚛️ КВАНТУМ v6.0 — ПОЛНОСТЬЮ ПЕРЕРАБОТАННОЕ ПРИЛОЖЕНИЕ`);
+            console.log('⚛️ КВАНТУМ v6.0 — ПОЛНОСТЬЮ ПЕРЕРАБОТАННОЕ ПРИЛОЖЕНИЕ');
             console.log('✅ 5 вкладок: Прогнозы, LIVE, Поиск, Статистика, Настройки');
             console.log('✅ Фильтр по датам (горизонтальный скролл)');
             console.log('✅ Коэффициент 1xBet');
-            console.log('✅ xG за 5 матчей, домашний/выездной фактор');
             console.log('🚀 ГОТОВ К РАБОТЕ!');
         });
 
-        window.addEventListener('resize', () => {
+        window.addEventListener('resize', function() {
             if (state.currentTab === 'stats') renderChartCanvas();
         });
     </script>
