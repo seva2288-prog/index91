@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -10,12 +11,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Квантум">
     <meta name="theme-color" content="#0b0e14">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* ================================================================
-           КВАНТУМ v6.0 — НЕЙТРАЛЬНЫЙ МИНИМАЛИЗМ
-           Полностью переработанный интерфейс
-           ================================================================ */
-
         /* ----- СБРОС И БАЗА ----- */
         * {
             box-sizing: border-box;
@@ -1240,8 +1238,8 @@
             background: #2a3342;
         }
         @keyframes slideUp {
-            from { opacity: 0; transform: translateX(-50%) translateY(12px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* ----- TOAST ----- */
@@ -1374,6 +1372,132 @@
         .weather-input-btn:hover {
             background: #e8850a;
         }
+
+        /* H2H стили */
+        .h2h-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            font-size: 10px;
+            padding: 4px 0;
+            border-bottom: 1px solid #1e2430;
+            margin-bottom: 4px;
+        }
+        .h2h-summary .item {
+            background: rgba(255,255,255,0.04);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .h2h-summary .num {
+            color: #f7931a;
+            font-weight: 600;
+        }
+        .h2h-item {
+            font-size: 9px;
+            padding: 3px 0;
+            border-bottom: 1px solid #1e2430;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .h2h-item .score {
+            font-weight: 600;
+            color: #f7931a;
+        }
+        .h2h-input-row {
+            display: flex;
+            gap: 4px;
+            margin: 4px 0;
+            flex-wrap: wrap;
+        }
+        .h2h-input-row input {
+            flex: 1;
+            min-width: 80px;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #1e2430;
+            background: transparent;
+            color: #e6e8ec;
+            font-size: 11px;
+            outline: none;
+        }
+        .h2h-input-row input:focus {
+            border-color: #f7931a;
+        }
+        .h2h-input-row button {
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            background: #f7931a;
+            color: #0b0e14;
+            font-weight: 600;
+            font-size: 11px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .h2h-input-row button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .h2h-status {
+            font-size: 10px;
+            color: #8b93a7;
+            margin: 4px 0;
+        }
+        .h2h-data-status {
+            font-size: 8px;
+            color: #8b93a7;
+        }
+
+        /* Кнопки в настройках */
+        .btn-row {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .btn-row button {
+            padding: 4px 12px;
+            border-radius: 4px;
+            border: 1px solid #1e2430;
+            background: transparent;
+            color: #e6e8ec;
+            cursor: pointer;
+            font-size: 10px;
+            transition: all 0.2s;
+        }
+        .btn-row button:hover {
+            border-color: #f7931a;
+            color: #f7931a;
+        }
+
+        /* Адаптив для маленьких экранов */
+        @media (max-width: 420px) {
+            .table-header {
+                font-size: 6px;
+                grid-template-columns: 1.8fr 1fr 0.6fr 0.7fr 0.7fr;
+            }
+            .match-row {
+                grid-template-columns: 1.8fr 1fr 0.6fr 0.7fr 0.7fr;
+                padding: 5px 6px;
+                font-size: 10px;
+            }
+            .match-row .col-teams .teams {
+                font-size: 9px;
+            }
+            .match-row .col-confidence {
+                font-size: 11px;
+            }
+            .match-row .col-prediction .prediction {
+                font-size: 8px;
+            }
+            .modal-box {
+                padding: 14px;
+                margin: 10px;
+            }
+            .header h1 {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1421,6 +1545,40 @@
             <div id="predictionsContainer">
                 <div id="predictionsList"></div>
             </div>
+
+            <!-- Блок H2H -->
+            <div style="padding:0 10px;margin-top:6px;">
+                <div class="card">
+                    <div class="card-title">📊 H2H анализ</div>
+                    <div class="h2h-input-row">
+                        <input type="text" id="homeTeamH2H" placeholder="Хозяева" value="PSV Eindhoven">
+                        <input type="text" id="awayTeamH2H" placeholder="Гости" value="Fortuna Sittard">
+                        <button id="loadH2HBtn" onclick="loadH2H()">
+                            <span id="loadBtnText">📊 Загрузить H2H</span>
+                            <span id="loadSpinner" style="display:none;" class="spinner"></span>
+                        </button>
+                    </div>
+                    <div class="h2h-status" id="h2hStatus">Введите команды</div>
+                    <div id="h2hResults"></div>
+                    <div class="h2h-data-status" id="h2hDataStatus"></div>
+                </div>
+            </div>
+
+            <!-- Информация о лиге -->
+            <div style="padding:0 10px;margin-top:4px;">
+                <div class="card" id="leagueInfoCard" style="display:none;">
+                    <div class="card-title">🏆 Информация о лиге</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:10px;">
+                        <span><span class="text-muted">Лига:</span> <span id="leagueNameDisplay">—</span></span>
+                        <span><span class="text-muted">Страна:</span> <span id="leagueCountry">—</span></span>
+                        <span><span class="text-muted">Сезон:</span> <span id="leagueSeason">—</span></span>
+                        <span><span class="text-muted">Ср. тотал:</span> <span id="leagueAvgGoals">—</span></span>
+                        <span><span class="text-muted">ОЗ:</span> <span id="leagueOz">—</span></span>
+                        <span><span class="text-muted">Статус:</span> <span id="leagueDataStatus">—</span></span>
+                    </div>
+                </div>
+            </div>
+
             <div style="padding:0 10px;margin-top:6px;">
                 <div class="card">
                     <div class="card-title">📊 История прогнозов</div>
@@ -1518,9 +1676,9 @@
                     </div>
                     <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:3px;border-bottom:none;padding-bottom:3px;">
                         <span class="label">💾 Данные</span>
-                        <div style="display:flex;gap:4px;">
-                            <button onclick="exportData()" style="flex:1;padding:4px;border-radius:4px;border:1px solid #1e2430;background:transparent;color:#e6e8ec;cursor:pointer;font-size:10px;">📦 Экспорт</button>
-                            <button onclick="document.getElementById('importFile').click()" style="flex:1;padding:4px;border-radius:4px;border:1px solid #1e2430;background:transparent;color:#e6e8ec;cursor:pointer;font-size:10px;">📥 Импорт</button>
+                        <div class="btn-row">
+                            <button onclick="exportData()">📦 Экспорт</button>
+                            <button onclick="document.getElementById('importFile').click()">📥 Импорт</button>
                             <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
                         </div>
                     </div>
@@ -1593,7 +1751,6 @@
     <script>
         // ================================================================
         // КВАНТУМ v6.0 — ПОЛНАЯ JAVASCRIPT ЛОГИКА
-        // Исправленная и полностью рабочая версия
         // ================================================================
 
         // ===== КОНФИГУРАЦИЯ =====
@@ -1611,9 +1768,7 @@
         const PROXY_BASE = 'https://oz-proxy-clean.onrender.com/api/';
         const CURRENT_SEASON = 2026;
         const API_CACHE = {};
-        const POPULAR_TEAMS = ['Спартак', 'Зенит', 'ЦСКА', 'Локомотив', 'Динамо', 'Краснодар', 'Ростов', 'Оренбург', 'Акрон',
-            'Родина'
-        ];
+        const POPULAR_TEAMS = ['Спартак', 'Зенит', 'ЦСКА', 'Локомотив', 'Динамо', 'Краснодар', 'Ростов', 'Оренбург', 'Акрон', 'Родина'];
 
         function $(id) { return document.getElementById(id); }
 
@@ -1641,14 +1796,6 @@
                 cumulative += prob;
             }
             return { distribution: dist, cumulative };
-        }
-
-        function debounce(fn, delay = 300) {
-            let timer;
-            return (...args) => {
-                clearTimeout(timer);
-                timer = setTimeout(() => fn(...args), delay);
-            };
         }
 
         function showToast(msg, type = 'info') {
@@ -1926,7 +2073,7 @@
                 return;
             }
             var sorted = Object.keys(LEAGUES).sort(function(a, b) { return LEAGUES[a].name.localeCompare(LEAGUES[b]
-                .name); });
+                    .name); });
             for (var i = 0; i < sorted.length; i++) {
                 var key = sorted[i];
                 var opt = document.createElement('option');
@@ -2129,7 +2276,7 @@
                 for (var l = 0; l < limit; l++) {
                     var m = matches[l];
                     html += '<div class="h2h-item">' +
-                        sanitizeHTML(m.home) + ' ' + m.homeScore + ':' + m.awayScore + ' ' + sanitizeHTML(m.away) +
+                        sanitizeHTML(m.home) + ' <span class="score">' + m.homeScore + ':' + m.awayScore + '</span> ' + sanitizeHTML(m.away) +
                         (m.oz ? ' ✅' : ' ❌') +
                         '<span style="color:#6b7280;font-size:7px;">' + new Date(m.date).toLocaleDateString() +
                         '</span>' +
@@ -2323,19 +2470,20 @@
 
         // ===== ТЕМА =====
         function toggleTheme() {
-            var isDark = document.body.classList.toggle('dark');
+            var isDark = document.body.classList.contains('dark');
+            document.body.classList.toggle('dark');
             var btn = document.getElementById('themeBtn');
             var toggleBtn = document.getElementById('themeToggle');
-            if (btn) btn.textContent = isDark ? '☀️' : '🌙';
+            if (btn) btn.textContent = isDark ? '🌙' : '☀️';
             if (toggleBtn) {
-                toggleBtn.textContent = isDark ? '☀️ Светлая' : '🌙 Тёмная';
+                toggleBtn.textContent = isDark ? '🌙 Тёмная' : '☀️ Светлая';
                 toggleBtn.classList.toggle('active');
             }
-            localStorage.setItem('quantum_theme', isDark ? 'dark' : 'light');
+            localStorage.setItem('quantum_theme', isDark ? 'light' : 'dark');
         }
 
         function initTheme() {
-            var theme = localStorage.getItem('quantum_theme') || 'light';
+            var theme = localStorage.getItem('quantum_theme') || 'dark';
             if (theme === 'dark') {
                 document.body.classList.add('dark');
                 var btn = document.getElementById('themeBtn');
@@ -2343,6 +2491,13 @@
                 if (btn) btn.textContent = '☀️';
                 if (toggleBtn) { toggleBtn.textContent = '☀️ Светлая';
                     toggleBtn.classList.add('active'); }
+            } else {
+                document.body.classList.remove('dark');
+                var btn = document.getElementById('themeBtn');
+                var toggleBtn = document.getElementById('themeToggle');
+                if (btn) btn.textContent = '🌙';
+                if (toggleBtn) { toggleBtn.textContent = '🌙 Тёмная';
+                    toggleBtn.classList.remove('active'); }
             }
         }
 
@@ -2580,6 +2735,11 @@
         }
 
         // ===== РАСЧЁТЫ =====
+        function calculate() {
+            // Функция вызывается после загрузки H2H для пересчета прогнозов
+            renderPredictions();
+        }
+
         function calculateValueBet(aiProb, odds) {
             var ev = (aiProb * odds) - 1;
             var b = odds - 1;
@@ -2738,7 +2898,7 @@
             }
         }
 
-        // ===== ПРОГНОЗЫ (ИСПРАВЛЕННАЯ ВЕРСИЯ) =====
+        // ===== ПРОГНОЗЫ =====
         async function generateTestPredictions() {
             var apiKey = localStorage.getItem('quantum_api_key');
             if (!apiKey) {
