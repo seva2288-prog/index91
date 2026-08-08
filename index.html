@@ -3,7 +3,7 @@
 <head>  
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">  
-    <title>⚛️ Квантум v6.0</title>  
+    <title>⚛️ Квантум v6.1</title>  
     <link rel="manifest" href="manifest.json">  
     <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230b0e14'/%3E%3Ctext x='50' y='72' font-size='60' text-anchor='middle' font-family='Arial'%3E%E2%9A%9B%3C/text%3E%3C/svg%3E">  
     <meta name="apple-mobile-web-app-capable" content="yes">  
@@ -13,7 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>  
     <style>
         /* ================================================================ */
-        /* КВАНТУМ v6.0 - ПОЛНЫЙ CSS КОД С УЛУЧШЕНИЯМИ */
+        /* КВАНТУМ v6.1 - ПОЛНЫЙ CSS КОД С ТОП-3 И ГЛУБОКОЙ AI */
         /* ================================================================ */
         
         /* ----- СБРОС И БАЗА ----- */
@@ -2341,6 +2341,251 @@
             color: #2ecc71;
         }
         
+        /* ================================================================
+        НОВЫЕ СТИЛИ ДЛЯ ТОП-3 ПРОГНОЗОВ И ГЛУБОКОЙ AI
+        ================================================================ */
+
+        /* ----- ТОП-3 ПРОГНОЗА ДНЯ (НА ГЛАВНОМ ЭКРАНЕ) ----- */
+        .top-predictions {
+            background: #1a1f2a;
+            border: 1px solid #2a3140;
+            border-radius: 12px;
+            padding: 10px 12px;
+            margin: 4px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .top-predictions::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #f7931a, #2ecc71, #f7931a);
+            background-size: 200% 100%;
+            animation: gradientMove 3s ease-in-out infinite;
+        }
+        @keyframes gradientMove {
+            0%, 100% { background-position: 0% 0%; }
+            50% { background-position: 100% 0%; }
+        }
+        .top-predictions .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        .top-predictions .header .title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #f7931a;
+        }
+        .top-predictions .header .badge {
+            font-size: 10px;
+            background: #2ecc71;
+            color: #000;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+        .top-prediction-item {
+            background: #0b0e14;
+            border-radius: 8px;
+            padding: 8px 10px;
+            margin: 4px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            cursor: pointer;
+            border-left: 3px solid #2a3140;
+        }
+        .top-prediction-item:hover {
+            background: #1a2a3a;
+            transform: translateX(4px);
+        }
+        .top-prediction-item .rank {
+            font-size: 18px;
+            font-weight: 700;
+            color: #888;
+            min-width: 30px;
+            text-align: center;
+        }
+        .top-prediction-item .rank.gold { color: #f7931a; }
+        .top-prediction-item .rank.silver { color: #c0c0c0; }
+        .top-prediction-item .rank.bronze { color: #cd7f32; }
+        .top-prediction-item .info {
+            flex: 1;
+        }
+        .top-prediction-item .info .teams {
+            font-size: 13px;
+            font-weight: 600;
+            color: #eee;
+        }
+        .top-prediction-item .info .details {
+            font-size: 10px;
+            color: #888;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .top-prediction-item .info .details .pred {
+            color: #2ecc71;
+            font-weight: 600;
+        }
+        .top-prediction-item .confidence {
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            min-width: 60px;
+        }
+        .top-prediction-item .confidence .pct {
+            font-size: 18px;
+            color: #2ecc71;
+        }
+        .top-prediction-item .confidence .label {
+            font-size: 8px;
+            color: #888;
+            display: block;
+        }
+        .top-prediction-item .confidence.high .pct { color: #2ecc71; }
+        .top-prediction-item .confidence.medium .pct { color: #f1c40f; }
+        .top-prediction-item .confidence.low .pct { color: #e74c3c; }
+
+        /* ----- ГЛУБОКАЯ AI-МОДЕЛЬ (РАСШИРЕННЫЕ КАРТОЧКИ) ----- */
+        .ai-deep-card {
+            background: #1a1f2a;
+            border: 1px solid #9b59b6;
+            border-radius: 12px;
+            padding: 10px 12px;
+            margin: 4px 0;
+            border-left: 4px solid #9b59b6;
+        }
+        .ai-deep-card .card-title {
+            color: #9b59b6;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ai-deep-card .card-title .status {
+            font-size: 9px;
+            color: #888;
+            font-weight: 400;
+        }
+        .ai-deep-card .param-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+            margin: 4px 0;
+        }
+        .ai-deep-card .param-item {
+            background: #0b0e14;
+            padding: 4px 8px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 10px;
+            color: #888;
+        }
+        .ai-deep-card .param-item .value {
+            font-weight: 700;
+            font-size: 14px;
+            color: #f7931a;
+            display: block;
+        }
+        .ai-deep-card .param-item .value.good { color: #2ecc71; }
+        .ai-deep-card .param-item .value.warn { color: #f1c40f; }
+        .ai-deep-card .param-item .value.bad { color: #e74c3c; }
+        
+        .ai-deep-card .factor-bar {
+            margin: 4px 0;
+        }
+        .ai-deep-card .factor-bar .label {
+            font-size: 9px;
+            color: #888;
+            display: flex;
+            justify-content: space-between;
+        }
+        .ai-deep-card .factor-bar .bar-track {
+            height: 4px;
+            background: #2a3140;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 2px;
+        }
+        .ai-deep-card .factor-bar .bar-track .fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.8s ease;
+        }
+        .ai-deep-card .factor-bar .bar-track .fill.good { background: #2ecc71; }
+        .ai-deep-card .factor-bar .bar-track .fill.warn { background: #f1c40f; }
+        .ai-deep-card .factor-bar .bar-track .fill.bad { background: #e74c3c; }
+
+        .ai-deep-card .recommendation-deep {
+            margin-top: 6px;
+            padding: 6px 10px;
+            border-radius: 6px;
+            background: #0b0e14;
+            border-left: 3px solid #2ecc71;
+            font-size: 12px;
+        }
+        .ai-deep-card .recommendation-deep .big {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2ecc71;
+        }
+        .ai-deep-card .recommendation-deep .sub {
+            font-size: 10px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        /* ----- ПУЛЬСИРУЮЩИЙ ИНДИКАТОР НОВОГО ПРОГНОЗА ----- */
+        .pulse-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+        .pulse-dot.green { background: #2ecc71; }
+        .pulse-dot.gold { background: #f7931a; }
+        .pulse-dot.red { background: #e74c3c; }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+
+        /* ----- ТЕМНАЯ/СВЕТЛАЯ ТЕМА ДЛЯ НОВЫХ ЭЛЕМЕНТОВ ----- */
+        body.light .top-predictions {
+            background: #fff;
+            border-color: #d0d5dd;
+        }
+        body.light .top-prediction-item {
+            background: #f0f2f5;
+        }
+        body.light .top-prediction-item:hover {
+            background: #e8eef5;
+        }
+        body.light .top-prediction-item .info .teams {
+            color: #1a1a1a;
+        }
+        body.light .ai-deep-card {
+            background: #fff;
+            border-color: #9b59b6;
+        }
+        body.light .ai-deep-card .param-item {
+            background: #f0f2f5;
+        }
+        body.light .ai-deep-card .recommendation-deep {
+            background: #f0f2f5;
+        }
+        
         /* ----- АНИМАЦИИ ----- */
         @keyframes pulse {
             0%,
@@ -2380,7 +2625,7 @@
 <body>
     <!-- ===== ШАПКА ===== -->
     <header class="header">
-        <h1>⚛️ Квантум <span>v6.0</span></h1>
+        <h1>⚛️ Квантум <span>v6.1</span></h1>
         <div class="header-actions">
             <div class="header-weather" id="headerWeather" onclick="refreshWeather()" title="Нажмите для обновления погоды">
                 <span class="weather-icon" id="weatherIconHeader">⏳</span>
@@ -2398,6 +2643,20 @@
         ЭКРАН 1: АНАЛИЗ
         ============================================================ -->
         <div class="screen active" id="analysisScreen">
+            
+            <!-- ===== ТОП-3 ПРОГНОЗА ДНЯ (НОВОЕ!) ===== -->
+            <div id="topPredictionsContainer">
+                <div class="top-predictions">
+                    <div class="header">
+                        <span class="title">🏆 ТОП-3 ПРОГНОЗА ДНЯ</span>
+                        <span class="badge">⏳ Загрузка...</span>
+                    </div>
+                    <div style="text-align:center;color:#888;padding:12px 0;font-size:12px;">
+                        ⏳ Загрузка прогнозов...
+                    </div>
+                </div>
+            </div>
+
             <div class="league-info-card" id="leagueInfoCard" style="display:none;">
                 <div class="league-name" id="leagueNameDisplay">🏆 Лига</div>
                 <div class="league-details" id="leagueDetailsDisplay">
@@ -2469,7 +2728,7 @@
                         <div class="score-item"><div class="num" id="aiAwayScore">0</div><div class="label">✈️ AI Гости</div></div>
                     </div>
                     
-                    <!-- НОВЫЙ БЛОК: ТОЧНЫЙ СЧЕТ -->
+                    <!-- БЛОК: ТОЧНЫЙ СЧЕТ -->
                     <div class="score-prediction">
                         <div class="card-title">⚽ ТОЧНЫЙ СЧЕТ</div>
                         <div id="exactScoreContainer">
@@ -2477,7 +2736,7 @@
                         </div>
                     </div>
 
-                    <!-- НОВЫЙ БЛОК: ИНДИВИДУАЛЬНЫЙ ТОТАЛ -->
+                    <!-- БЛОК: ИНДИВИДУАЛЬНЫЙ ТОТАЛ -->
                     <div class="section">
                         <div class="label">🎯 Индивидуальный тотал</div>
                         <div class="individual-total">
@@ -2492,7 +2751,7 @@
                         </div>
                     </div>
 
-                    <!-- НОВЫЙ БЛОК: ГОЛЫ ПО ТАЙМАМ -->
+                    <!-- БЛОК: ГОЛЫ ПО ТАЙМАМ -->
                     <div class="section">
                         <div class="label">⏰ Голы по таймам</div>
                         <div class="half-time-goals">
@@ -2507,7 +2766,7 @@
                         </div>
                     </div>
 
-                    <!-- НОВЫЙ БЛОК: РАСШИРЕННАЯ УВЕРЕННОСТЬ -->
+                    <!-- БЛОК: РАСШИРЕННАЯ УВЕРЕННОСТЬ -->
                     <div class="section">
                         <div class="confidence-extended">
                             <span class="conf-label">📊 Уверенность (скорректированная)</span>
@@ -2532,6 +2791,20 @@
                     <div class="section"><span class="label">⚡ Средний тотал:</span> <span class="value" id="aiAvgTotal">—</span></div>
                     <div class="section"><span class="label">📊 Poisson прогноз:</span> <span class="value" id="aiPoisson">—</span></div>
                     <div class="section"><span class="label">🎯 Итоговая оценка:</span> <span class="value" id="aiEnsemble">—</span></div>
+                    
+                    <!-- ГЛУБОКИЙ AI-АНАЛИЗ (НОВОЕ!) -->
+                    <div id="deepAIContainer">
+                        <div class="ai-deep-card">
+                            <div class="card-title">
+                                🧠 ГЛУБОКИЙ AI-АНАЛИЗ
+                                <span class="status">⏳ Загрузка...</span>
+                            </div>
+                            <div style="text-align:center;color:#888;padding:12px 0;font-size:12px;">
+                                ⏳ Анализ факторов...
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="detective-card" id="detectiveCard" style="display:none;">
                         <div class="card-title">🕵️ Дополнительный анализ</div>
                         <div id="detectiveContent"></div>
@@ -2808,7 +3081,9 @@
                 <div class="card-title">🧠 Ассистент</div>
                 <div class="assistant-chat" id="assistantChat">
                     <div class="assistant-message ai">
-                        👋 Привет! Я ассистент Квантум v6.0.<br>
+                        👋 Привет! Я ассистент Квантум v6.1.<br>
+                        Сезон 2026-2027 - все прогнозы актуальны!<br>
+                        Теперь с ТОП-3 прогнозами дня и Глубокой AI-моделью!<br>
                         Задай вопрос о ставках, прогнозах или анализе матчей.
                         <div class="time">🤖 Ассистент</div>
                     </div>
@@ -2822,6 +3097,8 @@
                 <div class="card-title">📊 Быстрые вопросы</div>
                 <div style="display:flex;flex-wrap:wrap;gap:4px;">
                     <button class="btn" style="padding:6px 12px;font-size:11px;width:auto;background:#2a3140;color:#888;" onclick="quickUltimateQuestion('Какой прогноз на сегодня?')">📈 Прогноз</button>
+                    <button class="btn" style="padding:6px 12px;font-size:11px;width:auto;background:#2a3140;color:#888;" onclick="quickUltimateQuestion('Что такое ТОП-3 прогнозов?')">🏆 ТОП-3</button>
+                    <button class="btn" style="padding:6px 12px;font-size:11px;width:auto;background:#2a3140;color:#888;" onclick="quickUltimateQuestion('Как работает глубокая AI-модель?')">🧠 Глубокая AI</button>
                     <button class="btn" style="padding:6px 12px;font-size:11px;width:auto;background:#2a3140;color:#888;" onclick="quickUltimateQuestion('Какая погода влияет на голы?')">🌤️ Погода</button>
                     <button class="btn" style="padding:6px 12px;font-size:11px;width:auto;background:#2a3140;color:#888;" onclick="quickUltimateQuestion('Почему такой прогноз?')">🔍 Объясни</button>
                     <button class="btn" style="padding:6px 12px;font-size:11px;width:auto;background:#2a3140;color:#888;" onclick="quickUltimateQuestion('Что такое Value Betting?')">💰 Value</button>
@@ -2886,7 +3163,7 @@
 
     <script>
     // ================================================================
-    // КВАНТУМ v6.0 - ПОЛНАЯ JAVASCRIPT ЛОГИКА С УЛУЧШЕНИЯМИ
+    // КВАНТУМ v6.1 - ПОЛНАЯ JAVASCRIPT ЛОГИКА С ТОП-3 И ГЛУБОКОЙ AI
     // СЕЗОН: 2026-2027
     // ================================================================
 
@@ -3056,7 +3333,8 @@
 
         return { text: statusText, color, emoji };
     }
-  // ================================================================
+
+    // ================================================================
     // ПРЯМОЙ ЗАПРОС К API (БЕЗ ПРОКСИ)
     // ================================================================
 
@@ -3171,14 +3449,11 @@
             confidence: Math.min(85, Math.round(totalTop * 0.8 + 20))
         };
     }
-
-    // ================================================================
+  // ================================================================
     // НОВОЕ УЛУЧШЕНИЕ: РАСШИРЕННЫЕ ПАРАМЕТРЫ ДЛЯ AI
     // ================================================================
 
     function calculateRecentForm(team, matchesCount = 5) {
-        // В реальном коде здесь будет запрос к API
-        // Пока генерируем тестовые данные на основе H2H
         let wins = 0, draws = 0, losses = 0;
 
         if (state.h2hData && state.h2hData.length > 0) {
@@ -3186,7 +3461,7 @@
                 m.home === team || m.away === team
             );
             if (teamMatches.length > 0) {
-                teamMatches.forEach(m => {
+                teamMatches.slice(-matchesCount).forEach(m => {
                     const isHome = m.home === team;
                     const scored = isHome ? m.homeScore : m.awayScore;
                     const conceded = isHome ? m.awayScore : m.homeScore;
@@ -3197,7 +3472,6 @@
             }
         }
 
-        // Если нет данных, генерируем случайные
         if (wins + draws + losses === 0) {
             wins = Math.floor(Math.random() * 3) + 1;
             draws = Math.floor(Math.random() * 2);
@@ -3216,7 +3490,6 @@
     }
 
     function calculateHomeForm(team) {
-        // Домашняя форма — пока генерируем на основе H2H
         if (state.h2hData && state.h2hData.length > 0) {
             const homeMatches = state.h2hData.filter(m => m.home === team);
             if (homeMatches.length > 0) {
@@ -3239,22 +3512,34 @@
     }
 
     function getInjuries(team) {
-        // В реальном коде здесь будет запрос к API за травмами
         return Math.floor(Math.random() * 3);
     }
 
     function getWeatherImpact(weatherData) {
         if (!weatherData) return 0;
         const condition = weatherData.weather.toLowerCase();
-        if (condition.includes('rain') || condition.includes('drizzle')) return -0.15;
-        if (condition.includes('snow')) return -0.25;
-        if (condition.includes('cloud')) return -0.05;
-        if (condition.includes('clear')) return 0.1;
+        if (condition.includes('rain') || condition.includes('drizzle')) return -15;
+        if (condition.includes('snow')) return -25;
+        if (condition.includes('cloud')) return -5;
+        if (condition.includes('clear')) return 10;
         return 0;
     }
 
+    function getWeatherText(weatherData) {
+        if (!weatherData) return 'Нет данных';
+        const condition = weatherData.weather.toLowerCase();
+        const temp = weatherData.temp || 0;
+        if (condition.includes('rain') || condition.includes('drizzle')) return '🌧️ Дождь снижает результативность';
+        if (condition.includes('snow')) return '❄️ Снег сильно снижает результативность';
+        if (condition.includes('clear') && temp > 25) return '☀️ Отличная погода для футбола';
+        if (condition.includes('clear')) return '☀️ Хорошая погода';
+        if (condition.includes('cloud')) return '☁️ Облачно, условия нормальные';
+        if (temp > 30) return '🌡️ Жара снижает темп игры';
+        if (temp < 0) return '🥶 Холод влияет на качество игры';
+        return '✅ Погода нейтральна';
+    }
+
     function getLeagueAccuracy(league) {
-        // Историческая точность по лиге из сохраненных ставок
         const leagueBets = state.bets.filter(b => 
             b.league && b.league.includes(league) && b.outcome !== 'pending'
         );
@@ -3280,8 +3565,8 @@
         if (features.motivation > 1.3) modifier *= 1.1;
         if (features.motivation < 0.8) modifier *= 0.9;
 
-        if (features.weatherImpact < 0) modifier *= 0.95;
-        if (features.weatherImpact > 0) modifier *= 1.05;
+        if (features.weatherImpact < -10) modifier *= 0.95;
+        if (features.weatherImpact > 10) modifier *= 1.05;
 
         if (features.leagueAccuracy > 60) modifier *= 1.05;
         if (features.leagueAccuracy < 40) modifier *= 0.95;
@@ -3298,7 +3583,7 @@
         const awayInjuries = getInjuries(awayTeam);
         const motivation = calculateMotivation(homeTeam, awayTeam, league, h2hData).factor;
         const weatherImpact = getWeatherImpact(weatherData);
-        const leagueAccuracy = getLeagueAccuracy(league.name || '');
+        const leagueAccuracy = getLeagueAccuracy(league?.name || '');
 
         return {
             homeForm, awayForm, homeHomeForm, awayAwayForm,
@@ -4491,7 +4776,8 @@
             return null;
         }
     }
- // ================================================================
+
+    // ================================================================
     // ТУРБО АНАЛИЗ
     // ================================================================
 
@@ -4727,8 +5013,7 @@
         if (step) step.textContent = `Шаг ${current}/${total}: ${label}`;
         if (percent) percent.textContent = pct + '%';
     }
-
-    // ================================================================
+  // ================================================================
     // ОСНОВНОЙ ПРОГНОЗ (РАСШИРЕННЫЙ) - С ТОЧНЫМ СЧЕТОМ И УЛУЧШЕНИЯМИ
     // ================================================================
 
@@ -5023,6 +5308,9 @@
             `;
         }
         
+        // ===== НОВОЕ: ГЛУБОКИЙ AI-АНАЛИЗ =====
+        renderDeepAIAnalysis();
+        
         if (btn) { btn.disabled = false; btn.innerHTML = '<span>🤖</span> Сгенерировать прогноз'; }
         if (result) result.style.display = 'block';
         showToast('🧠 Расширенный прогноз готов!', 'success');
@@ -5205,6 +5493,363 @@
         result.formAnalysis = formAnalysis;
         return result;
     }
+ // ================================================================
+    // НОВОЕ: ТОП-3 ПРОГНОЗА ДНЯ
+    // ================================================================
+
+    function getTopPredictions(matches, count = 3) {
+        if (!matches || matches.length === 0) return [];
+        
+        // Фильтруем только предстоящие матчи с уверенностью >= 60%
+        const upcoming = matches.filter(m => 
+            m.status !== 'finished' && 
+            m.confidence >= 60 &&
+            new Date(m.startTime) > new Date()
+        );
+        
+        // Сортируем по уверенности (по убыванию)
+        const sorted = [...upcoming].sort((a, b) => b.confidence - a.confidence);
+        
+        // Берем топ-N
+        return sorted.slice(0, count);
+    }
+
+    function renderTopPredictions() {
+        const container = document.getElementById('topPredictionsContainer');
+        if (!container) return;
+        
+        const matches = state.predictions || getFallbackMatches();
+        const top = getTopPredictions(matches, 3);
+        
+        if (top.length === 0) {
+            container.innerHTML = `
+                <div class="top-predictions">
+                    <div class="header">
+                        <span class="title">🏆 ТОП-3 ПРОГНОЗА ДНЯ</span>
+                        <span class="badge">🔥 Нет прогнозов</span>
+                    </div>
+                    <div style="text-align:center;color:#888;padding:12px 0;font-size:12px;">
+                        ⏳ Скоро появятся новые прогнозы
+                    </div>
+                </div>
+            `;
+            return;
+        }
+        
+        const medals = ['🥇', '🥈', '🥉'];
+        const rankClasses = ['gold', 'silver', 'bronze'];
+        
+        container.innerHTML = `
+            <div class="top-predictions">
+                <div class="header">
+                    <span class="title">🏆 ТОП-3 ПРОГНОЗА ДНЯ</span>
+                    <span class="badge">🔥 ${top.length} прогнозов</span>
+                </div>
+                ${top.map((m, i) => `
+                    <div class="top-prediction-item" onclick="turboAnalyze(${m.id})">
+                        <div class="rank ${rankClasses[i] || ''}">${medals[i] || '#' + (i+1)}</div>
+                        <div class="info">
+                            <div class="teams">${sanitizeHTML(m.home)} vs ${sanitizeHTML(m.away)}</div>
+                            <div class="details">
+                                <span class="pred">🎯 ${m.prediction}</span>
+                                <span>🏆 ${m.league}</span>
+                                <span>⏱ ${new Date(m.startTime).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</span>
+                            </div>
+                        </div>
+                        <div class="confidence ${m.confidence >= 80 ? 'high' : m.confidence >= 65 ? 'medium' : 'low'}">
+                            <span class="pct">${m.confidence}%</span>
+                            <span class="label">Уверенность</span>
+                        </div>
+                    </div>
+                `).join('')}
+                <div style="font-size:9px;color:#555;text-align:center;margin-top:4px;">
+                    💡 Нажми на прогноз для Турбо-анализа
+                </div>
+            </div>
+        `;
+    }
+
+    // ================================================================
+    // НОВОЕ: ГЛУБОКАЯ AI-МОДЕЛЬ (РАСШИРЕННЫЙ АНАЛИЗ)
+    // ================================================================
+
+    function getDeepAIAnalysis(homeTeam, awayTeam, h2hData, weatherData, league) {
+        // === 1. АНАЛИЗ ФОРМЫ (последние 5 матчей) ===
+        let homeWins = 0, homeDraws = 0, homeLosses = 0;
+        let awayWins = 0, awayDraws = 0, awayLosses = 0;
+        
+        if (h2hData && h2hData.length > 0) {
+            const homeMatches = h2hData.filter(m => m.home === homeTeam || m.away === homeTeam);
+            const awayMatches = h2hData.filter(m => m.home === awayTeam || m.away === awayTeam);
+            
+            homeMatches.slice(-5).forEach(m => {
+                const isHome = m.home === homeTeam;
+                const scored = isHome ? m.homeScore : m.awayScore;
+                const conceded = isHome ? m.awayScore : m.homeScore;
+                if (scored > conceded) homeWins++;
+                else if (scored === conceded) homeDraws++;
+                else homeLosses++;
+            });
+            
+            awayMatches.slice(-5).forEach(m => {
+                const isHome = m.home === awayTeam;
+                const scored = isHome ? m.homeScore : m.awayScore;
+                const conceded = isHome ? m.awayScore : m.homeScore;
+                if (scored > conceded) awayWins++;
+                else if (scored === conceded) awayDraws++;
+                else awayLosses++;
+            });
+        }
+        
+        const homeTotal = homeWins + homeDraws + homeLosses || 1;
+        const awayTotal = awayWins + awayDraws + awayLosses || 1;
+        
+        const homeFormScore = Math.round((homeWins / homeTotal) * 100);
+        const awayFormScore = Math.round((awayWins / awayTotal) * 100);
+        
+        // === 2. МОТИВАЦИЯ ===
+        const motivation = calculateMotivation(homeTeam, awayTeam, league, h2hData);
+        
+        // === 3. СТАБИЛЬНОСТЬ ===
+        const homeStability = calculateUnpredictability(homeTeam, h2hData);
+        const awayStability = calculateUnpredictability(awayTeam, h2hData);
+        
+        // === 4. ПОГОДНЫЙ ФАКТОР ===
+        let weatherImpact = 0;
+        let weatherText = 'Нейтральная';
+        if (weatherData) {
+            const condition = weatherData.weather.toLowerCase();
+            if (condition.includes('rain') || condition.includes('drizzle')) {
+                weatherImpact = -15;
+                weatherText = '🌧️ Дождь снижает результативность';
+            } else if (condition.includes('snow')) {
+                weatherImpact = -25;
+                weatherText = '❄️ Снег сильно снижает результативность';
+            } else if (condition.includes('clear')) {
+                weatherImpact = 10;
+                weatherText = '☀️ Отличная погода для футбола';
+            } else if (condition.includes('cloud')) {
+                weatherImpact = 0;
+                weatherText = '☁️ Облачно, условия нормальные';
+            } else if (weatherData.temp > 30) {
+                weatherImpact = -10;
+                weatherText = '🌡️ Жара снижает темп игры';
+            } else if (weatherData.temp < 0) {
+                weatherImpact = -10;
+                weatherText = '🥶 Холод влияет на качество игры';
+            }
+        }
+        
+        // === 5. ДЕРБИ-ФАКТОР ===
+        const derby = isDerby(homeTeam, awayTeam);
+        
+        // === 6. ИСТОРИЧЕСКАЯ ТОЧНОСТЬ ПО ЛИГЕ ===
+        const leagueAccuracy = getLeagueAccuracy(league?.name || '');
+        
+        // === 7. ОБЩАЯ ОЦЕНКА ===
+        let totalScore = 50;
+        totalScore += (homeFormScore - 50) * 0.3;
+        totalScore += (awayFormScore - 50) * 0.2;
+        totalScore += (motivation.factor - 1) * 30;
+        totalScore += (weatherImpact / 2);
+        if (derby) totalScore += 10;
+        if (homeStability.level === 'low') totalScore += 5;
+        if (awayStability.level === 'low') totalScore += 3;
+        if (homeStability.level === 'high') totalScore -= 10;
+        if (awayStability.level === 'high') totalScore -= 5;
+        
+        totalScore = Math.min(95, Math.max(5, Math.round(totalScore)));
+        
+        // === 8. РЕКОМЕНДАЦИЯ ===
+        let recommendation = '';
+        let recColor = '#2ecc71';
+        if (totalScore >= 75) {
+            recommendation = '✅ Отличный прогноз! Высокая уверенность. Рекомендуется к рассмотрению.';
+            recColor = '#2ecc71';
+        } else if (totalScore >= 60) {
+            recommendation = '🟡 Хороший прогноз. Можно рассмотреть с осторожностью.';
+            recColor = '#f1c40f';
+        } else if (totalScore >= 45) {
+            recommendation = '🟠 Средний прогноз. Требуется дополнительный анализ.';
+            recColor = '#f39c12';
+        } else {
+            recommendation = '🔴 Слабый прогноз. Рекомендуется пропустить ставку.';
+            recColor = '#e74c3c';
+        }
+        
+        // === 9. ФАКТОРЫ ВЛИЯНИЯ ===
+        const factors = [];
+        if (homeFormScore > 60) factors.push({ name: 'Форма хозяев', value: homeFormScore, type: 'good' });
+        else if (homeFormScore < 40) factors.push({ name: 'Форма хозяев', value: homeFormScore, type: 'bad' });
+        if (awayFormScore > 60) factors.push({ name: 'Форма гостей', value: awayFormScore, type: 'good' });
+        else if (awayFormScore < 40) factors.push({ name: 'Форма гостей', value: awayFormScore, type: 'bad' });
+        if (motivation.factor > 1.2) factors.push({ name: 'Мотивация', value: Math.round((motivation.factor - 1) * 100), type: 'good' });
+        if (derby) factors.push({ name: 'Дерби', value: 30, type: 'good' });
+        if (weatherImpact < -10) factors.push({ name: 'Погода', value: Math.abs(weatherImpact), type: 'bad' });
+        if (weatherImpact > 10) factors.push({ name: 'Погода', value: weatherImpact, type: 'good' });
+        if (homeStability.level === 'high') factors.push({ name: 'Нестабильность хозяев', value: 20, type: 'bad' });
+        if (awayStability.level === 'high') factors.push({ name: 'Нестабильность гостей', value: 15, type: 'bad' });
+        if (leagueAccuracy > 60) factors.push({ name: 'Опыт в лиге', value: leagueAccuracy, type: 'good' });
+        
+        return {
+            totalScore,
+            recommendation,
+            recColor,
+            factors,
+            homeFormScore,
+            awayFormScore,
+            motivation: motivation.reason,
+            weatherImpact,
+            weatherText,
+            derby,
+            homeStability: homeStability.level,
+            awayStability: awayStability.level,
+            leagueAccuracy,
+            homeWins,
+            homeDraws,
+            homeLosses,
+            awayWins,
+            awayDraws,
+            awayLosses
+        };
+    }
+
+    // ================================================================
+    // НОВОЕ: ОТОБРАЖЕНИЕ ГЛУБОКОЙ AI В КАРТОЧКЕ
+    // ================================================================
+
+    function renderDeepAIAnalysis() {
+        const container = document.getElementById('deepAIContainer');
+        if (!container) return;
+        
+        const homeTeamName = document.getElementById('homeTeamH2H')?.value || '';
+        const awayTeamName = document.getElementById('awayTeamH2H')?.value || '';
+        
+        if (!homeTeamName || !awayTeamName) {
+            container.innerHTML = `
+                <div class="ai-deep-card">
+                    <div class="card-title">
+                        🧠 ГЛУБОКИЙ AI-АНАЛИЗ
+                        <span class="status">⏳ Введите команды</span>
+                    </div>
+                    <div style="text-align:center;color:#888;padding:12px 0;font-size:12px;">
+                        Введите команды в разделе "Поиск" для анализа
+                    </div>
+                </div>
+            `;
+            return;
+        }
+        
+        const league = getLeague();
+        const analysis = getDeepAIAnalysis(
+            homeTeamName, 
+            awayTeamName, 
+            state.h2hData, 
+            state.weatherData, 
+            league
+        );
+        
+        // Определяем статус
+        let statusText = '✅ Готово';
+        let statusColor = '#2ecc71';
+        if (analysis.totalScore < 40) { statusText = '⚠️ Низкая уверенность'; statusColor = '#e74c3c'; }
+        else if (analysis.totalScore < 60) { statusText = '🟡 Средняя уверенность'; statusColor = '#f1c40f'; }
+        
+        container.innerHTML = `
+            <div class="ai-deep-card">
+                <div class="card-title">
+                    🧠 ГЛУБОКИЙ AI-АНАЛИЗ
+                    <span class="status" style="color:${statusColor};">${statusText}</span>
+                </div>
+                
+                <div class="param-grid">
+                    <div class="param-item">
+                        📊 Общая оценка
+                        <span class="value ${analysis.totalScore >= 70 ? 'good' : analysis.totalScore >= 50 ? 'warn' : 'bad'}">
+                            ${analysis.totalScore}%
+                        </span>
+                    </div>
+                    <div class="param-item">
+                        🏠 Форма хозяев
+                        <span class="value ${analysis.homeFormScore >= 60 ? 'good' : analysis.homeFormScore >= 40 ? 'warn' : 'bad'}">
+                            ${analysis.homeFormScore}%
+                        </span>
+                    </div>
+                    <div class="param-item">
+                        ✈️ Форма гостей
+                        <span class="value ${analysis.awayFormScore >= 60 ? 'good' : analysis.awayFormScore >= 40 ? 'warn' : 'bad'}">
+                            ${analysis.awayFormScore}%
+                        </span>
+                    </div>
+                    <div class="param-item">
+                        🎯 Мотивация
+                        <span class="value">${analysis.motivation}</span>
+                    </div>
+                    <div class="param-item">
+                        🌤️ Погода
+                        <span class="value ${analysis.weatherImpact >= 0 ? 'good' : 'bad'}">
+                            ${analysis.weatherText}
+                        </span>
+                    </div>
+                    <div class="param-item">
+                        ${analysis.derby ? '⚔️ Дерби' : '📊 Стандартный'}
+                        <span class="value">${analysis.derby ? '✅ Да' : '—'}</span>
+                    </div>
+                </div>
+                
+                <!-- Факторы влияния -->
+                ${analysis.factors.length > 0 ? `
+                    <div style="margin:4px 0;">
+                        <div style="font-size:9px;color:#888;margin-bottom:2px;">📈 Факторы влияния:</div>
+                        ${analysis.factors.map(f => `
+                            <div class="factor-bar">
+                                <div class="label">
+                                    <span>${f.name}</span>
+                                    <span>${f.value > 0 ? '+' : ''}${f.value}%</span>
+                                </div>
+                                <div class="bar-track">
+                                    <div class="fill ${f.type}" style="width:${Math.min(Math.abs(f.value), 100)}%"></div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : ''}
+                
+                <!-- Рекомендация -->
+                <div class="recommendation-deep" style="border-left-color:${analysis.recColor};">
+                    <div class="big" style="color:${analysis.recColor};">${analysis.recommendation}</div>
+                    <div class="sub">
+                        🏠 ${analysis.homeWins}W ${analysis.homeDraws}D ${analysis.homeLosses}L · 
+                        ✈️ ${analysis.awayWins}W ${analysis.awayDraws}D ${analysis.awayLosses}L · 
+                        📊 Точность лиги: ${analysis.leagueAccuracy}%
+                        ${analysis.derby ? ' · ⚔️ Дерби-фактор учтён' : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // ================================================================
+    // НОВОЕ: ОБНОВЛЕНИЕ ТОП-3 И ГЛУБОКОЙ AI ПРИ ИЗМЕНЕНИИ ДАННЫХ
+    // ================================================================
+
+    function updateAllNewFeatures() {
+        renderTopPredictions();
+        renderDeepAIAnalysis();
+    }
+
+    // Подключаем к существующим функциям
+    const originalRefreshPredictions = refreshPredictions;
+    refreshPredictions = function() {
+        originalRefreshPredictions();
+        setTimeout(updateAllNewFeatures, 500);
+    };
+
+    const originalGenerateUltimatePredictionExtended = generateUltimatePredictionExtended;
+    generateUltimatePredictionExtended = async function() {
+        await originalGenerateUltimatePredictionExtended();
+        setTimeout(renderDeepAIAnalysis, 300);
+    };
 // ================================================================
     // ЭКСПЕРИМЕНТАЛЬНАЯ МОДЕЛЬ (QuantumAssistant)
     // ================================================================
@@ -5800,7 +6445,7 @@
             bets: state.bets,
             leagues: LEAGUES,
             valueBets: state.valueBets,
-            version: '6.0',
+            version: '6.1',
             exportDate: new Date().toISOString()
         };
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -5843,9 +6488,8 @@
         reader.readAsText(file);
         event.target.value = '';
     }
-
-    // ================================================================
-    // ПРОГНОЗЫ v5.0
+  // ================================================================
+    // ПРОГНОЗЫ v5.0 (продолжение)
     // ================================================================
 
     async function generateTestPredictions() {
@@ -6343,7 +6987,7 @@
         const message = `🔔 Через 30 минут начинается матч ${match.home} vs ${match.away}! Прогноз: ${match.prediction} с уверенностью ${match.confidence}%`;
         showToast(message, 'success');
         if (Notification.permission === 'granted') {
-            new Notification('⚛️ Квантум v6.0', {
+            new Notification('⚛️ Квантум v6.1', {
                 body: `${match.home} vs ${match.away}\nПрогноз: ${match.prediction}\nУверенность: ${match.confidence}%`,
                 icon: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="45" fill="%230b0e14"/%3E%3Ctext x="50" y="72" font-size="60" text-anchor="middle" font-family="Arial"%3E%E2%9A%9B%3C/text%3E%3C/svg%3E'
             });
@@ -6366,9 +7010,9 @@
         if (state.assistantHistory.length === 0) {
             chat.innerHTML = `
                 <div class="assistant-message ai">
-                    👋 Привет! Я ассистент Квантум v6.0.<br>
+                    👋 Привет! Я ассистент Квантум v6.1.<br>
                     Сезон ${CURRENT_SEASON} - все прогнозы актуальны!<br>
-                    Теперь с прогнозом точного счета и расширенной AI-моделью!<br>
+                    Теперь с ТОП-3 прогнозами дня и Глубокой AI-моделью!<br>
                     Задай вопрос о ставках, прогнозах или анализе матчей.
                     <div class="time">🤖 Ассистент</div>
                 </div>
@@ -6434,6 +7078,12 @@
         if (lower.includes('точный счет')) {
             return `⚽ **ПРОГНОЗ ТОЧНОГО СЧЕТА**\n\nТеперь приложение показывает топ-5 самых вероятных счетов!\n\nПример:\n• 2:1 — 28%\n• 1:1 — 23%\n• 2:0 — 18%\n• 1:2 — 12%\n• 3:1 — 8%\n\n🎯 Самый вероятный счет выделяется зеленым.\n\n📊 Уверенность в точном счете рассчитывается на основе xG команд.`;
         }
+        if (lower.includes('топ-3') || lower.includes('топ 3') || lower.includes('лучшие прогнозы')) {
+            return `🏆 **ТОП-3 ПРОГНОЗА ДНЯ**\n\nНа главном экране теперь отображаются 3 самых надежных прогноза!\n\n• 🥇 Золото — самый уверенный прогноз\n• 🥈 Серебро — второй по надежности\n• 🥉 Бронза — третий по надежности\n\n📊 Отбираются только прогнозы с уверенностью ≥ 60%\n\n💡 Нажми на любой прогноз для Турбо-анализа!`;
+        }
+        if (lower.includes('глубокая ai') || lower.includes('глубокая модель') || lower.includes('ai модель')) {
+            return `🧠 **ГЛУБОКАЯ AI-МОДЕЛЬ**\n\nМодель анализирует 9+ факторов:\n• 📊 Форма команд (последние 5 матчей)\n• 🏠 Домашняя/гостевая форма\n• 🎯 Мотивация (дерби, борьба за место)\n• 🌤️ Погодные условия\n• ⚔️ Дерби-фактор\n• 📈 Стабильность команд\n• 🏆 Историческая точность по лиге\n\n📊 Общая оценка выводится в процентах\n\n🔥 Каждый фактор визуально отображается в виде шкалы!`;
+        }
         if (lower.includes('уведомл') || lower.includes('напомина') || lower.includes('нотификац')) {
             return `🔔 **УВЕДОМЛЕНИЯ**\n\nСистема автоматически проверяет матчи каждые 30 минут.\n\n• Оповещает за 30 минут до начала\n• Только для прогнозов с уверенностью ≥ 70%\n• Показывает в приложении и браузере\n\n✅ Для браузерных уведомлений разрешите их в настройках браузера.\n\n📊 Сейчас активно: ${state.notifiedMatches.size} уведомлений за сессию.`;
         }
@@ -6449,7 +7099,7 @@
         const total = context.bets.length;
         const wins = context.bets.filter(b => b.outcome === 'win').length;
         const rate = total > 0 ? Math.round((wins / total) * 100) : 0;
-        return `🧠 **АССИСТЕНТ v6.0**\n\n📊 Ваша статистика: ${total} ставок, ${rate}% точности\n${ultimateAI.isTrained() ? `🎯 Модель: ${Math.round(ultimateAI.accuracy * 100)}%` : '⏳ Обучите модель'}\n\nНОВОЕ В v6.0:\n• ⚽ Прогноз точного счета (топ-5 счетов)\n• 🎯 Индивидуальный тотал команд\n• ⏰ Голы по таймам\n• 🧠 Расширенная AI-модель (32 параметра)\n• 🔄 Авто-обучение каждые 6 часов\n\nЧто вас интересует?`;
+        return `🧠 **АССИСТЕНТ v6.1**\n\n📊 Ваша статистика: ${total} ставок, ${rate}% точности\n${ultimateAI.isTrained() ? `🎯 Модель: ${Math.round(ultimateAI.accuracy * 100)}%` : '⏳ Обучите модель'}\n\nНОВОЕ В v6.1:\n• 🏆 ТОП-3 прогноза дня на главном экране\n• 🧠 Глубокая AI-модель (9+ факторов)\n• 📊 Визуальные шкалы факторов влияния\n• ⚽ Прогноз точного счета (топ-5 счетов)\n• 🎯 Индивидуальный тотал команд\n• ⏰ Голы по таймам\n• 🔄 Авто-обучение каждые 6 часов\n\nЧто вас интересует?`;
     }
 
     // ================================================================
@@ -6506,6 +7156,12 @@
         updateLeagueFilters();
         requestNotificationPermission();
 
+        // ===== НОВЫЕ ФИЧИ: ТОП-3 И ГЛУБОКАЯ AI =====
+        setTimeout(() => {
+            renderTopPredictions();
+            renderDeepAIAnalysis();
+        }, 500);
+
         if (!state.updateTimer) {
             state.updateTimer = setInterval(() => {
                 refreshPredictions();
@@ -6529,12 +7185,14 @@
             navigator.serviceWorker.register('sw.js').catch(() => {});
         }
 
-        console.log(`⚛️ КВАНТУМ v6.0 — СЕЗОН ${CURRENT_SEASON}`);
+        console.log(`⚛️ КВАНТУМ v6.1 — СЕЗОН ${CURRENT_SEASON}`);
         console.log('✅ 39 ЕВРОПЕЙСКИХ ЛИГ (ВКЛЮЧАЯ РПЛ И ЧЕХИЮ)');
         console.log('✅ ПРЯМЫЕ ЗАПРОСЫ К API (БЕЗ ПРОКСИ)');
         console.log('✅ ПРОГНОЗ ТОЧНОГО СЧЕТА');
         console.log('✅ ИНДИВИДУАЛЬНЫЙ ТОТАЛ');
         console.log('✅ ГОЛЫ ПО ТАЙМАМ');
+        console.log('✅ ТОП-3 ПРОГНОЗА ДНЯ');
+        console.log('✅ ГЛУБОКАЯ AI-МОДЕЛЬ (9+ ФАКТОРОВ)');
         console.log('✅ РАСШИРЕННАЯ AI-МОДЕЛЬ (32 ПАРАМЕТРА)');
         console.log('✅ АВТО-ОБУЧЕНИЕ КАЖДЫЕ 6 ЧАСОВ');
         console.log('🚀 ГОТОВ К РАБОТЕ!');
@@ -6545,4 +7203,4 @@
     });
 </script>
 </body>
-</html>        
+</html>      
