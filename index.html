@@ -4730,17 +4730,17 @@ body.light .btn-cache:hover {
     function confirmSaveBet() {
     if (!pendingTurboBet) return;
     
-    // ===== ИСПРАВЛЕНИЕ: БЕРЁМ РЕАЛЬНЫЙ СЧЁТ =====
+    // ===== БЕРЁМ РЕАЛЬНЫЙ СЧЁТ =====
     let homeScore = 0;
     let awayScore = 0;
     
-    // 1. Пробуем взять из pendingTurboBet
+    // 1. Из pendingTurboBet
     if (pendingTurboBet.home !== undefined && pendingTurboBet.away !== undefined) {
         homeScore = pendingTurboBet.home;
         awayScore = pendingTurboBet.away;
     }
     
-    // 2. Пробуем взять из AI-прогноза
+    // 2. Из AI-прогноза
     if (homeScore === 0 && awayScore === 0) {
         const aiHome = parseInt(document.getElementById('aiHomeScore')?.textContent) || 0;
         const aiAway = parseInt(document.getElementById('aiAwayScore')?.textContent) || 0;
@@ -4750,7 +4750,7 @@ body.light .btn-cache:hover {
         }
     }
     
-    // 3. Пробуем взять из полей ввода
+    // 3. Из полей ввода
     if (homeScore === 0 && awayScore === 0) {
         const inputHome = parseInt(document.getElementById('homeGoals')?.value) || 0;
         const inputAway = parseInt(document.getElementById('awayGoals')?.value) || 0;
@@ -4760,7 +4760,7 @@ body.light .btn-cache:hover {
         }
     }
     
-    // 4. Если всё равно 0:0 — оставляем как есть (но это уже реальные данные)
+    // 4. Если всё равно 0:0 — оставляем (это реальные данные)
     
     const bet = {
         id: Date.now(),
