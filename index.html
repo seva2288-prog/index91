@@ -2621,6 +2621,64 @@
             border-top-color: #d0d5dd;
         }
     </style>
+    /* ===== ИСПРАВЛЕНИЕ ДЛЯ VALUE-СТАВОК ===== */
+.value-bet-card {
+    background: #0b0e14;
+    border: 1px solid #2ecc71;
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin: 4px 0;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+.value-bet-card .match {
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+.value-bet-card .details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    font-size: 11px;
+    color: #888;
+    margin-top: 2px;
+}
+.value-bet-card .details span {
+    background: #1a1f2a;
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+    font-size: 10px;
+}
+.value-bet-card .details strong {
+    font-weight: 700;
+}
+.value-bet-card .details .ev {
+    color: #2ecc71;
+}
+.value-bet-card .details .kelly {
+    color: #f7931a;
+}
+.value-bet-card .details .badge {
+    color: #2ecc71;
+    font-weight: 700;
+}
+.value-bet-card .size-hint {
+    font-size: 9px;
+    color: #555;
+    margin-top: 2px;
+}
+body.light .value-bet-card {
+    background: #f0f2f5;
+    border-color: #2ecc71;
+}
+body.light .value-bet-card .details span {
+    background: #fff;
+}
 </head>
 <body>
     <!-- ===== ШАПКА ===== -->
@@ -3650,100 +3708,108 @@
     // ФУНКЦИИ ДЛЯ РАБОТЫ С ЛИГАМИ
     // ================================================================
 
-    function getLeagueInfo(leagueId) {
-        return LEAGUE_INFO[leagueId] || {
-            name: `Лига ${leagueId}`,
-            country: 'Мир',
-            flag: '🌍',
-            level: 1
-        };
-    }
-
-    function renderAllLeagues() {
-        const select = document.getElementById('filterLeague');
-        if (!select) return;
-        select.innerHTML = '';
-        for (const [groupName, leagueIds] of Object.entries(LEAGUE_GROUPS)) {
-            const optgroup = document.createElement('optgroup');
-            optgroup.label = groupName;
-            for (const id of leagueIds) {
-                const info = getLeagueInfo(id);
-                const option = document.createElement('option');
-                option.value = id;
-                option.textContent = `${info.flag} ${info.name} (${info.country})`;
-                if (id == state.currentLeague) option.selected = true;
-                optgroup.appendChild(option);
-            }
-            select.appendChild(optgroup);
-        }
-    }
-
     async function loadAllLeaguesExtended() {
-        const apiKey = localStorage.getItem('quantum_api_key');
-        if (!apiKey || apiKey === '') {
-            showToast('⚠️ Введите API ключ в настройках', 'error');
-            return;
-        }
-        showToast('📡 Загрузка всех европейских лиг...', 'info');
-        let loadedCount = 0;
-        const leagueStats = {};
-        const allIds = Object.keys(LEAGUE_INFO).map(Number);
-        for (const leagueId of allIds) {
-            const cacheKey = `league_stats_${leagueId}`;
-            const cached = localStorage.getItem(cacheKey);
-            if (cached) {
-                try {
-                    const data = JSON.parse(cached);
-                    if (Date.now() - data.timestamp < CACHE_CONFIG.LEAGUES_TTL) {
-                        leagueStats[leagueId] = data.data;
-                        loadedCount++;
-                        continue;
-                    }
-                } catch (e) {}
-            }
-            try {
-                const statsRes = await fetchWithCache(
-                    `leagues/statistics?league=${leagueId}&season=${CURRENT_SEASON}`,
-                    { headers: { 'x-apisports-key': apiKey } },
-                    CACHE_CONFIG.LEAGUES_TTL
-                );
-                if (statsRes && statsRes.response) {
-                    const stats = statsRes.response;
-                    const info = getLeagueInfo(leagueId);
-                    let avgGoals = 2.5, ozPercent = 55;
-                    if (stats.goals?.total) {
-                        avgGoals = parseFloat((stats.goals.total.total / stats.fixtures.total).toFixed(2));
-                    }
-                    if (stats.goals?.both) {
-                        ozPercent = Math.round((stats.goals.both.total / stats.fixtures.total) * 100);
-                    }
-                    leagueStats[leagueId] = {
-                        name: `${info.flag} ${info.name}`,
-                        oz: ozPercent,
-                        avgGoals: avgGoals,
-                        country: info.country,
-                        season: CURRENT_SEASON,
-                        level: info.level,
-                        flag: info.flag,
-                        matches: stats.fixtures?.total || 0
-                    };
-                    localStorage.setItem(cacheKey, JSON.stringify({
-                        data: leagueStats[leagueId],
-                        timestamp: Date.now()
-                    }));
-                    loadedCount++;
-                }
-                await delay(100);
-            } catch (e) {
-                console.log(`⚠️ Ошибка с лигой ${leagueId}:`, e);
-            }
-        }
-        LEAGUES = leagueStats;
-        localStorage.setItem('quantum_leagues', JSON.stringify(leagueStats));
-        renderAllLeagues();
-        updateLeagueInfoDisplay();
-        showToast(`✅ Загружено ${loadedCount} европейских лиг!`, 'success');
+    const apiKey = localStorage.getItem('quantum_api_key');
+    if (!apiKey || apiKey === '') {
+        showToast('⚠️ Введите API ключ в настройках', 'error');
+        return;
     }
+    showToast('📡 Загрузка всех европейских лиг...', 'info');
+    let loadedCount = 0;
+    const leagueStats = {};
+    const allIds = Object.keys(LEAGUE_INFO).map(Number);
+    
+    for (const leagueId of allIds) {
+        const cacheKey = `league_stats_${leagueId}`;
+        const cached = localStorage.getItem(cacheKey);
+        if (cached) {
+            try {
+                const data = JSON.parse(cached);
+                if (Date.now() - data.timestamp < CACHE_CONFIG.LEAGUES_TTL) {
+                    leagueStats[leagueId] = data.data;
+                    loadedCount++;
+                    continue;
+                }
+            } catch (e) {}
+        }
+        try {
+            // ===== ИСПРАВЛЕНИЕ: правильный эндпоинт =====
+            const statsRes = await fetchWithCache(
+                `fixtures?league=${leagueId}&season=${CURRENT_SEASON}`,
+                { headers: { 'x-apisports-key': apiKey } },
+                CACHE_CONFIG.LEAGUES_TTL
+            );
+            if (statsRes && statsRes.response && statsRes.response.length > 0) {
+                const fixtures = statsRes.response;
+                let totalGoals = 0;
+                let ozCount = 0;
+                let totalMatches = fixtures.length;
+                
+                fixtures.forEach(m => {
+                    const homeG = m.goals?.home || 0;
+                    const awayG = m.goals?.away || 0;
+                    totalGoals += homeG + awayG;
+                    if (homeG > 0 && awayG > 0) ozCount++;
+                });
+                
+                const avgGoals = totalMatches > 0 ? parseFloat((totalGoals / totalMatches).toFixed(2)) : 2.5;
+                const ozPercent = totalMatches > 0 ? Math.round((ozCount / totalMatches) * 100) : 55;
+                const info = getLeagueInfo(leagueId);
+                
+                leagueStats[leagueId] = {
+                    name: `${info.flag} ${info.name}`,
+                    oz: ozPercent,
+                    avgGoals: avgGoals,
+                    country: info.country,
+                    season: CURRENT_SEASON,
+                    level: info.level,
+                    flag: info.flag,
+                    matches: totalMatches
+                };
+                localStorage.setItem(cacheKey, JSON.stringify({
+                    data: leagueStats[leagueId],
+                    timestamp: Date.now()
+                }));
+                loadedCount++;
+            } else {
+                // ===== Если нет матчей, используем дефолтные значения =====
+                const info = getLeagueInfo(leagueId);
+                leagueStats[leagueId] = {
+                    name: `${info.flag} ${info.name}`,
+                    oz: 55,
+                    avgGoals: 2.5,
+                    country: info.country,
+                    season: CURRENT_SEASON,
+                    level: info.level,
+                    flag: info.flag,
+                    matches: 0
+                };
+                loadedCount++;
+            }
+            await delay(100);
+        } catch (e) {
+            console.log(`⚠️ Ошибка с лигой ${leagueId}:`, e);
+            // ===== Не падаем, продолжаем загрузку =====
+            const info = getLeagueInfo(leagueId);
+            leagueStats[leagueId] = {
+                name: `${info.flag} ${info.name}`,
+                oz: 55,
+                avgGoals: 2.5,
+                country: info.country,
+                season: CURRENT_SEASON,
+                level: info.level,
+                flag: info.flag,
+                matches: 0
+            };
+            loadedCount++;
+        }
+    }
+    LEAGUES = leagueStats;
+    localStorage.setItem('quantum_leagues', JSON.stringify(leagueStats));
+    renderAllLeagues();
+    updateLeagueInfoDisplay();
+    showToast(`✅ Загружено ${loadedCount} европейских лиг!`, 'success');
+}
 
     function getFlag(country) {
         const flags = {
@@ -5269,17 +5335,25 @@
                     <div style="font-size:10px;color:#555;margin-top:2px;">${valueResult.reasoning}</div>
                 </div>
             `;
-            if (valueResult.isValue) {
-                state.valueBets.push({
-                    date: new Date().toISOString(),
-                    match: `${homeTeamName || 'Хозяева'} vs ${awayTeamName || 'Гости'}`,
-                    ev: valueResult.ev,
-                    kelly: valueResult.kelly,
-                    recommendation: valueResult.recommendation
-                });
-                localStorage.setItem('quantum_value_bets', JSON.stringify(state.valueBets));
-            }
-        }
+            // ===== БЛОК 5: ОЧИСТКА ДУБЛЕЙ В VALUE-СТАВКАХ =====
+if (valueResult.isValue) {
+    // Проверяем, есть ли уже такая ставка
+    const duplicate = state.valueBets.some(v => 
+        v.match === `${homeTeamName || 'Хозяева'} vs ${awayTeamName || 'Гости'}` &&
+        Math.abs(v.ev - valueResult.ev) < 0.01
+    );
+    // Если дубля нет — сохраняем
+    if (!duplicate) {
+        state.valueBets.push({
+            date: new Date().toISOString(),
+            match: `${homeTeamName || 'Хозяева'} vs ${awayTeamName || 'Гости'}`,
+            ev: valueResult.ev,
+            kelly: valueResult.kelly,
+            recommendation: valueResult.recommendation
+        });
+        localStorage.setItem('quantum_value_bets', JSON.stringify(state.valueBets));
+    }
+}
         
         // Детектив
         const homeForm = state.h2hData ? Math.round(state.h2hData.filter(m => m.homeScore > m.awayScore).length / state.h2hData.length * 100) : 50;
@@ -5405,32 +5479,32 @@
     // ================================================================
 
     function calculateValueBet(aiProb, odds) {
-        const ev = (aiProb * odds) - 1;
-        const b = odds - 1;
-        const q = 1 - aiProb;
-        const kelly = (aiProb * b - q) / b;
-        const kellyPercent = Math.max(0, Math.round(kelly * 100));
-        const evPercent = (ev * 100).toFixed(1) + '%';
-        const isValue = ev > 0.05;
-        let reasoning = '';
-        let recommendation = '';
-        if (isValue) {
-            reasoning = `AI вероятность ${Math.round(aiProb * 100)}%, коэффициент ${odds}, EV ${evPercent}`;
-            recommendation = '✅ VALUE BET! Рекомендуемый размер: ' + Math.min(10, Math.round(kelly * 100)) + '% банка';
-        } else {
-            reasoning = `AI вероятность ${Math.round(aiProb * 100)}%, коэффициент ${odds}, EV ${evPercent} — недостаточно value`;
-            recommendation = '❌ Нет value, пропустить ставку';
-        }
-        return {
-            ev: ev,
-            evPercent: evPercent,
-            kelly: kelly,
-            kellyPercent: kellyPercent + '%',
-            isValue: isValue,
-            reasoning: reasoning,
-            recommendation: recommendation
-        };
+    const ev = (aiProb * odds) - 1;
+    const b = odds - 1;
+    const q = 1 - aiProb;
+    const kelly = (aiProb * b - q) / b;
+    const kellyPercent = Math.max(0, Math.round(kelly * 100));
+    const evPercent = (ev * 100).toFixed(1) + '%';
+    const isValue = ev > 0.05;
+    let reasoning = '';
+    let recommendation = '';
+    if (isValue) {
+        reasoning = `AI вероятность ${Math.round(aiProb * 100)}%, коэффициент ${odds}, EV ${evPercent}`;
+        recommendation = '✅ VALUE BET! Рекомендуемый размер: ' + Math.min(10, Math.round(kelly * 100)) + '% банка';
+    } else {
+        reasoning = `AI вероятность ${Math.round(aiProb * 100)}%, коэффициент ${odds}, EV ${evPercent} — недостаточно value`;
+        recommendation = '❌ Нет value, пропустить ставку';
     }
+    return {
+        ev: ev,
+        evPercent: evPercent,
+        kelly: kelly,
+        kellyPercent: kellyPercent + '%',
+        isValue: isValue,
+        reasoning: reasoning,
+        recommendation: recommendation
+    };
+}
 
     // ================================================================
     // ДЕТЕКТИВ
@@ -6167,45 +6241,50 @@
     }
 
     function renderUltimateDashboard() {
-        const total = state.bets.length;
-        const wins = state.bets.filter(b => b.outcome === 'win').length;
-        const losses = state.bets.filter(b => b.outcome === 'loss').length;
-        const roi = total > 0 ? ((wins - losses) / total) * 100 : 0;
-        document.getElementById('kpiROIDisplay').textContent = roi.toFixed(1) + '%';
-        document.getElementById('kpiROITrend').textContent = roi > 0 ? '📈 За месяц' : '📉 За месяц';
-        const aiAcc = ultimateAI.isTrained() ? Math.round(ultimateAI.accuracy * 100) : 0;
-        document.getElementById('kpiAIDisplay').textContent = aiAcc + '%';
-        document.getElementById('kpiAITrend').textContent = ultimateAI.isTrained() ? '✅ Обучена' : '⏳ Не обучена';
-        const profit = wins - losses;
-        document.getElementById('kpiProfitDisplay').textContent = profit;
-        document.getElementById('kpiProfitTrend').textContent = `📊 Ставок: ${total}`;
-        const valueCount = state.valueBets ? state.valueBets.length : 0;
-        const valueRate = total > 0 ? Math.round((valueCount / total) * 100) : 0;
-        document.getElementById('kpiValueDisplay').textContent = valueRate + '%';
-        document.getElementById('kpiValueTrend').textContent = valueRate > 0 ? '✅ +' + valueRate + '%' : '⏳ Нет value';
-        if (state.shapData) {
-            const shapContainer = document.getElementById('shapVisualization');
-            shapContainer.innerHTML = state.shapData.contributions.map(c =>
-                `<div style="display:flex;justify-content:space-between;font-size:11px;padding:2px 0;border-bottom:1px solid #2a3140;">
-                    <span>${c.emoji} ${c.name}</span>
-                    <span style="color:${c.direction === 'positive' ? '#2ecc71' : '#e74c3c'};">${c.direction === 'positive' ? '+' : ''}${c.impact}</span>
-                </div>`
-            ).join('');
-        }
-        if (state.valueBets && state.valueBets.length > 0) {
-            const valueList = document.getElementById('valueBetsList');
-            valueList.innerHTML = state.valueBets.slice(-5).reverse().map(v =>
-                `<div class="value-bet-card">
-                    <div class="match">${v.match}</div>
-                    <div class="details">
-                        <span class="ev">EV: ${v.ev}</span>
-                        <span class="kelly">Kelly: ${v.kelly}</span>
-                        <span class="recommendation">${v.recommendation}</span>
-                    </div>
-                </div>`
-            ).join('');
-        }
+    const total = state.bets.length;
+    const wins = state.bets.filter(b => b.outcome === 'win').length;
+    const losses = state.bets.filter(b => b.outcome === 'loss').length;
+    const roi = total > 0 ? ((wins - losses) / total) * 100 : 0;
+    document.getElementById('kpiROIDisplay').textContent = roi.toFixed(1) + '%';
+    document.getElementById('kpiROITrend').textContent = roi > 0 ? '📈 За месяц' : '📉 За месяц';
+    const aiAcc = ultimateAI.isTrained() ? Math.round(ultimateAI.accuracy * 100) : 0;
+    document.getElementById('kpiAIDisplay').textContent = aiAcc + '%';
+    document.getElementById('kpiAITrend').textContent = ultimateAI.isTrained() ? '✅ Обучена' : '⏳ Не обучена';
+    const profit = wins - losses;
+    document.getElementById('kpiProfitDisplay').textContent = profit;
+    document.getElementById('kpiProfitTrend').textContent = `📊 Ставок: ${total}`;
+    const valueCount = state.valueBets ? state.valueBets.length : 0;
+    const valueRate = total > 0 ? Math.round((valueCount / total) * 100) : 0;
+    document.getElementById('kpiValueDisplay').textContent = valueRate + '%';
+    document.getElementById('kpiValueTrend').textContent = valueRate > 0 ? '✅ +' + valueRate + '%' : '⏳ Нет value';
+    
+    // ===== ИСПРАВЛЕНИЕ: КОМПАКТНОЕ ОТОБРАЖЕНИЕ VALUE =====
+    const valueList = document.getElementById('valueBetsList');
+    if (state.valueBets && state.valueBets.length > 0) {
+        const unique = [];
+        const seen = new Set();
+        state.valueBets.slice(-10).reverse().forEach(v => {
+            const key = v.match + v.ev;
+            if (!seen.has(key)) {
+                seen.add(key);
+                unique.push(v);
+            }
+        });
+        valueList.innerHTML = unique.map(v => `
+            <div class="value-bet-card">
+                <div class="match">${v.match || 'Матч'}</div>
+                <div class="details" style="display:flex;flex-wrap:wrap;gap:6px;font-size:11px;color:#888;margin-top:2px;">
+                    <span style="background:#0b0e14;padding:2px 8px;border-radius:10px;">💰 EV: <strong style="color:#2ecc71;">${(v.ev * 100).toFixed(1)}%</strong></span>
+                    <span style="background:#0b0e14;padding:2px 8px;border-radius:10px;">📊 Kelly: <strong style="color:#f7931a;">${(v.kelly * 100).toFixed(1)}%</strong></span>
+                    <span style="background:#0b0e14;padding:2px 8px;border-radius:10px;color:#2ecc71;font-weight:700;">✅ VALUE BET!</span>
+                </div>
+                <div style="font-size:10px;color:#555;margin-top:2px;">💡 Рекомендуемый размер: ${Math.round(v.kelly * 100)}% банка</div>
+            </div>
+        `).join('');
+    } else {
+        valueList.innerHTML = '<div class="text-muted text-center" style="padding:10px 0;">Пока нет value-ставок</div>';
     }
+}
 
     function renderChartCanvas() {
         const canvas = document.getElementById('balanceChart');
