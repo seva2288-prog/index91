@@ -4728,63 +4728,97 @@ body.light .btn-cache:hover {
     }
 
     function confirmSaveBet() {
-        if (!pendingTurboBet) return;
-        const bet = {
-            id: Date.now(),
-            date: new Date().toISOString(),
-            match: pendingTurboBet.match || 'Матч',
-            mode: pendingTurboBet.mode || 'total',
-            value: pendingTurboBet.prediction || '—',
-            home: pendingTurboBet.home || 0,
-            away: pendingTurboBet.away || 0,
-            confidence: pendingTurboBet.confidence || 50,
-            outcome: 'pending',
-            resultText: '⏳ Ожидание',
-            weather: pendingTurboBet.weather || null,
-            league: pendingTurboBet.league || null,
-            home_xG: pendingTurboBet.homeXG || 1.2,
-            away_xG: pendingTurboBet.awayXG || 1.2,
-            home_form: pendingTurboBet.homeForm || 50,
-            away_form: pendingTurboBet.awayForm || 50,
-            motivation_home: pendingTurboBet.motivationHome || 1.0,
-            motivation_away: pendingTurboBet.motivationAway || 1.0,
-            is_derby: pendingTurboBet.isDerby || 0,
-            temperature: pendingTurboBet.temperature || 15,
-            wind_speed: pendingTurboBet.windSpeed || 5,
-            humidity: pendingTurboBet.humidity || 60,
-            precipitation: pendingTurboBet.precipitation || 0,
-            home_rest_days: 7,
-            away_rest_days: 7,
-            home_elo: 1500,
-            away_elo: 1500,
-            home_team_rank: 10,
-            away_team_rank: 10,
-            is_cup_match: 0,
-            home_possession: 50,
-            away_possession: 50,
-            home_shot_conversion: 12,
-            away_shot_conversion: 12,
-            home_pressing_intensity: 5,
-            away_pressing_intensity: 5,
-            league_avg: getLeague().avgGoals || 2.5,
-            h2h_avg: state.h2hData ? state.h2hData.reduce((s, m) => s + m.total, 0) / state.h2hData.length : 2.5,
-            weather_factor: 1.0,
-            home_xGA: 1.0,
-            away_xGA: 1.0
-        };
-        state.bets.push(bet);
-        localStorage.setItem('quantum_bets', JSON.stringify(state.bets));
-        renderHistory();
-        renderStats();
-        renderDashboard();
-        renderChartCanvas();
-        renderMonthlyChart();
-        renderInsights();
-        renderUltimateDashboard();
-        updateAIStatus();
-        closeSaveModal();
-        showToast('✅ Ставка сохранена со всеми данными!', 'success');
+    if (!pendingTurboBet) return;
+    
+    // ===== ИСПРАВЛЕНИЕ: БЕРЁМ РЕАЛЬНЫЙ СЧЁТ =====
+    let homeScore = 0;
+    let awayScore = 0;
+    
+    // 1. Пробуем взять из pendingTurboBet
+    if (pendingTurboBet.home !== undefined && pendingTurboBet.away !== undefined) {
+        homeScore = pendingTurboBet.home;
+        awayScore = pendingTurboBet.away;
     }
+    
+    // 2. Пробуем взять из AI-прогноза
+    if (homeScore === 0 && awayScore === 0) {
+        const aiHome = parseInt(document.getElementById('aiHomeScore')?.textContent) || 0;
+        const aiAway = parseInt(document.getElementById('aiAwayScore')?.textContent) || 0;
+        if (aiHome > 0 || aiAway > 0) {
+            homeScore = aiHome;
+            awayScore = aiAway;
+        }
+    }
+    
+    // 3. Пробуем взять из полей ввода
+    if (homeScore === 0 && awayScore === 0) {
+        const inputHome = parseInt(document.getElementById('homeGoals')?.value) || 0;
+        const inputAway = parseInt(document.getElementById('awayGoals')?.value) || 0;
+        if (inputHome > 0 || inputAway > 0) {
+            homeScore = inputHome;
+            awayScore = inputAway;
+        }
+    }
+    
+    // 4. Если всё равно 0:0 — оставляем как есть (но это уже реальные данные)
+    
+    const bet = {
+        id: Date.now(),
+        date: new Date().toISOString(),
+        match: pendingTurboBet.match || 'Матч',
+        mode: pendingTurboBet.mode || 'total',
+        value: pendingTurboBet.prediction || '—',
+        home: homeScore,
+        away: awayScore,
+        confidence: pendingTurboBet.confidence || 50,
+        outcome: 'pending',
+        resultText: '⏳ Ожидание',
+        weather: pendingTurboBet.weather || null,
+        league: pendingTurboBet.league || null,
+        home_xG: pendingTurboBet.homeXG || 1.2,
+        away_xG: pendingTurboBet.awayXG || 1.2,
+        home_form: pendingTurboBet.homeForm || 50,
+        away_form: pendingTurboBet.awayForm || 50,
+        motivation_home: pendingTurboBet.motivationHome || 1.0,
+        motivation_away: pendingTurboBet.motivationAway || 1.0,
+        is_derby: pendingTurboBet.isDerby || 0,
+        temperature: pendingTurboBet.temperature || 15,
+        wind_speed: pendingTurboBet.windSpeed || 5,
+        humidity: pendingTurboBet.humidity || 60,
+        precipitation: pendingTurboBet.precipitation || 0,
+        home_rest_days: 7,
+        away_rest_days: 7,
+        home_elo: 1500,
+        away_elo: 1500,
+        home_team_rank: 10,
+        away_team_rank: 10,
+        is_cup_match: 0,
+        home_possession: 50,
+        away_possession: 50,
+        home_shot_conversion: 12,
+        away_shot_conversion: 12,
+        home_pressing_intensity: 5,
+        away_pressing_intensity: 5,
+        league_avg: getLeague().avgGoals || 2.5,
+        h2h_avg: state.h2hData ? state.h2hData.reduce((s, m) => s + m.total, 0) / state.h2hData.length : 2.5,
+        weather_factor: 1.0,
+        home_xGA: 1.0,
+        away_xGA: 1.0
+    };
+    
+    state.bets.push(bet);
+    localStorage.setItem('quantum_bets', JSON.stringify(state.bets));
+    renderHistory();
+    renderStats();
+    renderDashboard();
+    renderChartCanvas();
+    renderMonthlyChart();
+    renderInsights();
+    renderUltimateDashboard();
+    updateAIStatus();
+    closeSaveModal();
+    showToast('✅ Ставка сохранена со всеми данными!', 'success');
+}
 
     // ================================================================
     // ПОГОДА ДЛЯ СТАДИОНА
