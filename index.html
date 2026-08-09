@@ -4713,14 +4713,14 @@ body.light .btn-cache:hover {
     let pendingTurboBet = null;
 
     function showSaveModal(data) {
-        pendingTurboBet = data;
-        document.getElementById('modalPrediction').textContent = data.prediction || '—';
-        document.getElementById('modalConfidence').textContent = data.confidence + '%' || '—';
-        document.getElementById('modalValue').textContent = data.value || '—';
-        document.getElementById('modalDetective').textContent = data.detective || '—';
-        document.getElementById('modalWeather').textContent = data.weather || '—';
-        document.getElementById('saveModal').classList.add('active');
-    }
+    pendingTurboBet = data;
+    document.getElementById('modalPrediction').textContent = data.prediction || '—';
+    document.getElementById('modalConfidence').textContent = data.confidence + '%' || '—';
+    document.getElementById('modalValue').textContent = data.value || '—';
+    document.getElementById('modalDetective').textContent = data.detective || '—';
+    document.getElementById('modalWeather').textContent = data.weather || '—';
+    document.getElementById('saveModal').classList.add('active');
+}
 
     function closeSaveModal() {
         document.getElementById('saveModal').classList.remove('active');
