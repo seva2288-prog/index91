@@ -2614,7 +2614,34 @@
         body.light .disclaimer {
             border-top-color: #d0d5dd;
         }
-        
+   /* ================================================================ */
+/* БЛОК 3: КНОПКА ОЧИСТКИ КЭША (НОВЫЕ СТИЛИ)                     */
+/* ================================================================ */
+.btn-cache {
+    padding: 6px 16px;
+    border-radius: 8px;
+    border: 1px solid #f7931a;
+    background: transparent;
+    color: #f7931a;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s;
+}
+.btn-cache:hover {
+    background: #f7931a;
+    color: #000;
+}
+.btn-cache:active {
+    transform: scale(0.95);
+}
+body.light .btn-cache {
+    border-color: #f7931a;
+    color: #f7931a;
+}
+body.light .btn-cache:hover {
+    background: #f7931a;
+    color: #000;
+}     
         /* ================================================================ */
         /* БЛОК 3+6: ИСПРАВЛЕНИЕ ДЛЯ VALUE-СТАВОК + СКРОЛЛ               */
         /* ================================================================ */
@@ -3128,7 +3155,13 @@
                 </div>
                 <div class="settings-item" style="border-bottom:none;padding-bottom:4px;">
                     <span class="label">🗑️ Сброс</span>
-                    <button onclick="resetAll()" style="padding:6px 16px;border-radius:8px;border:1px solid #e74c3c;background:transparent;color:#e74c3c;cursor:pointer;font-size:12px;">Сбросить всё</button>
+                    <button onclick="resetAll()" style="padding:6px 16px;border-radius:8px;border:1px solid #e74c3c;background:transparent;color:#e74c3c;cursor:pointer;font-size:12px;<!-- ===== НОВАЯ КНОПКА: ОЧИСТИТЬ КЭШ ===== -->
+<div class="settings-item" style="border-bottom:1px solid #2a3140;padding-bottom:8px;margin-bottom:4px;">
+    <span class="label">🗑️ Очистить кэш</span>
+    <button onclick="clearCache()" style="padding:6px 16px;border-radius:8px;border:1px solid #f7931a;background:transparent;color:#f7931a;cursor:pointer;font-size:12px;">
+        🧹 Очистить
+    </button>
+</div>">Сбросить всё</button>
                 </div>
                 <div style="text-align:center;font-size:10px;color:#555;margin-top:8px;border-top:1px solid #2a3140;padding-top:8px;">
                     ⚛️ Квантум · Анализ на основе H2H, Poisson и погоды
@@ -6516,7 +6549,120 @@
         document.getElementById('valueContainer').style.display = 'none';
         showToast('🗑️ Очищено', 'info');
     }
+// ================================================================
+// ОЧИСТКА КЭША (НОВАЯ КНОПКА)
+// ================================================================
 
+function clearCache() {
+    if (!confirm('🧹 Очистить весь кэш?\n\nБудут удалены:\n• H2H история (все матчи)\n• Прогнозы на сегодня\n• Данные погоды\n• Кэш API\n\nСТАВКИ и НАСТРОЙКИ НЕ БУДУТ УДАЛЕНЫ!')) {
+        return;
+    }
+
+    let count = 0;
+    
+    // 1. Удаляем H2H кэш
+    Object.keys(localStorage)
+        .filter(key => key.startsWith('h2h_'))
+        .forEach(key => {
+            localStorage.removeItem(key);
+            count++;
+        });
+    
+    // 2. Удаляем прогнозы
+    Object.keys(localStorage)
+        .filter(key => key.startsWith('predictions_'))
+        .forEach(key => {
+            localStorage.removeItem(key);
+            count++;
+        });
+    
+    // 3. Удаляем погоду
+    Object.keys(localStorage)
+        .filter(key => key.startsWith('weather_'))
+        .forEach(key => {
+            localStorage.removeItem(key);
+            count++;
+        });
+    
+    // 4. Удаляем кэш API
+    Object.keys(localStorage)
+        .filter(key => key.startsWith('api_cache_'))
+        .forEach(key => {
+            localStorage.removeItem(key);
+            count++;
+        });
+    
+    // 5. Удаляем данные лиг
+    Object.keys(localStorage)
+        .filter(key => key.startsWith('league_stats_'))
+        .forEach(key => {
+            localStorage.removeItem(key);
+            count++;
+        });
+
+    // 6. Очищаем состояние в памяти
+    state.h2hData = null;
+    state.h2hTimestamp = null;
+    state.weatherData = null;
+    state.weatherTimestamp = null;
+    state.headerWeather = null;
+    state.headerWeatherTimestamp = null;
+    state.currentLeagueData = null;
+    state.predictions = null;
+    state.lastUpdate = null;
+    state.shapData = null;
+    API_CACHE = {};
+
+    // 7. Обновляем интерфейс
+    document.getElementById('h2hResults').innerHTML = '';
+    document.getElementById('h2hStatus').textContent = '🧹 Кэш очищен! Введите команды и нажмите "Загрузить H2H"';
+    document.getElementById('h2hDataStatus').textContent = '';
+    document.getElementById('searchBadgeNav').style.display = 'none';
+    document.getElementById('valueBetsList').innerHTML = '<div class="text-muted text-center" style="padding:10px 0;">Пока нет value-ставок</div>';
+    document.getElementById('shapVisualization').innerHTML = '<div class="text-muted text-center" style="padding:10px 0;">Нет данных для анализа</div>';
+    document.getElementById('leagueInfoCard').style.display = 'none';
+    document.getElementById('weatherCardContent').innerHTML = '<div class="weather-loading-text">⏳ Загрузка погоды...</div>';
+    
+    // Скрываем AI-результаты
+    document.getElementById('aiResult').style.display = 'none';
+    document.getElementById('explanationCard').style.display = 'none';
+    document.getElementById('valueContainer').style.display = 'none';
+    document.getElementById('detectiveCard').style.display = 'none';
+    document.getElementById('smartInsightsCard').style.display = 'none';
+    document.getElementById('deepAIContainer').innerHTML = `
+        <div class="ai-deep-card">
+            <div class="card-title">
+                🧠 ГЛУБОКИЙ AI-АНАЛИЗ
+                <span class="status">⏳ Введите команды</span>
+            </div>
+            <div style="text-align:center;color:#888;padding:12px 0;font-size:12px;">
+                Введите команды в разделе "Поиск" для анализа
+            </div>
+        </div>
+    `;
+    
+    // Очищаем поля
+    document.getElementById('homeTeamH2H').value = '';
+    document.getElementById('awayTeamH2H').value = '';
+    document.getElementById('homeGoals').value = '0';
+    document.getElementById('awayGoals').value = '0';
+    document.getElementById('sumDisplay').textContent = '0';
+    document.getElementById('resValue1').textContent = '--';
+    document.getElementById('resValue2').textContent = '--';
+    document.getElementById('resValue3').textContent = '--';
+    document.getElementById('resAdvice').textContent = '⏳ Введите данные для расчёта';
+    document.getElementById('resAdvice').className = 'advice info';
+    document.getElementById('confidenceLabel').textContent = '0%';
+    document.getElementById('confidenceFill').style.width = '0%';
+
+    showToast(`✅ Очищено ${count} кэш-записей!`, 'success');
+    
+    // Обновляем прогнозы заново
+    setTimeout(() => {
+        refreshPredictions();
+        loadHeaderWeather();
+    }, 300);
+}
     function exportData() {
         const data = {
             bets: state.bets,
