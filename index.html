@@ -5109,29 +5109,54 @@ body.light .btn-cache:hover {
         if (progressContainer) progressContainer.classList.remove('active');
         if (btn) { btn.disabled = false; btn.innerHTML = '🔥 Турбо-анализ'; }
 
-        const modalData = {
-            match: results.match,
-            prediction: results.prediction,
-            confidence: results.confidence,
-            value: results.value,
-            detective: results.detective,
-            weather: state.weatherData ? `${state.weatherData.temp}°C, ${state.weatherData.description}` : 'Нет данных',
-            home: homeGoals,
-            away: awayGoals,
-            mode: state.currentMode,
-            homeXG: results.homeXG,
-            awayXG: results.awayXG,
-            homeForm: results.homeForm,
-            awayForm: results.awayForm,
-            motivationHome: detectiveResult.motivation?.factor || 1.0,
-            motivationAway: detectiveResult.motivation?.factor || 1.0,
-            isDerby: detectiveResult.derby ? 1 : 0,
-            temperature: state.weatherData?.temp || 15,
-            windSpeed: state.weatherData?.wind_speed || 5,
-            humidity: state.weatherData?.humidity || 60,
-            precipitation: state.weatherData?.weather?.toLowerCase().includes('rain') ? 1 : 0,
-            league: match.league || null
-        };
+        // ===== ИСПРАВЛЕНИЕ: ПЕРЕДАЁМ РЕАЛЬНЫЙ СЧЁТ =====
+// Пробуем взять счет из AI-прогноза
+let realHome = 0;
+let realAway = 0;
+
+const aiHomeScore = parseInt(document.getElementById('aiHomeScore')?.textContent) || 0;
+const aiAwayScore = parseInt(document.getElementById('aiAwayScore')?.textContent) || 0;
+
+if (aiHomeScore > 0 || aiAwayScore > 0) {
+    realHome = aiHomeScore;
+    realAway = aiAwayScore;
+} else {
+    // Если AI не дал счет, берем из полей ввода
+    const inputHome = parseInt(document.getElementById('homeGoals')?.value) || 0;
+    const inputAway = parseInt(document.getElementById('awayGoals')?.value) || 0;
+    realHome = inputHome;
+    realAway = inputAway;
+}
+
+// Если все равно 0, берем homeGoals/awayGoals из матча (если есть)
+if (realHome === 0 && realAway === 0) {
+    realHome = match.homeScore !== null && match.homeScore !== undefined ? match.homeScore : 0;
+    realAway = match.awayScore !== null && match.awayScore !== undefined ? match.awayScore : 0;
+}
+
+const modalData = {
+    match: results.match,
+    prediction: results.prediction,
+    confidence: results.confidence,
+    value: results.value,
+    detective: results.detective,
+    weather: state.weatherData ? `${state.weatherData.temp}°C, ${state.weatherData.description}` : 'Нет данных',
+    home: realHome,
+    away: realAway,
+    mode: state.currentMode,
+    homeXG: results.homeXG,
+    awayXG: results.awayXG,
+    homeForm: results.homeForm,
+    awayForm: results.awayForm,
+    motivationHome: detectiveResult.motivation?.factor || 1.0,
+    motivationAway: detectiveResult.motivation?.factor || 1.0,
+    isDerby: detectiveResult.derby ? 1 : 0,
+    temperature: state.weatherData?.temp || 15,
+    windSpeed: state.weatherData?.wind_speed || 5,
+    humidity: state.weatherData?.humidity || 60,
+    precipitation: state.weatherData?.weather?.toLowerCase().includes('rain') ? 1 : 0,
+    league: match.league || null
+};
 
         showSaveModal(modalData);
         state.isTurboRunning = false;
