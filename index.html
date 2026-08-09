@@ -3926,175 +3926,206 @@ body.light .btn-cache:hover {
     // ================================================================
 
     async function loadH2H() {
-        const homeTeamInput = $('homeTeamH2H');
-        const awayTeamInput = $('awayTeamH2H');
-        if (!homeTeamInput || !awayTeamInput) return;
-        const homeTeam = homeTeamInput.value?.trim() || '';
-        const awayTeam = awayTeamInput.value?.trim() || '';
-        if (!homeTeam || !awayTeam) { showToast('⚠️ Введите обе команды!', 'error'); return; }
+    const homeTeamInput = document.getElementById('homeTeamH2H');
+    const awayTeamInput = document.getElementById('awayTeamH2H');
+    
+    if (!homeTeamInput || !awayTeamInput) return;
+    
+    const homeTeam = homeTeamInput.value?.trim() || '';
+    const awayTeam = awayTeamInput.value?.trim() || '';
+    
+    if (!homeTeam || !awayTeam) {
+        showToast('⚠️ Введите обе команды!', 'error');
+        return;
+    }
 
-        const cacheKey = `h2h_${homeTeam}_${awayTeam}`;
-        const cached = localStorage.getItem(cacheKey);
-        if (cached) {
-            try {
-                const data = JSON.parse(cached);
-                if (Date.now() - data.timestamp < CACHE_CONFIG.H2H_TTL) {
+    // Проверяем кэш
+    const cacheKey = `h2h_${homeTeam}_${awayTeam}`;
+    const cached = localStorage.getItem(cacheKey);
+    
+    if (cached) {
+        try {
+            const data = JSON.parse(cached);
+            if (Date.now() - data.timestamp < CACHE_CONFIG.H2H_TTL) {
+                // Проверяем, есть ли реальные данные в кэше
+                const hasRealData = data.matches.some(m => m.homeScore > 0 || m.awayScore > 0);
+                if (hasRealData) {
                     state.h2hData = data.matches;
                     state.h2hTimestamp = data.timestamp;
                     renderH2HData(data.matches);
                     showToast(`✅ Из кэша (${data.matches.length} матчей)`, 'success');
                     return;
+                } else {
+                    // В кэше только 0:0 — игнорируем
+                    localStorage.removeItem(cacheKey);
                 }
-            } catch (e) {}
+            }
+        } catch (e) {
+            localStorage.removeItem(cacheKey);
+        }
+    }
+
+    if (state.isLoading) return;
+    state.isLoading = true;
+    
+    const btn = document.getElementById('loadH2HBtn');
+    const btnText = document.getElementById('loadBtnText');
+    const spinner = document.getElementById('loadSpinner');
+    const status = document.getElementById('h2hStatus');
+    const results = document.getElementById('h2hResults');
+    const dataStatus = document.getElementById('h2hDataStatus');
+    
+    if (btn) btn.disabled = true;
+    if (btnText) btnText.textContent = '⏳ Загрузка...';
+    if (spinner) spinner.style.display = 'inline-block';
+    if (status) status.innerHTML = '⏳ Поиск команд...';
+    if (results) results.innerHTML = '';
+    if (dataStatus) dataStatus.textContent = '';
+
+    try {
+        const apiKey = localStorage.getItem('quantum_api_key');
+        if (!apiKey || apiKey === '') {
+            throw new Error('Введите API ключ в настройках');
         }
 
-        if (state.isLoading) return;
-        state.isLoading = true;
-        const btn = $('loadH2HBtn');
-        const btnText = $('loadBtnText');
-        const spinner = $('loadSpinner');
-        const status = $('h2hStatus');
-        const results = $('h2hResults');
-        const dataStatus = $('h2hDataStatus');
-        if (btn) btn.disabled = true;
-        if (btnText) btnText.textContent = '⏳ Загрузка...';
-        if (spinner) spinner.style.display = 'inline-block';
-        if (status) status.innerHTML = '⏳ Поиск команд...';
-        if (results) results.innerHTML = '';
-        if (dataStatus) dataStatus.textContent = '';
+        // Ищем ID команды хозяев
+        const data1 = await fetchWithCache(
+            `teams?search=${encodeURIComponent(homeTeam)}`,
+            { headers: { 'x-apisports-key': apiKey } },
+            CACHE_CONFIG.API_TTL
+        );
+        
+        if (!data1 || !data1.response || data1.response.length === 0) {
+            if (status) status.innerHTML = `❌ Команда "${sanitizeHTML(homeTeam)}" не найдена`;
+            state.isLoading = false;
+            resetButtons(btn, btnText, spinner);
+            return;
+        }
+        const homeId = data1.response[0].team.id;
 
-        try {
-            const apiKey = localStorage.getItem('quantum_api_key');
-            if (!apiKey || apiKey === '') {
-                throw new Error('Введите API ключ в настройках');
+        // Ищем ID команды гостей
+        const data2 = await fetchWithCache(
+            `teams?search=${encodeURIComponent(awayTeam)}`,
+            { headers: { 'x-apisports-key': apiKey } },
+            CACHE_CONFIG.API_TTL
+        );
+        
+        if (!data2 || !data2.response || data2.response.length === 0) {
+            if (status) status.innerHTML = `❌ Команда "${sanitizeHTML(awayTeam)}" не найдена`;
+            state.isLoading = false;
+            resetButtons(btn, btnText, spinner);
+            return;
+        }
+        const awayId = data2.response[0].team.id;
+
+        if (status) status.innerHTML = '⏳ Загрузка истории матчей...';
+        
+        // ===== ИСПРАВЛЕНИЕ: Правильный запрос =====
+        // Запрашиваем матчи через fixtures с фильтром по командам
+        const allMatches = [];
+        const today = new Date();
+        
+        for (let i = 0; i < 4; i++) {
+            const year = today.getFullYear() - i;
+            
+            // Запрос матчей для хозяев
+            const homeMatches = await fetchWithCache(
+                `fixtures?team=${homeId}&season=${year}`,
+                { headers: { 'x-apisports-key': apiKey } },
+                CACHE_CONFIG.API_TTL
+            );
+            
+            if (homeMatches && homeMatches.response) {
+                // Фильтруем матчи с гостями
+                const filtered = homeMatches.response.filter(m => 
+                    m.teams.away.id === awayId || m.teams.home.id === awayId
+                );
+                allMatches.push(...filtered);
             }
-
-            const data1 = await fetchWithCache(`teams?search=${encodeURIComponent(homeTeam)}`, {
-                headers: { 'x-apisports-key': apiKey }
-            }, CACHE_CONFIG.API_TTL);
-            if (!data1 || !data1.response || data1.response.length === 0) {
-                if (status) status.innerHTML = `❌ Команда "${sanitizeHTML(homeTeam)}" не найдена`;
-                state.isLoading = false;
-                resetButtons(btn, btnText, spinner);
-                return;
-            }
-            const homeId = data1.response[0].team.id;
-
-            const data2 = await fetchWithCache(`teams?search=${encodeURIComponent(awayTeam)}`, {
-                headers: { 'x-apisports-key': apiKey }
-            }, CACHE_CONFIG.API_TTL);
-            if (!data2 || !data2.response || data2.response.length === 0) {
-                if (status) status.innerHTML = `❌ Команда "${sanitizeHTML(awayTeam)}" не найдена`;
-                state.isLoading = false;
-                resetButtons(btn, btnText, spinner);
-                return;
-            }
-            const awayId = data2.response[0].team.id;
-
-            if (status) status.innerHTML = '⏳ Загрузка истории матчей...';
-            const allMatches = [];
-            for (let i = 0; i < 3; i++) {
-                const year = CURRENT_SEASON - i;
-                const h2hData = await fetchWithCache(
-                    `fixtures/headtohead?h2h=${homeId}-${awayId}&season=${year}`,
+            
+            // Запрос матчей для гостей (если не нашли через хозяев)
+            if (allMatches.length === 0) {
+                const awayMatches = await fetchWithCache(
+                    `fixtures?team=${awayId}&season=${year}`,
                     { headers: { 'x-apisports-key': apiKey } },
                     CACHE_CONFIG.API_TTL
                 );
-                if (h2hData && h2hData.response) {
-                    allMatches.push(...h2hData.response);
+                if (awayMatches && awayMatches.response) {
+                    const filtered = awayMatches.response.filter(m => 
+                        m.teams.home.id === homeId || m.teams.away.id === homeId
+                    );
+                    allMatches.push(...filtered);
                 }
-                await delay(200);
             }
+            
+            await delay(200);
+        }
 
-            if (allMatches.length === 0) {
-                if (status) status.innerHTML = `❌ Нет встреч между командами`;
-                state.isLoading = false;
-                resetButtons(btn, btnText, spinner);
-                return;
+        // Убираем дубликаты
+        const uniqueMatches = [];
+        const seen = new Set();
+        for (const m of allMatches) {
+            const key = `${m.fixture.id}`;
+            if (!seen.has(key)) {
+                seen.add(key);
+                uniqueMatches.push(m);
             }
+        }
 
-            const matches = allMatches.map(m => ({
+        if (uniqueMatches.length === 0) {
+            if (status) status.innerHTML = `❌ Нет встреч между командами`;
+            state.isLoading = false;
+            resetButtons(btn, btnText, spinner);
+            return;
+        }
+
+        // ===== ИСПРАВЛЕНИЕ: Берем реальные голы =====
+        const matches = uniqueMatches
+            .filter(m => {
+                // Проверяем, есть ли голы в ответе
+                const hasGoals = m.goals && (m.goals.home !== null || m.goals.away !== null);
+                return hasGoals;
+            })
+            .slice(0, 20) // Берем последние 20 матчей
+            .map(m => ({
                 home: m.teams.home.name,
                 away: m.teams.away.name,
-                homeScore: m.goals.home || 0,
-                awayScore: m.goals.away || 0,
-                oz: (m.goals.home || 0) > 0 && (m.goals.away || 0) > 0,
-                total: (m.goals.home || 0) + (m.goals.away || 0),
+                homeScore: m.goals?.home || 0,
+                awayScore: m.goals?.away || 0,
+                oz: (m.goals?.home || 0) > 0 && (m.goals?.away || 0) > 0,
+                total: (m.goals?.home || 0) + (m.goals?.away || 0),
                 date: m.fixture.date,
                 league: m.league || null
             }));
 
-            state.h2hData = matches;
-            state.h2hTimestamp = Date.now();
-            localStorage.setItem(cacheKey, JSON.stringify({
-                matches: matches,
-                timestamp: Date.now()
-            }));
-            renderH2HData(matches);
-            showToast(`✅ Загружено ${matches.length} матчей!`, 'success');
-
-        } catch (error) {
-            handleError(error, '⚠️ Ошибка загрузки');
-            if (status) status.innerHTML = `❌ ${error.message}`;
-        } finally {
+        if (matches.length === 0) {
+            if (status) status.innerHTML = `❌ Нет данных с голами для этих команд`;
             state.isLoading = false;
             resetButtons(btn, btnText, spinner);
+            return;
         }
+
+        state.h2hData = matches;
+        state.h2hTimestamp = Date.now();
+        
+        // Сохраняем в кэш только если есть реальные голы
+        localStorage.setItem(cacheKey, JSON.stringify({
+            matches: matches,
+            timestamp: Date.now()
+        }));
+        
+        renderH2HData(matches);
+        showToast(`✅ Загружено ${matches.length} матчей!`, 'success');
+
+    } catch (error) {
+        console.error('❌ Ошибка:', error);
+        if (status) status.innerHTML = `❌ ${error.message}`;
+        showToast(`⚠️ ${error.message}`, 'error');
+    } finally {
+        state.isLoading = false;
+        resetButtons(btn, btnText, spinner);
     }
-
-    function renderH2HData(matches) {
-        const status = $('h2hStatus');
-        const results = $('h2hResults');
-        const dataStatus = $('h2hDataStatus');
-        const total = matches.length;
-        const ozCount = matches.filter(m => m.oz).length;
-        const avgTotal = (matches.reduce((s, m) => s + m.total, 0) / total).toFixed(1);
-        const homeWins = matches.filter(m => m.homeScore > m.awayScore).length;
-        const awayWins = matches.filter(m => m.awayScore > m.homeScore).length;
-        const draws = total - homeWins - awayWins;
-
-        let leagueInfo = {
-            name: 'Лига',
-            country: matches[0]?.league?.country || '--',
-            season: CURRENT_SEASON,
-            avgGoals: parseFloat(avgTotal),
-            oz: Math.round((ozCount / total) * 100),
-            matches: total,
-            timestamp: state.h2hTimestamp || Date.now()
-        };
-        state.currentLeagueData = leagueInfo;
-        updateLeagueInfoDisplay(leagueInfo);
-
-        if (dataStatus) {
-            const statusData = getDataStatus(state.h2hTimestamp, CACHE_CONFIG.H2H_TTL, total);
-            dataStatus.textContent = statusData.text;
-            dataStatus.style.color = statusData.color;
-        }
-
-        if (status) status.innerHTML = `✅ Найдено ${total} встреч!`;
-        if (results) {
-            results.innerHTML = `
-                <div class="h2h-summary">
-                    <span class="item">📊 Всего: <span class="num">${total}</span></span>
-                    <span class="item">⚽ ОЗ: <span class="num">${Math.round((ozCount/total)*100)}%</span></span>
-                    <span class="item">📈 Тотал: <span class="num">${avgTotal}</span></span>
-                    <span class="item">🏠 ${homeWins} | ✈️ ${awayWins} | 🤝 ${draws}</span>
-                    <span class="item">🔥 Форма хозяев: ${Math.round((homeWins/total)*100)}%</span>
-                </div>
-                ${matches.slice(0, 15).map(m => `
-                    <div class="h2h-item">
-                        ${sanitizeHTML(m.home)} ${m.homeScore}:${m.awayScore} ${sanitizeHTML(m.away)}
-                        ${m.oz ? '✅' : '❌'}
-                        <span style="color:#555;font-size:9px;">${new Date(m.date).toLocaleDateString()}</span>
-                    </div>
-                `).join('')}
-                ${total > 15 ? `<div style="color:#888;font-size:10px;text-align:center;margin-top:4px;">и еще ${total - 15} матчей...</div>` : ''}
-            `;
-        }
-        const badge = $('searchBadgeNav');
-        if (badge) { badge.style.display = 'block'; badge.textContent = total; }
-        calculate();
-    }
+}
 
     function resetButtons(btn, btnText, spinner) {
         if (btn) btn.disabled = false;
