@@ -3961,7 +3961,7 @@
             if (status) status.innerHTML = '⏳ Загрузка истории матчей...';  
             const allMatches = [];  
             for (let i = 0; i < 3; i++) {  
-                const year = CURRENT_SEASON - i;  
+                const year = CURRENT_SEASON - i; 2025, 2024, 2023 
                 const h2hData = await fetchWithCache(  
                     `fixtures/headtohead?h2h=${homeId}-${awayId}&season=${year}`,  
                     { headers: { 'x-apisports-key': apiKey } },  
