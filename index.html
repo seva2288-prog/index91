@@ -2747,175 +2747,12 @@
     // СЕЗОН: 2025-2026  
     // ================================================================  
   
-    // ===== КОНФИГУРАЦИЯ КЭШИРОВАНИЯ =====  
-    const CACHE_CONFIG = {  
-        H2H_TTL: 7 * 24 * 60 * 60 * 1000,        // 7 дней  
-        LEAGUES_TTL: 24 * 60 * 60 * 1000,         // 24 часа  
-        PREDICTIONS_TTL: 2 * 60 * 60 * 1000,      // 2 часа  
-        WEATHER_TTL: 2 * 60 * 60 * 1000,           // 2 часа  
-        API_TTL: 24 * 60 * 60 * 1000,              // 24 часа для API  
-        UPDATE_INTERVAL: 30 * 60 * 1000            // 30 минут вместо 5  
-    };  
-  
-    // ===== ВСЕ 82 ЛИГИ И ТУРНИРА =====  
-const TOP_LEAGUES = [  
-    // === ЕВРОПЕЙСКИЕ ЛИГИ (54) ===  
-    // Великобритания и Ирландия  
-    39,   // АПЛ (Англия)  
-    40,   // Чемпионшип (Англия, Д2)  
-    41,   // Лига 1 (Англия, Д3)  
-    179,  // Шотландский Премьершип  
-    184,  // Ирландская Премьер-лига  
-    195,  // Уэльская Премьер-лига  
-      
-    // Испания  
-    140,  // Ла Лига  
-    141,  // Сегунда (Испания, Д2)  
-      
-    // Германия  
-    78,   // Бундеслига  
-    79,   // Бундеслига 2 (Германия, Д2)  
-    80,   // Бундеслига 3 (Германия, Д3)  
-      
-    // Италия  
-    135,  // Серия А  
-    136,  // Серия В (Италия, Д2)  
-    137,  // Серия С (Италия, Д3)  
-      
-    // Франция  
-    61,   // Лига 1  
-    62,   // Лига 2 (Франция, Д2)  
-      
-    // Нидерланды  
-    88,   // Эредивизи  
-    89,   // Эрсте Дивизи (Нидерланды, Д2)  
-      
-    // Португалия  
-    94,   // Примейра-лига  
-    95,   // Сегунда-лига (Португалия, Д2)  
-      
-    // Бельгия  
-    144,  // Про-лига (Бельгия)  
-    145,  // Челленджер-лига (Бельгия, Д2)  
-      
-    // Россия  
-    203,  // РПЛ  
-    204,  // Первая лига (Россия, Д2)  
-    205,  // Вторая лига (Россия, Д3)  
-      
-    // Украина  
-    2,    // Украинская Премьер-лига  
-    3,    // Первая лига (Украина, Д2)  
-      
-    // Турция  
-    197,  // Суперлига (Турция)  
-    198,  // Первая лига (Турция, Д2)  
-      
-    // Греция  
-    345,  // Суперлига (Греция)  
-    346,  // Суперлига 2 (Греция, Д2)  
-      
-    // Швейцария  
-    207,  // Суперлига (Швейцария)  
-    208,  // Челлендж-лига (Швейцария, Д2)  
-      
-    // Австрия  
-    209,  // Бундеслига (Австрия)  
-    210,  // Вторая лига (Австрия, Д2)  
-      
-    // Чехия  
-    211,  // Первая лига (Чехия)  
-    212,  // Вторая лига (Чехия, Д2)  
-      
-    // Польша  
-    213,  // Экстракласа (Польша)  
-    214,  // Первая лига (Польша, Д2)  
-      
-    // Дания  
-    215,  // Суперлига (Дания)  
-    216,  // Первая лига (Дания, Д2)  
-      
-    // Норвегия  
-    217,  // Элитсериен (Норвегия)  
-    218,  // Первая лига (Норвегия, Д2)  
-      
-    // Швеция  
-    219,  // Аллсвенскан (Швеция)  
-    220,  // Суперэттан (Швеция, Д2)  
-      
-    // Финляндия  
-    221,  // Вейккауслига (Финляндия)  
-      
-    // Хорватия  
-    222,  // ХНЛ (Хорватия)  
-      
-    // Сербия  
-    223,  // Суперлига (Сербия)  
-      
-    // Словакия  
-    224,  // Суперлига (Словакия)  
-      
-    // Словения  
-    225,  // Первая лига (Словения)  
-      
-    // Болгария  
-    226,  // Первая лига (Болгария)  
-      
-    // Румыния  
-    227,  // Лига 1 (Румыния)  
-      
-    // Венгрия  
-    228,  // НБ I (Венгрия)  
-      
-    // Израиль  
-    229,  // Лига ХаАль (Израиль)  
-      
-    // === ЕВРОПЕЙСКИЕ КУБКИ (3) ===  
-    230,  // Лига Чемпионов УЕФА  
-    231,  // Лига Европы УЕФА  
-    232,  // Лига Конференций УЕФА  
-      
-    // === МАТЧИ СБОРНЫХ (6) ===  
-    233,  // Матчи сборных (товарищеские)  
-    234,  // Отборочные ЧМ-2026  
-    235,  // Отборочные ЧЕ-2028  
-    236,  // Лига Наций УЕФА  
-    237,  // Кубок Америки  
-    238,  // Кубок Африки (AFCON)  
-      
-    // === НАЦИОНАЛЬНЫЕ КУБКИ (4) ===  
-    239,  // Кубок Англии (FA Cup)  
-    240,  // Кубок Испании (Copa del Rey)  
-    241,  // Кубок Германии (DFB-Pokal)  
-    242,  // Кубок Италии (Coppa Italia)  
-      
-    // === АМЕРИКАНСКИЕ ЛИГИ (6) ===  
-    243,  // MLS (США)  
-    244,  // Лига MX (Мексика)  
-    245,  // Бразилия (Serie A)  
-    246,  // Аргентина (Liga Profesional)  
-    247,  // Чили (Primera División)  
-    248,  // Колумбия (Primera A)  
-      
-    // === АЗИАТСКИЕ ЛИГИ (3) ===  
-    249,  // J1 Лига (Япония)  
-    250,  // Китай (Super League)  
-    251,  // A-Лига (Австралия)  
-      
-    // === ДРУГИЕ ЛИГИ (6) ===  
-    252,  // Чемпионат Украины  
-    253,  // Чемпионат Шотландии  
-    254,  // Чемпионат Ирландии  
-    255,  // Чемпионат Уэльса  
-    256,  // Парагвай (Primera División)  
-    257   // Первая лига (Словакия)  
-];  
-  
+    // ===== КОНФИГУРАЦИЯ =====  
+    // Кэш отключен, поэтому TTL не используется.  
+    const CURRENT_SEASON = 2026;  
     // ===== БАЗОВЫЕ УТИЛИТЫ =====  
     const PROXY_BASE = 'https://oz-proxy-clean.onrender.com/api/';  
-    const CURRENT_SEASON = 2026;  
-    const API_CACHE = {};  
-    const MAX_CACHE_SIZE = 100;  
+    const API_CACHE = {}; // Кэш в памяти оставлен для простоты, но он не используется в функциях запросов.  
   
     function $(id) { return document.getElementById(id); }  
     function safeNum(v) { const n = parseFloat(v); return isNaN(n) ? 0 : n; }  
@@ -3004,50 +2841,15 @@ const TOP_LEAGUES = [
         return { text: statusText, color, emoji };  
     }  
   
-    // ===== ОПТИМИЗИРОВАННЫЙ API-ЗАПРОС С АВТОМАТИЧЕСКИМ КЭШЕМ =====  
-    async function fetchWithCache(url, options = {}, ttl = CACHE_CONFIG.API_TTL) {  
-        const key = url + JSON.stringify(options);  
-            
-        // Проверяем кэш в памяти  
-        if (API_CACHE[key] && Date.now() - API_CACHE[key].time < ttl) {  
-            return API_CACHE[key].data;  
-        }  
-            
-        // Проверяем localStorage для долгого хранения  
-        const storageKey = `api_cache_${btoa(key).slice(0, 50)}`;  
-        const stored = localStorage.getItem(storageKey);  
-        if (stored) {  
-            try {  
-                const data = JSON.parse(stored);  
-                if (Date.now() - data.timestamp < ttl) {  
-                    API_CACHE[key] = { data: data.response, time: data.timestamp };  
-                    return data.response;  
-                }  
-            } catch (e) {}  
-        }  
-            
+    // ===== API-ЗАПРОС БЕЗ КЭША =====  
+    async function fetchWithCache(url, options = {}) {  
+        // Прямой запрос без проверки кэша  
         try {  
             const response = await fetch(url, options);  
             if (!response.ok) throw new Error(`HTTP ${response.status}`);  
             const data = await response.json();  
-                
-            // Сохраняем в память  
-            API_CACHE[key] = { data, time: Date.now() };  
-                
-            // Сохраняем в localStorage для долгого хранения  
-            try {  
-                localStorage.setItem(storageKey, JSON.stringify({  
-                    response: data,  
-                    timestamp: Date.now()  
-                }));  
-            } catch (e) {}  
-                
             return data;  
         } catch (error) {  
-            // Если запрос упал, пытаемся вернуть кэш даже если он устарел  
-            if (API_CACHE[key]) {  
-                return API_CACHE[key].data;  
-            }  
             throw error;  
         }  
     }  
@@ -3120,24 +2922,10 @@ const TOP_LEAGUES = [
     let LEAGUES = JSON.parse(localStorage.getItem('quantum_leagues') || '{}');  
     let ALL_LEAGUES_LOADED = false;  
   
-    // ===== ОПТИМИЗИРОВАННАЯ ЗАГРУЗКА ЛИГ =====  
+    // ===== ЗАГРУЗКА ЛИГ БЕЗ КЭША =====  
     async function loadAllLeagues() {  
         if (ALL_LEAGUES_LOADED && Object.keys(LEAGUES).length > 0) return;  
-            
-        // Проверяем кэш  
-        const cached = localStorage.getItem('quantum_leagues_cache');  
-        if (cached) {  
-            try {  
-                const data = JSON.parse(cached);  
-                if (Date.now() - data.timestamp < CACHE_CONFIG.LEAGUES_TTL) {  
-                    LEAGUES = data.leagues;  
-                    ALL_LEAGUES_LOADED = true;  
-                    renderLeagues();  
-                    return;  
-                }  
-            } catch (e) {}  
-        }  
-            
+        // Кэш отключен, всегда делаем запрос  
         const apiKey = localStorage.getItem('quantum_api_key');  
         if (!apiKey) {   
             showToast('⚠️ Введите API ключ в настройках', 'error');  
@@ -3148,7 +2936,7 @@ const TOP_LEAGUES = [
             showToast('📡 Загрузка лиг...', 'info');  
             const response = await fetchWithCache(`${PROXY_BASE}leagues`, {  
                 headers: { 'x-apisports-key': apiKey }  
-            }, CACHE_CONFIG.LEAGUES_TTL);  
+            });  
                 
             const leagues = {};  
             const leaguesToProcess = response.response.filter(l =>  
@@ -3161,25 +2949,10 @@ const TOP_LEAGUES = [
                 const id = league.league.id;  
                 const season = league.seasons[0].year;  
                     
-                // Проверяем кэш для каждой лиги  
-                const leagueCacheKey = `league_stats_${id}`;  
-                const cachedStats = localStorage.getItem(leagueCacheKey);  
-                    
-                if (cachedStats) {  
-                    try {  
-                        const stats = JSON.parse(cachedStats);  
-                        if (Date.now() - stats.timestamp < CACHE_CONFIG.LEAGUES_TTL) {  
-                            leagues[id] = stats.data;  
-                            continue;  
-                        }  
-                    } catch (e) {}  
-                }  
-                    
                 try {  
                     const statsRes = await fetchWithCache(  
                         `${PROXY_BASE}leagues/statistics?league=${id}&season=${season}`,  
-                        { headers: { 'x-apisports-key': apiKey } },  
-                        CACHE_CONFIG.LEAGUES_TTL  
+                        { headers: { 'x-apisports-key': apiKey } }  
                     );  
                         
                     if (statsRes.response) {  
@@ -3199,11 +2972,6 @@ const TOP_LEAGUES = [
                             country: league.country.name,  
                             season: season  
                         };  
-                            
-                        localStorage.setItem(leagueCacheKey, JSON.stringify({  
-                            data: leagues[id],  
-                            timestamp: Date.now()  
-                        }));  
                     }  
                     await delay(200);  
                 } catch (e) {  
@@ -3213,10 +2981,6 @@ const TOP_LEAGUES = [
                 
             LEAGUES = leagues;  
             localStorage.setItem('quantum_leagues', JSON.stringify(leagues));  
-            localStorage.setItem('quantum_leagues_cache', JSON.stringify({  
-                leagues: leagues,  
-                timestamp: Date.now()  
-            }));  
             ALL_LEAGUES_LOADED = true;  
             renderLeagues();  
             showToast(`✅ Загружено ${Object.keys(leagues).length} лиг!`, 'success');  
@@ -3298,7 +3062,7 @@ const TOP_LEAGUES = [
         const statusEl = document.getElementById('leagueDataStatus');  
         if (statusEl) {  
             if (leagueData.timestamp) {  
-                const status = getDataStatus(leagueData.timestamp, CACHE_CONFIG.LEAGUES_TTL, leagueData.matches);  
+                const status = getDataStatus(leagueData.timestamp, 3600000, leagueData.matches);  
                 statusEl.textContent = status.text;  
                 statusEl.style.color = status.color;  
             } else {  
@@ -3317,7 +3081,7 @@ const TOP_LEAGUES = [
         return { name: 'Лига', oz: 60, avgGoals: 2.6, country: 'Мир' };  
     }  
   
-    // ===== ОПТИМИЗИРОВАННАЯ ЗАГРУЗКА H2H =====  
+    // ===== ЗАГРУЗКА H2H БЕЗ КЭША =====  
     async function loadH2H() {  
         const homeTeamInput = $('homeTeamH2H');  
         const awayTeamInput = $('awayTeamH2H');  
@@ -3325,23 +3089,6 @@ const TOP_LEAGUES = [
         const homeTeam = homeTeamInput.value?.trim() || '';  
         const awayTeam = awayTeamInput.value?.trim() || '';  
         if (!homeTeam || !awayTeam) { showToast('⚠️ Введите обе команды!', 'error'); return; }  
-            
-        const cacheKey = `h2h_${homeTeam}_${awayTeam}`;  
-        const cached = localStorage.getItem(cacheKey);  
-            
-        // Проверяем кэш  
-        if (cached) {  
-            try {  
-                const data = JSON.parse(cached);  
-                if (Date.now() - data.timestamp < CACHE_CONFIG.H2H_TTL) {  
-                    state.h2hData = data.matches;  
-                    state.h2hTimestamp = data.timestamp;  
-                    renderH2HData(data.matches);  
-                    showToast(`✅ Из кэша (${data.matches.length} матчей)`, 'success');  
-                    return;  
-                }  
-            } catch (e) {}  
-        }  
             
         if (state.isLoading) return;  
         state.isLoading = true;  
@@ -3367,7 +3114,7 @@ const TOP_LEAGUES = [
             const url1 = `${PROXY_BASE}teams?search=${encodeURIComponent(homeTeam)}`;  
             const data1 = await fetchWithCache(url1, {  
                 headers: { 'x-apisports-key': apiKey }  
-            }, CACHE_CONFIG.API_TTL);  
+            });  
                 
             if (!data1.response || data1.response.length === 0) {  
                 if (status) status.innerHTML = `❌ Команда "${sanitizeHTML(homeTeam)}" не найдена`;  
@@ -3381,7 +3128,7 @@ const TOP_LEAGUES = [
             const url2 = `${PROXY_BASE}teams?search=${encodeURIComponent(awayTeam)}`;  
             const data2 = await fetchWithCache(url2, {  
                 headers: { 'x-apisports-key': apiKey }  
-            }, CACHE_CONFIG.API_TTL);  
+            });  
                 
             if (!data2.response || data2.response.length === 0) {  
                 if (status) status.innerHTML = `❌ Команда "${sanitizeHTML(awayTeam)}" не найдена`;  
@@ -3433,12 +3180,6 @@ const TOP_LEAGUES = [
             state.h2hData = matches;  
             state.h2hTimestamp = Date.now();  
                 
-            // Сохраняем в кэш  
-            localStorage.setItem(cacheKey, JSON.stringify({  
-                matches: matches,  
-                timestamp: Date.now()  
-            }));  
-                
             renderH2HData(matches);  
             showToast(`✅ Загружено ${matches.length} матчей!`, 'success');  
                 
@@ -3476,7 +3217,7 @@ const TOP_LEAGUES = [
             
         // Статус данных H2H  
         if (dataStatus) {  
-            const statusData = getDataStatus(state.h2hTimestamp, CACHE_CONFIG.H2H_TTL, total);  
+            const statusData = getDataStatus(state.h2hTimestamp, 3600000, total);  
             dataStatus.textContent = statusData.text;  
             dataStatus.style.color = statusData.color;  
         }  
@@ -3552,7 +3293,7 @@ const TOP_LEAGUES = [
                 state.liveTimer = setInterval(() => {  
                     refreshPredictions();  
                     checkNotifications();  
-                }, CACHE_CONFIG.UPDATE_INTERVAL);  
+                }, 1800000); // 30 минут  
             }  
         } else {  
             if (state.liveTimer) {  
@@ -3791,21 +3532,6 @@ const TOP_LEAGUES = [
         const descEl = document.getElementById('weatherDescHeader');  
         if (!iconEl) return;  
             
-        const weatherCacheKey = 'weather_moscow';  
-        const cached = localStorage.getItem(weatherCacheKey);  
-        if (cached) {  
-            try {  
-                const data = JSON.parse(cached);  
-                if (Date.now() - data.timestamp < CACHE_CONFIG.WEATHER_TTL) {  
-                    state.headerWeather = data.weather;  
-                    state.headerWeatherTimestamp = data.timestamp;  
-                    updateHeaderWeatherDisplay();  
-                    updateWeatherCard();  
-                    return;  
-                }  
-            } catch (e) {}  
-        }  
-            
         iconEl.textContent = '⏳';  
         tempEl.textContent = '--°C';  
         descEl.textContent = 'Загрузка...';  
@@ -3834,10 +3560,6 @@ const TOP_LEAGUES = [
                 country: data.sys.country  
             };  
             state.headerWeatherTimestamp = Date.now();  
-            localStorage.setItem(weatherCacheKey, JSON.stringify({  
-                weather: state.headerWeather,  
-                timestamp: Date.now()  
-            }));  
             updateHeaderWeatherDisplay();  
             updateWeatherCard();  
         } catch (e) {  
@@ -3903,7 +3625,7 @@ const TOP_LEAGUES = [
             
         // Статус погоды  
         if (state.headerWeatherTimestamp) {  
-            const status = getDataStatus(state.headerWeatherTimestamp, CACHE_CONFIG.WEATHER_TTL);  
+            const status = getDataStatus(state.headerWeatherTimestamp, 3600000);  
             updateWeatherCardStatus(status.text, status.color);  
         } else {  
             updateWeatherCardStatus('⏳ Данных нет', '#888');  
@@ -4804,7 +4526,7 @@ const TOP_LEAGUES = [
         try {  
             const response = await fetchWithCache(`${PROXY_BASE}teams?search=${encodeURIComponent(teamName)}`, {  
                 headers: { 'x-apisports-key': apiKey }  
-            }, CACHE_CONFIG.API_TTL);  
+            });  
             if (response.response && response.response[0]) {  
                 const venue = response.response[0].venue;  
                 if (venue && venue.lat && venue.lon) {  
@@ -4826,16 +4548,6 @@ const TOP_LEAGUES = [
     async function getWeatherByCoords(lat, lon) {  
         const key = localStorage.getItem('quantum_weather_key');  
         if (!key || key === '') return null;  
-        const cacheKey = `weather_coords_${lat}_${lon}`;  
-        const cached = localStorage.getItem(cacheKey);  
-        if (cached) {  
-            try {  
-                const data = JSON.parse(cached);  
-                if (Date.now() - data.timestamp < CACHE_CONFIG.WEATHER_TTL) {  
-                    return data.weather;  
-                }  
-            } catch (e) {}  
-        }  
         try {  
             const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${key}`;  
             const response = await fetch(url);  
@@ -4850,10 +4562,6 @@ const TOP_LEAGUES = [
                 description: data.weather[0].description,  
                 icon: data.weather[0].icon  
             };  
-            localStorage.setItem(cacheKey, JSON.stringify({  
-                weather: weather,  
-                timestamp: Date.now()  
-            }));  
             return weather;  
         } catch (e) {  
             console.log('⚠️ Ошибка погоды:', e);  
@@ -5499,18 +5207,6 @@ const TOP_LEAGUES = [
             return getFallbackMatches();  
         }  
   
-        const predictionsCacheKey = `predictions_${new Date().toISOString().split('T')[0]}`;  
-        const cached = localStorage.getItem(predictionsCacheKey);  
-        if (cached) {  
-            try {  
-                const data = JSON.parse(cached);  
-                if (Date.now() - data.timestamp < CACHE_CONFIG.PREDICTIONS_TTL) {  
-                    showToast(`✅ Из кэша (${data.matches.length} матчей)`, 'success');  
-                    return data.matches;  
-                }  
-            } catch (e) {}  
-        }  
-  
         try {  
             const today = new Date();  
             const dateStr = today.toISOString().split('T')[0];  
@@ -5586,11 +5282,6 @@ const TOP_LEAGUES = [
             });  
                 
             predictions.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));  
-                
-            localStorage.setItem(predictionsCacheKey, JSON.stringify({  
-                matches: predictions,  
-                timestamp: Date.now()  
-            }));  
                 
             showToast(`✅ Загружено ${predictions.length} матчей`, 'success');  
             return predictions;  
@@ -5721,7 +5412,7 @@ const TOP_LEAGUES = [
         if (!timestamp) {  
             return { text: '⏳ Данных нет', color: '#888' };  
         }  
-        const status = getDataStatus(timestamp, CACHE_CONFIG.PREDICTIONS_TTL, count);  
+        const status = getDataStatus(timestamp, 3600000, count);  
         return status;  
     }  
   
@@ -6115,7 +5806,7 @@ const TOP_LEAGUES = [
             state.updateTimer = setInterval(() => {  
                 refreshPredictions();  
                 checkNotifications();  
-            }, CACHE_CONFIG.UPDATE_INTERVAL);  
+            }, 1800000); // 30 минут  
         }  
   
         document.querySelectorAll('.btn, .btn-api, .btn-ai, .btn-turbo').forEach(btn => {  
@@ -6147,4 +5838,4 @@ const TOP_LEAGUES = [
     });  
 </script>  
 </body>  
-</html>  
+</html>
