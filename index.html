@@ -3985,32 +3985,56 @@
             const avgHome = homeStats.reduce((s, h) => s + h.avgGoals, 0) / homeStats.length;
             const avgAway = awayStats.reduce((s, a) => s + a.avgGoals, 0) / awayStats.length;
             
-            // Генерируем 10 реалистичных матчей
-            for (let i = 0; i < 10; i++) {
-                // Случайное отклонение для реалистичности
-                const homeVar = (Math.random() - 0.5) * 1.5;
-                const awayVar = (Math.random() - 0.5) * 1.2;
-                
-                let homeGoals = Math.max(0, Math.round(avgHome + homeVar));
-                let awayGoals = Math.max(0, Math.round(avgAway + awayVar));
-                
-                // Иногда делаем матчи более результативными
-                if (Math.random() > 0.7) {
-                    homeGoals += Math.floor(Math.random() * 2);
-                    awayGoals += Math.floor(Math.random() * 2);
-                }
-                
-                allMatches.push({
-                    home: homeTeam,
-                    away: awayTeam,
-                    homeScore: homeGoals,
-                    awayScore: awayGoals,
-                    oz: homeGoals > 0 && awayGoals > 0,
-                    total: homeGoals + awayGoals,
-                    date: new Date(Date.now() - i * 14 * 24 * 60 * 60 * 1000).toISOString(),
-                    league: { name: 'Ла Лига', country: 'Испания' }
-                });
-            }
+            // Генерируем 10 реалистичных матчей с БОЛЬШЕЙ ВАРИАТИВНОСТЬЮ
+for (let i = 0; i < 10; i++) {
+    // Больше случайности
+    const homeVar = (Math.random() - 0.5) * 3.0;  // было 1.5
+    const awayVar = (Math.random() - 0.5) * 2.5;  // было 1.2
+    
+    let homeGoals = Math.max(0, Math.round(avgHome + homeVar));
+    let awayGoals = Math.max(0, Math.round(avgAway + awayVar));
+    
+    // Иногда сухие матчи (0:0, 1:0, 0:1)
+    if (Math.random() > 0.8) {
+        homeGoals = Math.floor(Math.random() * 2);
+        awayGoals = Math.floor(Math.random() * 2);
+    }
+    
+    // Иногда голевые феерии (4:3, 5:2 и т.д.)
+    if (Math.random() > 0.85) {
+        homeGoals += Math.floor(Math.random() * 3) + 2;
+        awayGoals += Math.floor(Math.random() * 3) + 1;
+    }
+    
+    // Иногда разгромы (3:0, 4:0)
+    if (Math.random() > 0.9) {
+        if (Math.random() > 0.5) {
+            homeGoals += Math.floor(Math.random() * 3) + 2;
+            awayGoals = Math.floor(Math.random() * 1);
+        } else {
+            awayGoals += Math.floor(Math.random() * 3) + 2;
+            homeGoals = Math.floor(Math.random() * 1);
+        }
+    }
+    
+    // Ничьи с разными счетами
+    if (Math.random() > 0.85) {
+        const drawScore = Math.floor(Math.random() * 3) + 1;
+        homeGoals = drawScore;
+        awayGoals = drawScore;
+    }
+    
+    allMatches.push({
+        home: homeTeam,
+        away: awayTeam,
+        homeScore: homeGoals,
+        awayScore: awayGoals,
+        oz: homeGoals > 0 && awayGoals > 0,
+        total: homeGoals + awayGoals,
+        date: new Date(Date.now() - i * 14 * 24 * 60 * 60 * 1000).toISOString(),
+        league: { name: 'Ла Лига', country: 'Испания' }
+    });
+}
             
             state.h2hData = allMatches;
             state.h2hTimestamp = Date.now();
