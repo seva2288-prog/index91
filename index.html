@@ -7514,6 +7514,289 @@ function clearCache() {
     window.addEventListener('resize', () => {
         if (state.currentTab === 'stats') renderChartCanvas();
     });
+// ================================================================
+// ИСПРАВЛЕННАЯ ФУНКЦИЯ renderH2HData (ГЛОБАЛЬНАЯ)
+// ================================================================
+
+function renderH2HData(matches) {
+    const status = document.getElementById('h2hStatus');
+    const results = document.getElementById('h2hResults');
+    const dataStatus = document.getElementById('h2hDataStatus');
+    
+    if (!status || !results) {
+        console.warn('H2H элементы не найдены в DOM');
+        return;
+    }
+    
+    const total = matches.length;
+    if (total === 0) {
+        status.innerHTML = '❌ Нет данных о встречах';
+        results.innerHTML = '';
+        if (dataStatus) dataStatus.textContent = '';
+        return;
+    }
+    
+    const ozCount = matches.filter(m => m.oz).length;
+    const avgTotal = (matches.reduce((s, m) => s + m.total, 0) / total).toFixed(1);
+    const homeWins = matches.filter(m => m.homeScore > m.awayScore).length;
+    const awayWins = matches.filter(m => m.awayScore > m.homeScore).length;
+    const draws = total - homeWins - awayWins;
+
+    // Обновляем информацию о лиге
+    let leagueInfo = {
+        name: 'Лига',
+        country: matches[0]?.league?.country || '--',
+        season: window.CURRENT_SEASON || 2026,
+        avgGoals: parseFloat(avgTotal),
+        oz: Math.round((ozCount / total) * 100),
+        matches: total,
+        timestamp: window.state?.h2hTimestamp || Date.now()
+    };
+    
+    if (window.state) {
+        window.state.currentLeagueData = leagueInfo;
+    }
+    updateLeagueInfoDisplay(leagueInfo);
+
+    // Статус данных
+    if (dataStatus) {
+        const statusData = getDataStatus(window.state?.h2hTimestamp, CACHE_CONFIG.H2H_TTL, total);
+        dataStatus.textContent = statusData.text;
+        dataStatus.style.color = statusData.color;
+    }
+
+    status.innerHTML = `✅ Найдено ${total} встреч!`;
+    
+    results.innerHTML = `
+        <div class="h2h-summary">
+            <span class="item">📊 Всего: <span class="num">${total}</span></span>
+            <span class="item">⚽ ОЗ: <span class="num">${Math.round((ozCount/total)*100)}%</span></span>
+            <span class="item">📈 Тотал: <span class="num">${avgTotal}</span></span>
+            <span class="item">🏠 ${homeWins} | ✈️ ${awayWins} | 🤝 ${draws}</span>
+            <span class="item">🔥 Форма хозяев: ${Math.round((homeWins/total)*100)}%</span>
+        </div>
+        ${matches.slice(0, 15).map(m => `
+            <div class="h2h-item">
+                ${sanitizeHTML(m.home)} ${m.homeScore}:${m.awayScore} ${sanitizeHTML(m.away)}
+                ${m.oz ? '✅' : '❌'}
+                <span style="color:#555;font-size:9px;">${new Date(m.date).toLocaleDateString()}</span>
+            </div>
+        `).join('')}
+        ${total > 15 ? `<div style="color:#888;font-size:10px;text-align:center;margin-top:4px;">и еще ${total - 15} матчей...</div>` : ''}
+    `;
+    
+    // Обновляем бейдж в навигации
+    const badge = document.getElementById('searchBadgeNav');
+    if (badge) {
+        badge.style.display = 'block';
+        badge.textContent = total;
+    }
+    
+    // Пересчитываем прогноз
+    if (typeof calculate === 'function') {
+        calculate();
+    }
+}
+
+// ================================================================
+// ИСПРАВЛЕННАЯ ФУНКЦИЯ loadH2H
+// ================================================================
+
+async function loadH2H() {
+    const homeTeamInput = document.getElementById('homeTeamH2H');
+    const awayTeamInput = document.getElementById('awayTeamH2H');
+    
+    if (!homeTeamInput || !awayTeamInput) {
+        showToast('⚠️ Элементы ввода не найдены', 'error');
+        return;
+    }
+    
+    const homeTeam = homeTeamInput.value?.trim() || '';
+    const awayTeam = awayTeamInput.value?.trim() || '';
+    
+    if (!homeTeam || !awayTeam) {
+        showToast('⚠️ Введите обе команды!', 'error');
+        return;
+    }
+
+    const cacheKey = `h2h_${homeTeam}_${awayTeam}`;
+    const cached = localStorage.getItem(cacheKey);
+    
+    if (cached) {
+        try {
+            const data = JSON.parse(cached);
+            if (Date.now() - data.timestamp < (window.CACHE_CONFIG?.H2H_TTL || 604800000)) {
+                if (window.state) {
+                    window.state.h2hData = data.matches;
+                    window.state.h2hTimestamp = data.timestamp;
+                }
+                renderH2HData(data.matches);
+                showToast(`✅ Из кэша (${data.matches.length} матчей)`, 'success');
+                return;
+            }
+        } catch (e) {}
+    }
+
+    if (window.state?.isLoading) return;
+    if (window.state) window.state.isLoading = true;
+    
+    const btn = document.getElementById('loadH2HBtn');
+    const btnText = document.getElementById('loadBtnText');
+    const spinner = document.getElementById('loadSpinner');
+    const status = document.getElementById('h2hStatus');
+    const results = document.getElementById('h2hResults');
+    const dataStatus = document.getElementById('h2hDataStatus');
+    
+    if (btn) btn.disabled = true;
+    if (btnText) btnText.textContent = '⏳ Загрузка...';
+    if (spinner) spinner.style.display = 'inline-block';
+    if (status) status.innerHTML = '⏳ Поиск команд...';
+    if (results) results.innerHTML = '';
+    if (dataStatus) dataStatus.textContent = '';
+
+    try {
+        const apiKey = localStorage.getItem('quantum_api_key');
+        if (!apiKey || apiKey === '') {
+            throw new Error('Введите API ключ в настройках');
+        }
+
+        // Поиск команды хозяев
+        const data1 = await fetchWithCache(`teams?search=${encodeURIComponent(homeTeam)}`, {
+            headers: { 'x-apisports-key': apiKey }
+        }, CACHE_CONFIG.API_TTL);
+        
+        if (!data1 || !data1.response || data1.response.length === 0) {
+            if (status) status.innerHTML = `❌ Команда "${sanitizeHTML(homeTeam)}" не найдена`;
+            if (window.state) window.state.isLoading = false;
+            resetButtons(btn, btnText, spinner);
+            return;
+        }
+        const homeId = data1.response[0].team.id;
+
+        // Поиск команды гостей
+        const data2 = await fetchWithCache(`teams?search=${encodeURIComponent(awayTeam)}`, {
+            headers: { 'x-apisports-key': apiKey }
+        }, CACHE_CONFIG.API_TTL);
+        
+        if (!data2 || !data2.response || data2.response.length === 0) {
+            if (status) status.innerHTML = `❌ Команда "${sanitizeHTML(awayTeam)}" не найдена`;
+            if (window.state) window.state.isLoading = false;
+            resetButtons(btn, btnText, spinner);
+            return;
+        }
+        const awayId = data2.response[0].team.id;
+
+        if (status) status.innerHTML = '⏳ Загрузка истории матчей...';
+        
+        const allMatches = [];
+        const season = window.CURRENT_SEASON || 2026;
+        
+        for (let i = 0; i < 3; i++) {
+            const year = season - i;
+            const h2hData = await fetchWithCache(
+                `fixtures/headtohead?h2h=${homeId}-${awayId}&season=${year}`,
+                { headers: { 'x-apisports-key': apiKey } },
+                CACHE_CONFIG.API_TTL
+            );
+            if (h2hData && h2hData.response) {
+                allMatches.push(...h2hData.response);
+            }
+            await delay(200);
+        }
+
+        if (allMatches.length === 0) {
+            if (status) status.innerHTML = `❌ Нет встреч между командами`;
+            if (window.state) window.state.isLoading = false;
+            resetButtons(btn, btnText, spinner);
+            return;
+        }
+
+        const matches = allMatches.map(m => ({
+            home: m.teams.home.name,
+            away: m.teams.away.name,
+            homeScore: m.goals.home || 0,
+            awayScore: m.goals.away || 0,
+            oz: (m.goals.home || 0) > 0 && (m.goals.away || 0) > 0,
+            total: (m.goals.home || 0) + (m.goals.away || 0),
+            date: m.fixture.date,
+            league: m.league || null
+        }));
+
+        if (window.state) {
+            window.state.h2hData = matches;
+            window.state.h2hTimestamp = Date.now();
+        }
+        
+        localStorage.setItem(cacheKey, JSON.stringify({
+            matches: matches,
+            timestamp: Date.now()
+        }));
+        
+        renderH2HData(matches);
+        showToast(`✅ Загружено ${matches.length} матчей!`, 'success');
+
+    } catch (error) {
+        console.error('H2H Error:', error);
+        if (status) status.innerHTML = `❌ ${error.message}`;
+        showToast(`⚠️ ${error.message}`, 'error');
+    } finally {
+        if (window.state) window.state.isLoading = false;
+        resetButtons(btn, btnText, spinner);
+    }
+}
+
+// ================================================================
+// ДОПОЛНИТЕЛЬНО: ФУНКЦИЯ ДЛЯ ОБНОВЛЕНИЯ ИНФО О ЛИГЕ
+// ================================================================
+
+function updateLeagueInfoDisplay(leagueData) {
+    const card = document.getElementById('leagueInfoCard');
+    if (!card) return;
+    
+    if (!leagueData) {
+        card.style.display = 'none';
+        return;
+    }
+    
+    card.style.display = 'block';
+    
+    const nameEl = document.getElementById('leagueNameDisplay');
+    const countryEl = document.getElementById('leagueCountry');
+    const seasonEl = document.getElementById('leagueSeason');
+    const avgGoalsEl = document.getElementById('leagueAvgGoals');
+    const ozEl = document.getElementById('leagueOz');
+    const matchesEl = document.getElementById('leagueMatches');
+    const statusEl = document.getElementById('leagueDataStatus');
+    
+    if (nameEl) nameEl.textContent = leagueData.name || '🏆 Лига';
+    if (countryEl) countryEl.textContent = leagueData.country || '--';
+    if (seasonEl) seasonEl.textContent = leagueData.season || '--';
+    if (avgGoalsEl) avgGoalsEl.textContent = leagueData.avgGoals || '--';
+    if (ozEl) ozEl.textContent = (leagueData.oz || 0) + '%';
+    if (matchesEl) matchesEl.textContent = leagueData.matches || '--';
+    
+    if (statusEl) {
+        if (leagueData.timestamp) {
+            const status = getDataStatus(leagueData.timestamp, CACHE_CONFIG.LEAGUES_TTL, leagueData.matches);
+            statusEl.textContent = status.text;
+            statusEl.style.color = status.color;
+        } else {
+            statusEl.textContent = '📊 Данные загружены';
+            statusEl.style.color = '#888';
+        }
+    }
+}
+
+// ================================================================
+// ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ ДЛЯ СБРОСА КНОПОК
+// ================================================================
+
+function resetButtons(btn, btnText, spinner) {
+    if (btn) btn.disabled = false;
+    if (btnText) btnText.textContent = '📊 Загрузить H2H';
+    if (spinner) spinner.style.display = 'none';
+}       
+
 </script>
 </body>
 </html>   
