@@ -7796,7 +7796,211 @@ function resetButtons(btn, btnText, spinner) {
     if (btnText) btnText.textContent = '📊 Загрузить H2H';
     if (spinner) spinner.style.display = 'none';
 }       
+// ================================================================
+// ФИКС ДЛЯ ПЛАТНОГО API: ЗАГРУЗКА РЕАЛЬНЫХ ДАННЫХ ЗА 2024-2025
+// ================================================================
 
+// Переопределяем функцию loadH2H
+const originalLoadH2H = window.loadH2H || loadH2H;
+
+window.loadH2H = async function() {
+    const homeTeamInput = document.getElementById('homeTeamH2H');
+    const awayTeamInput = document.getElementById('awayTeamH2H');
+    
+    if (!homeTeamInput || !awayTeamInput) {
+        showToast('⚠️ Элементы ввода не найдены', 'error');
+        return;
+    }
+    
+    const homeTeam = homeTeamInput.value?.trim() || '';
+    const awayTeam = awayTeamInput.value?.trim() || '';
+    
+    if (!homeTeam || !awayTeam) {
+        showToast('⚠️ Введите обе команды!', 'error');
+        return;
+    }
+
+    const btn = document.getElementById('loadH2HBtn');
+    const btnText = document.getElementById('loadBtnText');
+    const spinner = document.getElementById('loadSpinner');
+    const status = document.getElementById('h2hStatus');
+    const results = document.getElementById('h2hResults');
+    
+    if (btn) btn.disabled = true;
+    if (btnText) btnText.textContent = '⏳ Загрузка...';
+    if (spinner) spinner.style.display = 'inline-block';
+    if (status) status.innerHTML = '⏳ Поиск команд в API...';
+
+    try {
+        const apiKey = localStorage.getItem('quantum_api_key');
+        if (!apiKey || apiKey === '') {
+            throw new Error('❌ Введите API ключ в настройках');
+        }
+
+        // 1. Ищем ID команд
+        if (status) status.innerHTML = '🔍 Поиск команд...';
+        
+        const [data1, data2] = await Promise.all([
+            fetchWithCache(`teams?search=${encodeURIComponent(homeTeam)}`, {
+                headers: { 'x-apisports-key': apiKey }
+            }, CACHE_CONFIG.API_TTL),
+            fetchWithCache(`teams?search=${encodeURIComponent(awayTeam)}`, {
+                headers: { 'x-apisports-key': apiKey }
+            }, CACHE_CONFIG.API_TTL)
+        ]);
+        
+        if (!data1?.response?.length) {
+            if (status) status.innerHTML = `❌ Команда "${sanitizeHTML(homeTeam)}" не найдена`;
+            resetButtons(btn, btnText, spinner);
+            return;
+        }
+        if (!data2?.response?.length) {
+            if (status) status.innerHTML = `❌ Команда "${sanitizeHTML(awayTeam)}" не найдена`;
+            resetButtons(btn, btnText, spinner);
+            return;
+        }
+        
+        const homeId = data1.response[0].team.id;
+        const awayId = data2.response[0].team.id;
+        const homeName = data1.response[0].team.name;
+        const awayName = data2.response[0].team.name;
+
+        if (status) status.innerHTML = `⏳ Загрузка матчей: ${homeName} vs ${awayName}...`;
+
+        // 2. Загружаем матчи за последние сезоны
+        const allMatches = [];
+        const seasons = [2025, 2024, 2023]; // Реальные сезоны с данными
+        
+        for (const season of seasons) {
+            try {
+                if (status) status.innerHTML = `⏳ Загрузка сезона ${season}...`;
+                
+                const h2hData = await fetchWithCache(
+                    `fixtures/headtohead?h2h=${homeId}-${awayId}&season=${season}`,
+                    { headers: { 'x-apisports-key': apiKey } },
+                    CACHE_CONFIG.API_TTL
+                );
+                
+                if (h2hData?.response?.length > 0) {
+                    // Фильтруем только матчи с реальными данными
+                    const validMatches = h2hData.response.filter(m => 
+                        m.goals?.home !== null && 
+                        m.goals?.away !== null &&
+                        m.goals?.home !== undefined &&
+                        m.goals?.away !== undefined
+                    );
+                    allMatches.push(...validMatches);
+                }
+                await delay(300);
+            } catch (e) {
+                console.log(`⚠️ Нет данных за ${season}`);
+            }
+        }
+
+        // 3. Если матчей нет - пробуем через fixtures с лигой
+        if (allMatches.length === 0) {
+            if (status) status.innerHTML = '⏳ Пробую загрузить через лиги...';
+            
+            // Находим общую лигу (например, Ла Лига для Реала и Барсы)
+            const leagueIds = [140, 78, 135, 61, 39]; // Топ-5 лиг
+            
+            for (const leagueId of leagueIds) {
+                try {
+                    const fixturesData = await fetchWithCache(
+                        `fixtures?league=${leagueId}&season=2025&team=${homeId}`,
+                        { headers: { 'x-apisports-key': apiKey } },
+                        CACHE_CONFIG.API_TTL
+                    );
+                    
+                    if (fixturesData?.response) {
+                        const matchesWithAway = fixturesData.response.filter(m => 
+                            m.teams.away.id === awayId &&
+                            m.goals?.home !== null &&
+                            m.goals?.away !== null
+                        );
+                        if (matchesWithAway.length > 0) {
+                            allMatches.push(...matchesWithAway);
+                            break;
+                        }
+                    }
+                    await delay(200);
+                } catch (e) {}
+            }
+        }
+
+        // 4. Обрабатываем результаты
+        if (allMatches.length === 0) {
+            if (status) status.innerHTML = '⚠️ Матчей не найдено. Проверьте название команд или сезон.';
+            showToast('⚠️ Нет матчей между этими командами', 'warn');
+            resetButtons(btn, btnText, spinner);
+            return;
+        }
+
+        // Форматируем данные
+        const matches = allMatches.map(m => ({
+            home: m.teams.home.name,
+            away: m.teams.away.name,
+            homeScore: m.goals.home || 0,
+            awayScore: m.goals.away || 0,
+            oz: (m.goals.home || 0) > 0 && (m.goals.away || 0) > 0,
+            total: (m.goals.home || 0) + (m.goals.away || 0),
+            date: m.fixture.date,
+            league: m.league || null,
+            season: m.league?.season || 2025
+        }));
+
+        // Сортируем по дате (сначала новые)
+        matches.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        // Сохраняем в state
+        if (window.state) {
+            window.state.h2hData = matches;
+            window.state.h2hTimestamp = Date.now();
+        }
+
+        // Кэшируем
+        const cacheKey = `h2h_${homeTeam}_${awayTeam}`;
+        localStorage.setItem(cacheKey, JSON.stringify({
+            matches: matches,
+            timestamp: Date.now()
+        }));
+
+        // Отображаем
+        renderH2HData(matches);
+        
+        // Показываем статистику
+        const totalGoals = matches.reduce((s, m) => s + m.total, 0);
+        const avgGoals = (totalGoals / matches.length).toFixed(1);
+        const ozCount = matches.filter(m => m.oz).length;
+        const homeWins = matches.filter(m => m.homeScore > m.awayScore).length;
+        const awayWins = matches.filter(m => m.awayScore > m.homeScore).length;
+        const draws = matches.length - homeWins - awayWins;
+        
+        if (status) {
+            status.innerHTML = `
+                ✅ Найдено ${matches.length} матчей!
+                <br>⚽ Средний тотал: ${avgGoals} | ОЗ: ${Math.round((ozCount/matches.length)*100)}%
+                <br>🏠 ${homeWins} побед | ✈️ ${awayWins} побед | 🤝 ${draws} ничьих
+            `;
+        }
+        
+        showToast(`✅ Загружено ${matches.length} матчей с реальными данными!`, 'success');
+
+    } catch (error) {
+        console.error('H2H Error:', error);
+        if (status) status.innerHTML = `❌ ${error.message}`;
+        showToast(`⚠️ ${error.message}`, 'error');
+    } finally {
+        resetButtons(btn, btnText, spinner);
+    }
+};
+
+// Функция для сброса кнопок
+function resetButtons(btn, btnText, spinner) {
+    if (btn) btn.disabled = false;
+    if (btnText) btnText.textContent = '📊 Загрузить H2H';
+    if (spinner) spinner.style.display = 'none';
+}
 </script>
 </body>
 </html>   
