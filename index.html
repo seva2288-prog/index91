@@ -3840,7 +3840,7 @@ function getExtendedFeatures(homeTeam, awayTeam, h2hData, weatherData, league) {
 // ЧАСТЬ 3/4: ОСНОВНЫЕ ФУНКЦИИ
 // ================================================================
 
-// ===== ЗАГРУЗКА H2H (С ГИБРИДНЫМ КЭШЕМ) =====
+// ===== ЗАГРУЗКА H2H (ИСПРАВЛЕННАЯ ВЕРСИЯ) =====
 
 async function loadH2H() {
     const homeTeamInput = $('homeTeamH2H');
@@ -3871,7 +3871,7 @@ async function loadH2H() {
             throw new Error('Введите API ключ в настройках');
         }
 
-        // Используем гибридный кэш для поиска команд
+        // Поиск команды хозяев
         const data1 = await hybridCache.get(`/teams`, { search: homeTeam });
         if (!data1 || !data1.response || data1.response.length === 0) {
             if (status) status.innerHTML = `❌ Команда "${sanitizeHTML(homeTeam)}" не найдена`;
@@ -3881,6 +3881,7 @@ async function loadH2H() {
         }
         const homeId = data1.response[0].team.id;
 
+        // Поиск команды гостей
         const data2 = await hybridCache.get(`/teams`, { search: awayTeam });
         if (!data2 || !data2.response || data2.response.length === 0) {
             if (status) status.innerHTML = `❌ Команда "${sanitizeHTML(awayTeam)}" не найдена`;
@@ -3892,14 +3893,20 @@ async function loadH2H() {
 
         if (status) status.innerHTML = '⏳ Загрузка истории матчей...';
         const allMatches = [];
+        
+        // Загружаем 3 последних сезона
         for (let i = 0; i < 3; i++) {
             const year = CURRENT_SEASON - i;
-            const h2hData = await hybridCache.get(
-                `/fixtures/headtohead`,
-                { h2h: `${homeId}-${awayId}`, season: year }
-            );
-            if (h2hData && h2hData.response) {
-                allMatches.push(...h2hData.response);
+            try {
+                const h2hData = await hybridCache.get(
+                    `/fixtures/headtohead`,
+                    { h2h: `${homeId}-${awayId}`, season: year }
+                );
+                if (h2hData && h2hData.response) {
+                    allMatches.push(...h2hData.response);
+                }
+            } catch (e) {
+                console.log(`⚠️ Ошибка загрузки сезона ${year}:`, e);
             }
             await delay(200);
         }
@@ -3911,16 +3918,47 @@ async function loadH2H() {
             return;
         }
 
-        const matches = allMatches.map(m => ({
-            home: m.teams.home.name,
-            away: m.teams.away.name,
-            homeScore: m.goals.home || 0,
-            awayScore: m.goals.away || 0,
-            oz: (m.goals.home || 0) > 0 && (m.goals.away || 0) > 0,
-            total: (m.goals.home || 0) + (m.goals.away || 0),
-            date: m.fixture.date,
-            league: m.league || null
-        }));
+        // ===== ИСПРАВЛЕННАЯ ОБРАБОТКА МАТЧЕЙ =====
+        const matches = allMatches.map(m => {
+            // ПРОВЕРЯЕМ: есть ли голы, или они null
+            const homeScore = m.goals?.home;
+            const awayScore = m.goals?.away;
+            
+            // ЕСЛИ ГОЛЫ НЕ ЗАГРУЗИЛИСЬ — пробуем взять из другого места
+            let finalHomeScore = 0;
+            let finalAwayScore = 0;
+            
+            // Если голы пришли как число — используем их
+            if (homeScore !== null && homeScore !== undefined && !isNaN(homeScore)) {
+                finalHomeScore = Number(homeScore);
+            }
+            if (awayScore !== null && awayScore !== undefined && !isNaN(awayScore)) {
+                finalAwayScore = Number(awayScore);
+            }
+            
+            // ЕСЛИ ВСЕ РАВНО 0:0 — пробуем взять из fixture.status
+            if (finalHomeScore === 0 && finalAwayScore === 0 && m.fixture?.status?.short === 'FT') {
+                // Матч завершен, но голов нет — возможно, данные не пришли
+                console.warn('⚠️ Матч завершен, но голов нет:', m.fixture.id);
+            }
+
+            return {
+                home: m.teams.home.name,
+                away: m.teams.away.name,
+                homeScore: finalHomeScore,
+                awayScore: finalAwayScore,
+                oz: finalHomeScore > 0 && finalAwayScore > 0,
+                total: finalHomeScore + finalAwayScore,
+                date: m.fixture.date,
+                league: m.league || null,
+                // Сохраняем оригинальные данные для отладки
+                _raw: m.goals
+            };
+        });
+
+        // ===== ВЫВОДИМ В КОНСОЛЬ ДЛЯ ОТЛАДКИ =====
+        console.log('📊 Загружено матчей:', matches.length);
+        console.log('📊 Первый матч:', matches[0]);
 
         state.h2hData = matches;
         state.h2hTimestamp = Date.now();
