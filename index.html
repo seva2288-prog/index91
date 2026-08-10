@@ -4042,38 +4042,55 @@ async function loadH2H() {
         }
 
         // ===== ИСПРАВЛЕННАЯ ОБРАБОТКА МАТЧЕЙ =====
-        const matches = allMatches.map(m => {
-            const homeScore = m.goals?.home;
-            const awayScore = m.goals?.away;
-            
-            let finalHomeScore = 0;
-            let finalAwayScore = 0;
-            
-            if (homeScore !== null && homeScore !== undefined && !isNaN(homeScore)) {
-                finalHomeScore = Number(homeScore);
-            }
-            if (awayScore !== null && awayScore !== undefined && !isNaN(awayScore)) {
-                finalAwayScore = Number(awayScore);
-            }
-            
-            if (finalHomeScore === 0 && finalAwayScore === 0 && m.fixture?.status?.short === 'FT') {
-                console.warn('⚠️ Матч завершен, но голов нет:', m.fixture.id);
-            }
+        // Теперь корректно обрабатываем только завершенные матчи с реальными голами
+        const matches = allMatches
+            .filter(m => {
+                // Пропускаем матчи, которые не завершены или не имеют данных о голах
+                const status = m.fixture?.status?.short;
+                const isFinished = status === 'FT' || status === 'AET' || status === 'PEN';
+                const hasGoals = m.goals?.home !== null && m.goals?.home !== undefined && 
+                               m.goals?.away !== null && m.goals?.away !== undefined;
+                
+                // Для завершенных матчей обязательно должны быть голы
+                if (isFinished && !hasGoals) {
+                    console.warn('⚠️ Завершенный матч без голов:', m.fixture.id);
+                    return false;
+                }
+                
+                // Для незавершенных матчей не показываем счет
+                if (!isFinished) {
+                    return false;
+                }
+                
+                return true;
+            })
+            .map(m => {
+                // Здесь уже точно есть голы, так как мы отфильтровали
+                const homeScore = Number(m.goals.home) || 0;
+                const awayScore = Number(m.goals.away) || 0;
+                
+                return {
+                    home: m.teams.home.name,
+                    away: m.teams.away.name,
+                    homeScore: homeScore,
+                    awayScore: awayScore,
+                    oz: homeScore > 0 && awayScore > 0,
+                    total: homeScore + awayScore,
+                    date: m.fixture.date,
+                    league: m.league || null,
+                    status: m.fixture?.status?.short || 'FT'
+                };
+            });
 
-            return {
-                home: m.teams.home.name,
-                away: m.teams.away.name,
-                homeScore: finalHomeScore,
-                awayScore: finalAwayScore,
-                oz: finalHomeScore > 0 && finalAwayScore > 0,
-                total: finalHomeScore + finalAwayScore,
-                date: m.fixture.date,
-                league: m.league || null
-            };
-        });
-
-        console.log('📊 Загружено матчей:', matches.length);
+        console.log('📊 Загружено завершенных матчей с голами:', matches.length);
         console.log('📊 Первый матч:', matches[0]);
+
+        if (matches.length === 0) {
+            if (status) status.innerHTML = `⚠️ Нет завершенных матчей с данными о голах`;
+            state.isLoading = false;
+            resetButtons(btn, btnText, spinner);
+            return;
+        }
 
         state.h2hData = matches;
         state.h2hTimestamp = Date.now();
@@ -4133,6 +4150,7 @@ function renderH2HData(matches) {
                     ${sanitizeHTML(m.home)} ${m.homeScore}:${m.awayScore} ${sanitizeHTML(m.away)}
                     ${m.oz ? '✅' : '❌'}
                     <span style="color:#555;font-size:9px;">${new Date(m.date).toLocaleDateString()}</span>
+                    <span style="color:#555;font-size:8px;">${m.status || 'FT'}</span>
                 </div>
             `).join('')}
             ${total > 15 ? `<div style="color:#888;font-size:10px;text-align:center;margin-top:4px;">и еще ${total - 15} матчей...</div>` : ''}
@@ -6585,11 +6603,18 @@ async function generateTestPredictions() {
             let prediction = 'Тотал > 2.5';
             let confidence = 65 + Math.floor(Math.random() * 25);
 
-            if (match.goals && match.goals.home !== null) {
-                const total = (match.goals.home || 0) + (match.goals.away || 0);
-                if (total > 2.5) prediction = '✅ Тотал > 2.5';
-                else prediction = '❌ Тотал < 2.5';
+            // Используем реальные голы только для завершенных матчей
+            if (status === 'FT' || status === 'AET' || status === 'PEN') {
+                const homeGoals = match.goals?.home;
+                const awayGoals = match.goals?.away;
+                if (homeGoals !== null && homeGoals !== undefined && 
+                    awayGoals !== null && awayGoals !== undefined) {
+                    const total = homeGoals + awayGoals;
+                    if (total > 2.5) prediction = '✅ Тотал > 2.5';
+                    else prediction = '❌ Тотал < 2.5';
+                }
             } else {
+                // Для неначатых матчей - прогноз на основе xG
                 const random = Math.random();
                 if (random > 0.6) prediction = 'ОЗ - ДА';
                 else if (random > 0.3) prediction = 'Тотал > 2.5';
@@ -6609,16 +6634,20 @@ async function generateTestPredictions() {
                 league: match.league.name || 'Лига',
                 country: match.league.country || 'Мир',
                 startTime: new Date(match.fixture.date),
-                homeScore: match.goals?.home ?? null,
-                awayScore: match.goals?.away ?? null,
-                status: status === 'FT' ? 'finished' : (status === '1H' || status === '2H' ? 'live' : 'upcoming'),
+                homeScore: (status === 'FT' || status === 'AET' || status === 'PEN') ? 
+                    (match.goals?.home ?? null) : null,
+                awayScore: (status === 'FT' || status === 'AET' || status === 'PEN') ? 
+                    (match.goals?.away ?? null) : null,
+                status: (status === 'FT' || status === 'AET' || status === 'PEN') ? 'finished' : 
+                        (status === '1H' || status === '2H' ? 'live' : 'upcoming'),
                 prediction: prediction,
                 confidence: confidence,
                 odds: odds,
                 total: 2.5,
                 oz: Math.random() > 0.5,
                 isLive: status === '1H' || status === '2H',
-                actualOutcome: status === 'FT' ? (Math.random() > 0.5 ? 'win' : 'loss') : undefined
+                actualOutcome: (status === 'FT' || status === 'AET' || status === 'PEN') ? 
+                    (Math.random() > 0.5 ? 'win' : 'loss') : undefined
             };
         });
 
@@ -6675,7 +6704,9 @@ function getMatchStatusInfo(match) {
     const start = new Date(match.startTime);
     const diff = start - now;
     if (match.status === 'finished') {
-        return { status: 'finished', label: `Завершён ${match.homeScore}:${match.awayScore}`, badgeClass: 'finished', emoji: '🏁', priorityWeight: 0 };
+        const scoreStr = (match.homeScore !== null && match.awayScore !== null) ? 
+            `${match.homeScore}:${match.awayScore}` : '?';
+        return { status: 'finished', label: `Завершён ${scoreStr}`, badgeClass: 'finished', emoji: '🏁', priorityWeight: 0 };
     }
     if (match.status === 'live') {
         const elapsed = Math.abs(Math.floor(diff / 60000));
@@ -6873,7 +6904,8 @@ function renderHistoryPredictions(finished) {
         const isWin = m.actualOutcome === 'win';
         const emoji = isWin ? '✅' : '❌';
         const color = isWin ? '#2ecc71' : '#e74c3c';
-        const scoreStr = `${m.homeScore}:${m.awayScore}`;
+        const scoreStr = (m.homeScore !== null && m.awayScore !== null) ? 
+            `${m.homeScore}:${m.awayScore}` : '?';
         return `
             <div class="prediction-card" style="border-left:3px solid ${color};">
                 <div class="match-info">
@@ -7201,6 +7233,5 @@ window.addEventListener('resize', () => {
     if (state.currentTab === 'stats') renderChartCanvas();
 });  
         
-<style> 
 </body>
 </html>
