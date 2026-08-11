@@ -11,6 +11,7 @@
     <meta name="apple-mobile-web-app-title" content="Квантум">    
     <meta name="theme-color" content="#0b0e14">    
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>  
         /* ================================================================ */  
         /* КВАНТУМ v6.1 - ПОЛНЫЙ CSS КОД С ТОП-3 И ГЛУБОКОЙ AI */  
@@ -3137,56 +3138,56 @@
             </div>  
         </div>  
   
-        <!-- ============================================================
-        ЭКРАН 6: СКАННЕР VALUE
-        ============================================================ -->
-        <div class="screen" id="assistantScreen">
-            <div class="card">
-                <div class="card-title">🔍 СКАННЕР VALUE</div>
-                
-                <!-- Кнопки фильтров -->
-                <div style="display:flex;gap:4px;flex-wrap:wrap;margin:6px 0;">
-                    <button class="filter-btn active" data-filter="all" onclick="filterScanner('all')" style="padding:4px 12px;border-radius:12px;border:1px solid #f7931a;background:#f7931a;color:#000;font-size:10px;cursor:pointer;min-height:30px;">📊 Все</button>
-                    <button class="filter-btn" data-filter="high" onclick="filterScanner('high')" style="padding:4px 12px;border-radius:12px;border:1px solid #2a3140;background:transparent;color:#888;font-size:10px;cursor:pointer;min-height:30px;">🔥 EV > 20%</button>
-                    <button class="filter-btn" data-filter="medium" onclick="filterScanner('medium')" style="padding:4px 12px;border-radius:12px;border:1px solid #2a3140;background:transparent;color:#888;font-size:10px;cursor:pointer;min-height:30px;">🟡 EV 10-20%</button>
-                    <button class="filter-btn" data-filter="low" onclick="filterScanner('low')" style="padding:4px 12px;border-radius:12px;border:1px solid #2a3140;background:transparent;color:#888;font-size:10px;cursor:pointer;min-height:30px;">🟢 EV < 10%</button>
-                    <button onclick="findValueBets()" style="padding:4px 12px;border-radius:12px;border:1px solid #2ecc71;background:transparent;color:#2ecc71;font-size:10px;cursor:pointer;min-height:30px;">🔄 Обновить</button>
-                </div>
-
-                <!-- Результаты сканера -->
-                <div id="scannerContainer">
-                    <div style="text-align:center;color:#888;padding:20px 0;font-size:13px;">
-                        🔍 Нажмите "Найти Value ставки"
-                        <div style="font-size:10px;color:#555;margin-top:4px;">AI проанализирует все матчи и найдет выгодные ставки</div>
-                    </div>
-                </div>
-
-                <!-- Кнопка поиска -->
-                <button onclick="findValueBets()" style="width:100%;padding:12px;border-radius:10px;border:none;background:linear-gradient(135deg,#2ecc71,#27ae60);color:#000;font-weight:700;font-size:16px;cursor:pointer;margin-top:8px;min-height:48px;">
-                    🔍 Найти Value ставки
-                </button>
-
-                <!-- Статистика сканера -->
-                <div id="scannerStats" style="display:none;margin-top:8px;padding:8px 12px;background:#1a2a3a;border-radius:8px;">
-                    <div style="display:flex;justify-content:space-between;font-size:10px;color:#888;">
-                        <span>📊 Найдено: <span id="scannerCount">0</span> ставок</span>
-                        <span>🔥 Средний EV: <span id="scannerAvgEV">0%</span></span>
-                        <span>💰 Потенциальная прибыль: <span id="scannerProfit">0%</span></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- История найденных VALUE ставок -->
-            <div class="card" style="margin-top:8px;">
-                <div class="card-title">📜 История VALUE ставок</div>
-                <div id="scannerHistory">
-                    <div style="text-align:center;color:#888;padding:10px 0;font-size:11px;">
-                        Нет сохраненных VALUE ставок
-                    </div>
-                </div>
-            </div>
-
-            <div class="disclaimer">Это аналитический инструмент, а не рекомендация к ставкам. Решения принимаете вы.</div>
+        <!-- ============================================================  
+        ЭКРАН 6: СКАННЕР VALUE  
+        ============================================================ -->  
+        <div class="screen" id="assistantScreen">  
+            <div class="card">  
+                <div class="card-title">🔍 СКАННЕР VALUE</div>  
+                  
+                <!-- Кнопки фильтров -->  
+                <div style="display:flex;gap:4px;flex-wrap:wrap;margin:6px 0;">  
+                    <button class="filter-btn active" data-filter="all" onclick="filterScanner('all')" style="padding:4px 12px;border-radius:12px;border:1px solid #f7931a;background:#f7931a;color:#000;font-size:10px;cursor:pointer;min-height:30px;">📊 Все</button>  
+                    <button class="filter-btn" data-filter="high" onclick="filterScanner('high')" style="padding:4px 12px;border-radius:12px;border:1px solid #2a3140;background:transparent;color:#888;font-size:10px;cursor:pointer;min-height:30px;">🔥 EV > 20%</button>  
+                    <button class="filter-btn" data-filter="medium" onclick="filterScanner('medium')" style="padding:4px 12px;border-radius:12px;border:1px solid #2a3140;background:transparent;color:#888;font-size:10px;cursor:pointer;min-height:30px;">🟡 EV 10-20%</button>  
+                    <button class="filter-btn" data-filter="low" onclick="filterScanner('low')" style="padding:4px 12px;border-radius:12px;border:1px solid #2a3140;background:transparent;color:#888;font-size:10px;cursor:pointer;min-height:30px;">🟢 EV < 10%</button>  
+                    <button onclick="findValueBets()" style="padding:4px 12px;border-radius:12px;border:1px solid #2ecc71;background:transparent;color:#2ecc71;font-size:10px;cursor:pointer;min-height:30px;">🔄 Обновить</button>  
+                </div>  
+  
+                <!-- Результаты сканера -->  
+                <div id="scannerContainer">  
+                    <div style="text-align:center;color:#888;padding:20px 0;font-size:13px;">  
+                        🔍 Нажмите "Найти Value ставки"  
+                        <div style="font-size:10px;color:#555;margin-top:4px;">AI проанализирует все матчи и найдет выгодные ставки</div>  
+                    </div>  
+                </div>  
+  
+                <!-- Кнопка поиска -->  
+                <button onclick="findValueBets()" style="width:100%;padding:12px;border-radius:10px;border:none;background:linear-gradient(135deg,#2ecc71,#27ae60);color:#000;font-weight:700;font-size:16px;cursor:pointer;margin-top:8px;min-height:48px;">  
+                    🔍 Найти Value ставки  
+                </button>  
+  
+                <!-- Статистика сканера -->  
+                <div id="scannerStats" style="display:none;margin-top:8px;padding:8px 12px;background:#1a2a3a;border-radius:8px;">  
+                    <div style="display:flex;justify-content:space-between;font-size:10px;color:#888;">  
+                        <span>📊 Найдено: <span id="scannerCount">0</span> ставок</span>  
+                        <span>🔥 Средний EV: <span id="scannerAvgEV">0%</span></span>  
+                        <span>💰 Потенциальная прибыль: <span id="scannerProfit">0%</span></span>  
+                    </div>  
+                </div>  
+            </div>  
+  
+            <!-- История найденных VALUE ставок -->  
+            <div class="card" style="margin-top:8px;">  
+                <div class="card-title">📜 История VALUE ставок</div>  
+                <div id="scannerHistory">  
+                    <div style="text-align:center;color:#888;padding:10px 0;font-size:11px;">  
+                        Нет сохраненных VALUE ставок  
+                    </div>  
+                </div>  
+            </div>  
+  
+            <div class="disclaimer">Это аналитический инструмент, а не рекомендация к ставкам. Решения принимаете вы.</div>  
         </div>  
   
     <!-- ===== НИЖНЯЯ НАВИГАЦИЯ ===== -->  
@@ -3238,9 +3239,8 @@
                 <button class="btn-skip-modal" onclick="closeSaveModal()">❌ Нет, только посмотреть</button>  
             </div>  
         </div>  
-    </div>  
-  
-    <script>  
+    </div>
+   <script>  
     // ================================================================  
     // КВАНТУМ v6.1 - ПОЛНАЯ JAVASCRIPT ЛОГИКА С ТОП-3 И ГЛУБОКОЙ AI  
     // СЕЗОН: 2026-2027  
@@ -3486,10 +3486,7 @@
         }  
     }  
   
-    // ================================================================  
-    // НОВОЕ УЛУЧШЕНИЕ: ПРОГНОЗ ТОЧНОГО СЧЕТА  
-    // ================================================================  
-  
+    // ===== НОВОЕ УЛУЧШЕНИЕ: ПРОГНОЗ ТОЧНОГО СЧЕТА =====  
     function predictExactScore(homeXG, awayXG, maxGoals = 4) {  
         const results = [];  
         let totalProbability = 0;  
@@ -3528,10 +3525,8 @@
             confidence: Math.min(85, Math.round(totalTop * 0.8 + 20))  
         };  
     }  
-  // ================================================================  
-    // НОВОЕ УЛУЧШЕНИЕ: РАСШИРЕННЫЕ ПАРАМЕТРЫ ДЛЯ AI  
-    // ================================================================  
-  
+
+    // ===== НОВОЕ УЛУЧШЕНИЕ: РАСШИРЕННЫЕ ПАРАМЕТРЫ ДЛЯ AI =====  
     function calculateRecentForm(team, matchesCount = 5) {  
         let wins = 0, draws = 0, losses = 0;  
   
@@ -3824,48 +3819,11 @@
         showToast(`✅ Загружено ${loadedCount} европейских лиг!`, 'success');  
     }  
   
-    function getFlag(country) {  
-        const flags = {  
-            'England': '🏴', 'Spain': '🇪🇸', 'Germany': '🇩🇪', 'Italy': '🇮🇹',  
-            'France': '🇫🇷', 'Netherlands': '🇳🇱', 'Portugal': '🇵🇹', 'Brazil': '🇧🇷',  
-            'Argentina': '🇦🇷', 'USA': '🇺🇸', 'Mexico': '🇲🇽', 'Russia': '🇷🇺',  
-            'Japan': '🇯🇵', 'South Korea': '🇰🇷', 'Australia': '🇦🇺', 'China': '🇨🇳',  
-            'Saudi Arabia': '🇸🇦', 'Turkey': '🇹🇷', 'Belgium': '🇧🇪', 'Switzerland': '🇨🇭',  
-            'Ukraine': '🇺🇦', 'Poland': '🇵🇱', 'Czech Republic': '🇨🇿', 'Austria': '🇦🇹',  
-            'Greece': '🇬🇷', 'Denmark': '🇩🇰', 'Norway': '🇳🇴', 'Sweden': '🇸🇪',  
-            'Scotland': '🏴', 'Wales': '🏴', 'Ireland': '🇮🇪', 'Northern Ireland': '🇬🇧'  
-        };  
-        return flags[country] || '🌍';  
-    }  
-  
-    function renderLeagues() {  
-        const select = $('leagueSelect');  
-        if (!select) return;  
-        select.innerHTML = '';  
-        if (Object.keys(LEAGUES).length === 0) {  
-            const option = document.createElement('option');  
-            option.value = '39';  
-            option.textContent = '🏴 АПЛ (загрузка...)';  
-            select.appendChild(option);  
-            return;  
+    function getLeague() {  
+        if (LEAGUES[state.currentLeague]) {  
+            return LEAGUES[state.currentLeague];  
         }  
-        const sorted = Object.keys(LEAGUES).sort((a, b) => LEAGUES[a].name.localeCompare(LEAGUES[b].name));  
-        sorted.forEach(key => {  
-            const option = document.createElement('option');  
-            option.value = key;  
-            option.textContent = LEAGUES[key].name;  
-            if (key === state.currentLeague) option.selected = true;  
-            select.appendChild(option);  
-        });  
-        updateLeagueInfo();  
-    }  
-  
-    function updateLeagueInfo() {  
-        const league = getLeague();  
-        const info = $('leagueInfo');  
-        if (info && league.avgGoals) {  
-            info.textContent = `Ср. тотал: ${league.avgGoals} | ОЗ: ${league.oz}% | ${Object.keys(LEAGUES).length} лиг`;  
-        }  
+        return { name: 'Лига', oz: 60, avgGoals: 2.6, country: 'Мир' };  
     }  
   
     function updateLeagueInfoDisplay(leagueData) {  
@@ -3893,14 +3851,6 @@
                 statusEl.style.color = '#888';  
             }  
         }  
-    }  
-  
-    function renderSettingsLeagues() {}  
-    function getLeague() {  
-        if (LEAGUES[state.currentLeague]) {  
-            return LEAGUES[state.currentLeague];  
-        }  
-        return { name: 'Лига', oz: 60, avgGoals: 2.6, country: 'Мир' };  
     }  
   
     // ================================================================  
@@ -4001,55 +3951,50 @@
             const avgAway = awayStats.reduce((s, a) => s + a.avgGoals, 0) / awayStats.length;
             
             // Генерируем 10 реалистичных матчей с БОЛЬШЕЙ ВАРИАТИВНОСТЬЮ
-for (let i = 0; i < 10; i++) {
-    // Больше случайности
-    const homeVar = (Math.random() - 0.5) * 3.0;  // было 1.5
-    const awayVar = (Math.random() - 0.5) * 2.5;  // было 1.2
-    
-    let homeGoals = Math.max(0, Math.round(avgHome + homeVar));
-    let awayGoals = Math.max(0, Math.round(avgAway + awayVar));
-    
-    // Иногда сухие матчи (0:0, 1:0, 0:1)
-    if (Math.random() > 0.8) {
-        homeGoals = Math.floor(Math.random() * 2);
-        awayGoals = Math.floor(Math.random() * 2);
-    }
-    
-    // Иногда голевые феерии (4:3, 5:2 и т.д.)
-    if (Math.random() > 0.85) {
-        homeGoals += Math.floor(Math.random() * 3) + 2;
-        awayGoals += Math.floor(Math.random() * 3) + 1;
-    }
-    
-    // Иногда разгромы (3:0, 4:0)
-    if (Math.random() > 0.9) {
-        if (Math.random() > 0.5) {
-            homeGoals += Math.floor(Math.random() * 3) + 2;
-            awayGoals = Math.floor(Math.random() * 1);
-        } else {
-            awayGoals += Math.floor(Math.random() * 3) + 2;
-            homeGoals = Math.floor(Math.random() * 1);
-        }
-    }
-    
-    // Ничьи с разными счетами
-    if (Math.random() > 0.85) {
-        const drawScore = Math.floor(Math.random() * 3) + 1;
-        homeGoals = drawScore;
-        awayGoals = drawScore;
-    }
-    
-    allMatches.push({
-        home: homeTeam,
-        away: awayTeam,
-        homeScore: homeGoals,
-        awayScore: awayGoals,
-        oz: homeGoals > 0 && awayGoals > 0,
-        total: homeGoals + awayGoals,
-        date: new Date(Date.now() - i * 14 * 24 * 60 * 60 * 1000).toISOString(),
-        league: { name: 'Ла Лига', country: 'Испания' }
-    });
-}
+            for (let i = 0; i < 10; i++) {
+                const homeVar = (Math.random() - 0.5) * 3.0;
+                const awayVar = (Math.random() - 0.5) * 2.5;
+                
+                let homeGoals = Math.max(0, Math.round(avgHome + homeVar));
+                let awayGoals = Math.max(0, Math.round(avgAway + awayVar));
+                
+                if (Math.random() > 0.8) {
+                    homeGoals = Math.floor(Math.random() * 2);
+                    awayGoals = Math.floor(Math.random() * 2);
+                }
+                
+                if (Math.random() > 0.85) {
+                    homeGoals += Math.floor(Math.random() * 3) + 2;
+                    awayGoals += Math.floor(Math.random() * 3) + 1;
+                }
+                
+                if (Math.random() > 0.9) {
+                    if (Math.random() > 0.5) {
+                        homeGoals += Math.floor(Math.random() * 3) + 2;
+                        awayGoals = Math.floor(Math.random() * 1);
+                    } else {
+                        awayGoals += Math.floor(Math.random() * 3) + 2;
+                        homeGoals = Math.floor(Math.random() * 1);
+                    }
+                }
+                
+                if (Math.random() > 0.85) {
+                    const drawScore = Math.floor(Math.random() * 3) + 1;
+                    homeGoals = drawScore;
+                    awayGoals = drawScore;
+                }
+                
+                allMatches.push({
+                    home: homeTeam,
+                    away: awayTeam,
+                    homeScore: homeGoals,
+                    awayScore: awayGoals,
+                    oz: homeGoals > 0 && awayGoals > 0,
+                    total: homeGoals + awayGoals,
+                    date: new Date(Date.now() - i * 14 * 24 * 60 * 60 * 1000).toISOString(),
+                    league: { name: 'Ла Лига', country: 'Испания' }
+                });
+            }
             
             state.h2hData = allMatches;
             state.h2hTimestamp = Date.now();
@@ -4057,7 +4002,6 @@ for (let i = 0; i < 10; i++) {
             showToast(`✅ Сгенерировано ${allMatches.length} матчей на основе статистики`, 'success');
             
         } else {
-            // 4. ЕСЛИ СТАТИСТИКИ НЕТ - ИСПОЛЬЗУЕМ РЕАЛИСТИЧНЫЕ ДАННЫЕ ПО УМОЛЧАНИЮ
             if (status) status.innerHTML = '⏳ Генерация тестовых данных...';
             
             const defaultMatches = [];
@@ -4096,6 +4040,7 @@ for (let i = 0; i < 10; i++) {
         resetButtons(btn, btnText, spinner);
     }
 }  
+  
     function renderH2HData(matches) {  
         const status = $('h2hStatus');  
         const results = $('h2hResults');  
@@ -4186,7 +4131,6 @@ for (let i = 0; i < 10; i++) {
             renderUltimateDashboard();  
         }  
         if (tab === 'settings') {  
-            renderSettingsLeagues();  
             updateAIStatus();  
             document.getElementById('apiKeyInput').value = localStorage.getItem('quantum_api_key') || '';  
             document.getElementById('weatherKeyInput').value = localStorage.getItem('quantum_weather_key') || '';  
@@ -4208,17 +4152,18 @@ for (let i = 0; i < 10; i++) {
             }  
         }  
         if (tab === 'assistant') {
-    renderScannerHistory();
-    const container = document.getElementById('scannerContainer');
-    if (container) {
-        container.innerHTML = `
-            <div style="text-align:center;color:#888;padding:20px 0;font-size:13px;">
-                🔍 Нажмите "Найти Value ставки"
-                <div style="font-size:10px;color:#555;margin-top:4px;">AI проанализирует все матчи и найдет выгодные ставки</div>
-            </div>
-        `;
-    }
-}  
+            renderScannerHistory();
+            const container = document.getElementById('scannerContainer');
+            if (container) {
+                container.innerHTML = `
+                    <div style="text-align:center;color:#888;padding:20px 0;font-size:13px;">
+                        🔍 Нажмите "Найти Value ставки"
+                        <div style="font-size:10px;color:#555;margin-top:4px;">AI проанализирует все матчи и найдет выгодные ставки</div>
+                    </div>
+                `;
+            }
+        }  
+    }  
   
     function switchMode(mode, btn) {  
         state.currentMode = mode;  
@@ -4441,7 +4386,8 @@ for (let i = 0; i < 10; i++) {
         }  
         document.getElementById('smartScore').innerHTML = `📊 Оценка: <span class="num">${score}</span>%`;  
     }  
-// ================================================================  
+  
+    // ================================================================  
     // ПОГОДА  
     // ================================================================  
   
@@ -4979,9 +4925,7 @@ for (let i = 0; i < 10; i++) {
     let currentStep = 0;
     let results = {};
 
-    // ================================================================
     // ШАГ 1: ЗАГРУЗКА H2H
-    // ================================================================
     currentStep++;
     updateTurboProgress(progressFill, progressStep, progressPercent, currentStep, totalSteps, steps[currentStep-1].icon + ' ' + steps[currentStep-1].label);
 
@@ -4990,9 +4934,7 @@ for (let i = 0; i < 10; i++) {
     await loadH2H();
     await delay(300);
 
-    // ================================================================
     // ШАГ 2: РЕАЛЬНАЯ ФОРМА КОМАНД (последние 5 матчей)
-    // ================================================================
     currentStep++;
     updateTurboProgress(progressFill, progressStep, progressPercent, currentStep, totalSteps, steps[currentStep-1].icon + ' ' + steps[currentStep-1].label);
 
@@ -5004,7 +4946,6 @@ for (let i = 0; i < 10; i++) {
     try {
         const apiKey = localStorage.getItem('quantum_api_key');
         if (apiKey) {
-            // Поиск ID команд
             const homeSearch = await fetchWithCache(`teams?search=${encodeURIComponent(match.home)}`, {
                 headers: { 'x-apisports-key': apiKey }
             }, CACHE_CONFIG.API_TTL);
@@ -5016,7 +4957,6 @@ for (let i = 0; i < 10; i++) {
                 const homeId = homeSearch.response[0].team.id;
                 const awayId = awaySearch.response[0].team.id;
 
-                // Получаем последние 5 матчей каждой команды
                 const homeFixtures = await fetchWithCache(
                     `fixtures?team=${homeId}&season=2025&last=5`,
                     { headers: { 'x-apisports-key': apiKey } },
@@ -5071,7 +5011,6 @@ for (let i = 0; i < 10; i++) {
         }
     } catch (e) {
         console.log('⚠️ Ошибка загрузки формы:', e);
-        // Используем H2H как запасной вариант
         if (state.h2hData && state.h2hData.length > 0) {
             const wins = state.h2hData.filter(m => m.homeScore > m.awayScore).length;
             const awayWins = state.h2hData.filter(m => m.awayScore > m.homeScore).length;
@@ -5081,9 +5020,7 @@ for (let i = 0; i < 10; i++) {
     }
     await delay(200);
 
-    // ================================================================
     // ШАГ 3: ТУРНИРНАЯ ТАБЛИЦА И МОТИВАЦИЯ
-    // ================================================================
     currentStep++;
     updateTurboProgress(progressFill, progressStep, progressPercent, currentStep, totalSteps, steps[currentStep-1].icon + ' ' + steps[currentStep-1].label);
 
@@ -5094,7 +5031,7 @@ for (let i = 0; i < 10; i++) {
     try {
         const apiKey = localStorage.getItem('quantum_api_key');
         if (apiKey) {
-            const leagueId = match.leagueId || 39; // АПЛ по умолчанию
+            const leagueId = match.leagueId || 39;
             const standings = await fetchWithCache(
                 `standings?league=${leagueId}&season=2025`,
                 { headers: { 'x-apisports-key': apiKey } },
@@ -5122,7 +5059,6 @@ for (let i = 0; i < 10; i++) {
         console.log('⚠️ Ошибка загрузки таблицы:', e);
     }
 
-    // Дерби-фактор
     const isDerbyMatch = isDerby(match.home, match.away);
     if (isDerbyMatch) {
         motivationText = '⚔️ ДЕРБИ! Максимальная мотивация';
@@ -5130,9 +5066,7 @@ for (let i = 0; i < 10; i++) {
     }
     await delay(200);
 
-    // ================================================================
     // ШАГ 4: ПОГОДА
-    // ================================================================
     currentStep++;
     updateTurboProgress(progressFill, progressStep, progressPercent, currentStep, totalSteps, steps[currentStep-1].icon + ' ' + steps[currentStep-1].label);
 
@@ -5176,9 +5110,7 @@ for (let i = 0; i < 10; i++) {
     } catch (e) { console.log('⚠️ Ошибка погоды:', e); }
     await delay(200);
 
-    // ================================================================
     // ШАГ 5: ПРОГНОЗ xG И ТОТАЛА
-    // ================================================================
     currentStep++;
     updateTurboProgress(progressFill, progressStep, progressPercent, currentStep, totalSteps, steps[currentStep-1].icon + ' ' + steps[currentStep-1].label);
 
@@ -5198,21 +5130,17 @@ for (let i = 0; i < 10; i++) {
     const aiPoisson = document.getElementById('aiPoisson')?.textContent || '—';
     const exactScore = document.querySelector('.score-grid .most-likely .score-value')?.textContent || '—';
 
-    // Корректировка xG с учетом формы и погоды
     let adjustedHomeXG = aiHomeXG;
     let adjustedAwayXG = aiAwayXG;
     
-    // Коррекция по форме
     if (homeForm > 60) adjustedHomeXG *= 1.1;
     if (awayForm > 60) adjustedAwayXG *= 1.05;
     if (homeForm < 40) adjustedHomeXG *= 0.9;
     if (awayForm < 40) adjustedAwayXG *= 0.95;
     
-    // Коррекция по мотивации
     adjustedHomeXG *= motivationFactor;
     adjustedAwayXG *= motivationFactor;
     
-    // Коррекция по погоде
     if (weatherCondition === 'rain') { adjustedHomeXG *= 0.85; adjustedAwayXG *= 0.85; }
     if (weatherCondition === 'snow') { adjustedHomeXG *= 0.75; adjustedAwayXG *= 0.75; }
     if (weatherCondition === 'hot') { adjustedHomeXG *= 0.9; adjustedAwayXG *= 0.9; }
@@ -5220,9 +5148,7 @@ for (let i = 0; i < 10; i++) {
 
     await delay(200);
 
-    // ================================================================
     // ШАГ 6: ДОПОЛНИТЕЛЬНЫЙ АНАЛИЗ
-    // ================================================================
     currentStep++;
     updateTurboProgress(progressFill, progressStep, progressPercent, currentStep, totalSteps, steps[currentStep-1].icon + ' ' + steps[currentStep-1].label);
 
@@ -5235,7 +5161,6 @@ for (let i = 0; i < 10; i++) {
         state.weatherData
     );
     
-    // Добавляем реальную форму в детектив
     detectiveResult.homeRecentForm = homeRecentForm;
     detectiveResult.awayRecentForm = awayRecentForm;
     detectiveResult.homePosition = homePosition;
@@ -5251,9 +5176,7 @@ for (let i = 0; i < 10; i++) {
     
     await delay(200);
 
-    // ================================================================
     // ШАГ 7: VALUE BETTING
-    // ================================================================
     currentStep++;
     updateTurboProgress(progressFill, progressStep, progressPercent, currentStep, totalSteps, steps[currentStep-1].icon + ' ' + steps[currentStep-1].label);
 
@@ -5262,45 +5185,35 @@ for (let i = 0; i < 10; i++) {
     const valueResult = calculateValueBet(aiProb, odds);
     await delay(200);
 
-    // ================================================================
     // ШАГ 8: ИТОГОВЫЙ ПРОГНОЗ
-    // ================================================================
     currentStep++;
     updateTurboProgress(progressFill, progressStep, progressPercent, currentStep, totalSteps, steps[currentStep-1].icon + ' ' + steps[currentStep-1].label);
 
-    // Формируем рекомендацию с учетом всех факторов
     let finalRecommendation = '';
     let recommendationColor = '';
     let score = 0;
     
-    // Базовый счет (0-100)
     if (aiConfidence >= 70) score += 30;
     else if (aiConfidence >= 50) score += 20;
     else score += 10;
     
-    // Форма
     if (homeForm > 60 || awayForm > 60) score += 15;
     if (homeForm > 70 || awayForm > 70) score += 10;
     
-    // Мотивация
     if (motivationFactor > 1.2) score += 15;
     if (isDerbyMatch) score += 10;
     
-    // Погода
     if (weatherCondition === 'good') score += 5;
     if (weatherCondition === 'neutral') score += 3;
     if (weatherCondition === 'rain' || weatherCondition === 'snow') score -= 10;
     
-    // Value
     if (valueResult.isValue) score += 20;
     
-    // Непредсказуемость
     if (detectiveResult.homeUnpredictability?.level === 'high' || 
         detectiveResult.awayUnpredictability?.level === 'high') {
         score -= 15;
     }
     
-    // Итоговая оценка
     score = Math.min(100, Math.max(0, score));
     
     if (score >= 75 && valueResult.isValue) {
@@ -5320,10 +5233,6 @@ for (let i = 0; i < 10; i++) {
     if (isDerbyMatch) {
         finalRecommendation += ' ⚔️ Дерби!';
     }
-
-    // ================================================================
-    // ОТОБРАЖЕНИЕ РЕЗУЛЬТАТОВ
-    // ================================================================
 
     results = {
         match: `${match.home} vs ${match.away}`,
@@ -5429,8 +5338,9 @@ for (let i = 0; i < 10; i++) {
         if (step) step.textContent = `Шаг ${current}/${total}: ${label}`;  
         if (percent) percent.textContent = pct + '%';  
     }  
-  // ================================================================  
-    // ОСНОВНОЙ ПРОГНОЗ (РАСШИРЕННЫЙ) - С ТОЧНЫМ СЧЕТОМ И УЛУЧШЕНИЯМИ  
+
+    // ================================================================  
+    // ОСНОВНОЙ ПРОГНОЗ (РАСШИРЕННЫЙ)  
     // ================================================================  
   
     async function generateUltimatePredictionExtended() {  
@@ -5546,27 +5456,20 @@ for (let i = 0; i < 10; i++) {
         const probAwayWin = poissonAway.distribution.filter(d => d.value > 0).reduce((s, d) => s + d.probability, 0);  
         const probDraw = 1 - probHomeWin - probAwayWin;  
           
-        // ===== НОВОЕ: РАСШИРЕННЫЕ ПАРАМЕТРЫ =====  
         const extendedFeatures = getExtendedFeatures(homeTeamName, awayTeamName, state.h2hData, state.weatherData, league);  
         const adjustedConfidence = Math.min(95, Math.round(confidence * extendedFeatures.confidenceModifier));  
           
-        // ===== НОВОЕ: ПРОГНОЗ ТОЧНОГО СЧЕТА =====  
         const exactScore = predictExactScore(lambdaHome, lambdaAway);  
         const mostLikelyScore = exactScore.mostLikely;  
           
-        // ===== НОВОЕ: ГОЛЫ ПО ТАЙМАМ =====  
         const firstHalfHome = lambdaHome * 0.45;  
         const firstHalfAway = lambdaAway * 0.45;  
         const secondHalfHome = lambdaHome * 0.55;  
         const secondHalfAway = lambdaAway * 0.55;  
           
-        // ===== НОВОЕ: ИНДИВИДУАЛЬНЫЙ ТОТАЛ =====  
         const homeTotal = Math.round(lambdaHome * 100) / 100;  
         const awayTotal = Math.round(lambdaAway * 100) / 100;  
           
-        // ===== ОТОБРАЖЕНИЕ =====  
-          
-        // Точный счет  
         const scoreContainer = document.getElementById('exactScoreContainer');  
         if (scoreContainer && mostLikelyScore) {  
             scoreContainer.innerHTML = `  
@@ -5585,11 +5488,9 @@ for (let i = 0; i < 10; i++) {
             `;  
         }  
           
-        // Индивидуальный тотал  
         document.getElementById('homeTotalDisplay').textContent = homeTotal.toFixed(1);  
         document.getElementById('awayTotalDisplay').textContent = awayTotal.toFixed(1);  
           
-        // Голы по таймам  
         document.getElementById('firstHalfDisplay').innerHTML = `  
             <span class="half-label">1-й тайм</span><br>  
             <span class="half-value">${firstHalfHome.toFixed(1)} : ${firstHalfAway.toFixed(1)}</span>  
@@ -5599,10 +5500,8 @@ for (let i = 0; i < 10; i++) {
             <span class="half-value">${secondHalfHome.toFixed(1)} : ${secondHalfAway.toFixed(1)}</span>  
         `;  
           
-        // Расширенная уверенность  
         document.getElementById('aiConfidenceExtended').textContent = adjustedConfidence + '%';  
           
-        // Остальные данные  
         if ($('aiHomeScore')) $('aiHomeScore').textContent = predictedHome;  
         if ($('aiAwayScore')) $('aiAwayScore').textContent = predictedAway;  
         if ($('aiAvgTotal')) $('aiAvgTotal').textContent = (lambdaHome + lambdaAway).toFixed(1);  
@@ -5614,7 +5513,6 @@ for (let i = 0; i < 10; i++) {
         if ($('aiPoisson')) $('aiPoisson').textContent = `П1: ${Math.round(probHomeWin * 100)}% | X: ${Math.round(probDraw * 100)}% | П2: ${Math.round(probAwayWin * 100)}%`;  
         if ($('aiEnsemble')) $('aiEnsemble').textContent = `Итоговая оценка: ${Math.round(ensembleResults.final * 100)}% уверенности`;  
           
-        // Форма команд  
         if (state.h2hData && state.h2hData.length > 0) {  
             const homeWins = state.h2hData.filter(m => m.homeScore > m.awayScore).length;  
             const awayWins = state.h2hData.filter(m => m.awayScore > m.homeScore).length;  
@@ -5625,7 +5523,6 @@ for (let i = 0; i < 10; i++) {
             document.getElementById('aiAwayForm').className = 'form-result ' + (awayWins > homeWins ? 'win' : 'loss');  
         }  
           
-        // Рекомендация  
         let rec = '';  
         if (mode === 'oz') {  
             rec = probOz > 0.65 ? `✅ ОЗ – ДА (${Math.round(probOz * 100)}%)` :  
@@ -5648,7 +5545,6 @@ for (let i = 0; i < 10; i++) {
         if ($('aiRecommendation')) $('aiRecommendation').textContent = rec;  
         if ($('aiAdvice')) $('aiAdvice').textContent = `На основе ${state.h2hData ? state.h2hData.length : 0} матчей, Poisson, формы и погоды`;  
   
-        // Статус данных  
         const dataStatusEl = document.getElementById('aiDataStatus');  
         if (dataStatusEl) {  
             const h2hCount = state.h2hData ? state.h2hData.length : 0;  
@@ -5659,7 +5555,6 @@ for (let i = 0; i < 10; i++) {
             dataStatusEl.style.color = h2hCount >= 3 ? '#888' : '#f39c12';  
         }  
   
-        // SHAP  
         if (shapResult) {  
             document.getElementById('explanationCard').style.display = 'block';  
             const contribContainer = document.getElementById('explanationContributions');  
@@ -5670,7 +5565,6 @@ for (let i = 0; i < 10; i++) {
             state.shapData = shapResult;  
         }  
           
-        // Value  
         if (valueResult) {  
             document.getElementById('valueContainer').style.display = 'block';  
             const valueContent = document.getElementById('valueContent');  
@@ -5686,7 +5580,6 @@ for (let i = 0; i < 10; i++) {
                 </div>  
             `;  
             if (valueResult.isValue) {  
-                // БЛОК 5: ПРОВЕРКА НА ДУБЛИ  
                 const duplicate = state.valueBets.some(v =>   
                     v.match === `${homeTeamName || 'Хозяева'} vs ${awayTeamName || 'Гости'}` &&  
                     Math.abs(v.ev - valueResult.ev) < 0.01  
@@ -5704,7 +5597,6 @@ for (let i = 0; i < 10; i++) {
             }  
         }  
           
-        // Детектив  
         const homeForm = state.h2hData ? Math.round(state.h2hData.filter(m => m.homeScore > m.awayScore).length / state.h2hData.length * 100) : 50;  
         const awayForm = state.h2hData ? Math.round(state.h2hData.filter(m => m.awayScore > m.homeScore).length / state.h2hData.length * 100) : 50;  
         const detectiveResult = runAIDetective(homeTeamName || 'Хозяева', awayTeamName || 'Гости', homeForm, awayForm, state.h2hData, state.weatherData);  
@@ -5731,7 +5623,6 @@ for (let i = 0; i < 10; i++) {
             `;  
         }  
           
-        // ===== НОВОЕ: ГЛУБОКИЙ AI-АНАЛИЗ =====  
         renderDeepAIAnalysis();  
           
         if (btn) { btn.disabled = false; btn.innerHTML = '<span>🤖</span> Сгенерировать прогноз'; }  
@@ -5772,7 +5663,7 @@ for (let i = 0; i < 10; i++) {
     }  
   
     // ================================================================  
-    // SHAP (ВЛИЯНИЕ ФАКТОРОВ)  
+    // SHAP  
     // ================================================================  
   
     function generateSHAP(features, prediction) {  
@@ -5824,7 +5715,7 @@ for (let i = 0; i < 10; i++) {
     }  
   
     // ================================================================  
-    // VALUE BETTING (БЛОК 4)  
+    // VALUE BETTING  
     // ================================================================  
   
     function calculateValueBet(aiProb, odds) {  
@@ -5916,24 +5807,22 @@ for (let i = 0; i < 10; i++) {
         result.formAnalysis = formAnalysis;  
         return result;  
     }  
- // ================================================================  
-    // НОВОЕ: ТОП-3 ПРОГНОЗА ДНЯ  
+  
+    // ================================================================  
+    // ТОП-3 ПРОГНОЗА ДНЯ  
     // ================================================================  
   
     function getTopPredictions(matches, count = 3) {  
         if (!matches || matches.length === 0) return [];  
           
-        // Фильтруем только предстоящие матчи с уверенностью >= 60%  
         const upcoming = matches.filter(m =>   
             m.status !== 'finished' &&   
             m.confidence >= 60 &&  
             new Date(m.startTime) > new Date()  
         );  
           
-        // Сортируем по уверенности (по убыванию)  
         const sorted = [...upcoming].sort((a, b) => b.confidence - a.confidence);  
           
-        // Берем топ-N  
         return sorted.slice(0, count);  
     }  
   
@@ -5993,11 +5882,10 @@ for (let i = 0; i < 10; i++) {
     }  
   
     // ================================================================  
-    // НОВОЕ: ГЛУБОКАЯ AI-МОДЕЛЬ (РАСШИРЕННЫЙ АНАЛИЗ)  
+    // ГЛУБОКАЯ AI-МОДЕЛЬ  
     // ================================================================  
   
     function getDeepAIAnalysis(homeTeam, awayTeam, h2hData, weatherData, league) {  
-        // === 1. АНАЛИЗ ФОРМЫ (последние 5 матчей) ===  
         let homeWins = 0, homeDraws = 0, homeLosses = 0;  
         let awayWins = 0, awayDraws = 0, awayLosses = 0;  
           
@@ -6030,14 +5918,11 @@ for (let i = 0; i < 10; i++) {
         const homeFormScore = Math.round((homeWins / homeTotal) * 100);  
         const awayFormScore = Math.round((awayWins / awayTotal) * 100);  
           
-        // === 2. МОТИВАЦИЯ ===  
         const motivation = calculateMotivation(homeTeam, awayTeam, league, h2hData);  
           
-        // === 3. СТАБИЛЬНОСТЬ ===  
         const homeStability = calculateUnpredictability(homeTeam, h2hData);  
         const awayStability = calculateUnpredictability(awayTeam, h2hData);  
           
-        // === 4. ПОГОДНЫЙ ФАКТОР ===  
         let weatherImpact = 0;  
         let weatherText = 'Нейтральная';  
         if (weatherData) {  
@@ -6063,13 +5948,10 @@ for (let i = 0; i < 10; i++) {
             }  
         }  
           
-        // === 5. ДЕРБИ-ФАКТОР ===  
         const derby = isDerby(homeTeam, awayTeam);  
           
-        // === 6. ИСТОРИЧЕСКАЯ ТОЧНОСТЬ ПО ЛИГЕ ===  
         const leagueAccuracy = getLeagueAccuracy(league?.name || '');  
           
-        // === 7. ОБЩАЯ ОЦЕНКА ===  
         let totalScore = 50;  
         totalScore += (homeFormScore - 50) * 0.3;  
         totalScore += (awayFormScore - 50) * 0.2;  
@@ -6083,7 +5965,6 @@ for (let i = 0; i < 10; i++) {
           
         totalScore = Math.min(95, Math.max(5, Math.round(totalScore)));  
           
-        // === 8. РЕКОМЕНДАЦИЯ ===  
         let recommendation = '';  
         let recColor = '#2ecc71';  
         if (totalScore >= 75) {  
@@ -6100,7 +5981,6 @@ for (let i = 0; i < 10; i++) {
             recColor = '#e74c3c';  
         }  
           
-        // === 9. ФАКТОРЫ ВЛИЯНИЯ ===  
         const factors = [];  
         if (homeFormScore > 60) factors.push({ name: 'Форма хозяев', value: homeFormScore, type: 'good' });  
         else if (homeFormScore < 40) factors.push({ name: 'Форма хозяев', value: homeFormScore, type: 'bad' });  
@@ -6137,10 +6017,6 @@ for (let i = 0; i < 10; i++) {
         };  
     }  
   
-    // ================================================================  
-    // НОВОЕ: ОТОБРАЖЕНИЕ ГЛУБОКОЙ AI В КАРТОЧКЕ  
-    // ================================================================  
-  
     function renderDeepAIAnalysis() {  
         const container = document.getElementById('deepAIContainer');  
         if (!container) return;  
@@ -6172,7 +6048,6 @@ for (let i = 0; i < 10; i++) {
             league  
         );  
           
-        // Определяем статус  
         let statusText = '✅ Готово';  
         let statusColor = '#2ecc71';  
         if (analysis.totalScore < 40) { statusText = '⚠️ Низкая уверенность'; statusColor = '#e74c3c'; }  
@@ -6220,7 +6095,6 @@ for (let i = 0; i < 10; i++) {
                     </div>  
                 </div>  
                   
-                <!-- Факторы влияния -->  
                 ${analysis.factors.length > 0 ? `  
                     <div style="margin:4px 0;">  
                         <div style="font-size:9px;color:#888;margin-bottom:2px;">📈 Факторы влияния:</div>  
@@ -6238,7 +6112,6 @@ for (let i = 0; i < 10; i++) {
                     </div>  
                 ` : ''}  
                   
-                <!-- Рекомендация -->  
                 <div class="recommendation-deep" style="border-left-color:${analysis.recColor};">  
                     <div class="big" style="color:${analysis.recColor};">${analysis.recommendation}</div>  
                     <div class="sub">  
@@ -6252,16 +6125,11 @@ for (let i = 0; i < 10; i++) {
         `;  
     }  
   
-    // ================================================================  
-    // НОВОЕ: ОБНОВЛЕНИЕ ТОП-3 И ГЛУБОКОЙ AI ПРИ ИЗМЕНЕНИИ ДАННЫХ  
-    // ================================================================  
-  
     function updateAllNewFeatures() {  
         renderTopPredictions();  
         renderDeepAIAnalysis();  
     }  
   
-    // Подключаем к существующим функциям  
     const originalRefreshPredictions = refreshPredictions;  
     refreshPredictions = function() {  
         originalRefreshPredictions();  
@@ -6273,7 +6141,8 @@ for (let i = 0; i < 10; i++) {
         await originalGenerateUltimatePredictionExtended();  
         setTimeout(renderDeepAIAnalysis, 300);  
     };  
-// ================================================================  
+
+    // ================================================================  
     // ЭКСПЕРИМЕНТАЛЬНАЯ МОДЕЛЬ (QuantumAssistant)  
     // ================================================================  
   
@@ -6313,19 +6182,6 @@ for (let i = 0; i < 10; i++) {
             });  
             if (features.length === 0) return { features: [], labels: [] };  
             return { features, labels };  
-        }  
-  
-        normalizeFeatures(features) {  
-            const means = [], stds = [];  
-            const numFeatures = features[0].length;  
-            for (let j = 0; j < numFeatures; j++) {  
-                const values = features.map(f => f[j]);  
-                const mean = values.reduce((a, b) => a + b, 0) / values.length;  
-                const std = Math.sqrt(values.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / values.length);  
-                means.push(mean);  
-                stds.push(std || 1);  
-            }  
-            return features.map(f => f.map((v, j) => (v - means[j]) / stds[j]));  
         }  
   
         async createModel() {  
@@ -6589,7 +6445,6 @@ for (let i = 0; i < 10; i++) {
         if (kpiBest) kpiBest.textContent = maxStreak;  
     }  
   
-    // ===== БЛОК 1: ОТОБРАЖЕНИЕ VALUE-СТАВОК =====  
     function renderUltimateDashboard() {  
         const total = state.bets.length;  
         const wins = state.bets.filter(b => b.outcome === 'win').length;  
@@ -6608,7 +6463,6 @@ for (let i = 0; i < 10; i++) {
         document.getElementById('kpiValueDisplay').textContent = valueRate + '%';  
         document.getElementById('kpiValueTrend').textContent = valueRate > 0 ? '✅ +' + valueRate + '%' : '⏳ Нет value';  
           
-        // Отображение списка value-ставок  
         const valueList = document.getElementById('valueBetsList');  
         if (state.valueBets && state.valueBets.length > 0) {  
             const unique = [];  
@@ -6917,8 +6771,9 @@ for (let i = 0; i < 10; i++) {
         reader.readAsText(file);  
         event.target.value = '';  
     }  
-  // ================================================================  
-    // ПРОГНОЗЫ v5.0 (продолжение)  
+
+    // ================================================================  
+    // ПРОГНОЗЫ v5.0  
     // ================================================================  
   
     async function generateTestPredictions() {  
@@ -7031,48 +6886,13 @@ for (let i = 0; i < 10; i++) {
     function getFallbackMatches() {  
         const now = new Date();  
         return [  
-            {  
-                id: 1, home: 'Спартак', away: 'Зенит', league: 'РПЛ', country: 'Россия',  
-                startTime: new Date(now.getTime() + 2 * 60 * 60 * 1000),  
-                homeScore: null, awayScore: null, status: 'upcoming',  
-                prediction: 'ОЗ - ДА', confidence: 78, odds: 1.95, total: 2.5, oz: true, isLive: false  
-            },  
-            {  
-                id: 2, home: 'ЦСКА', away: 'Динамо', league: 'РПЛ', country: 'Россия',  
-                startTime: new Date(now.getTime() + 4 * 60 * 60 * 1000),  
-                homeScore: null, awayScore: null, status: 'upcoming',  
-                prediction: 'Тотал > 2.5', confidence: 72, odds: 1.80, total: 2.5, oz: true, isLive: false  
-            },  
-            {  
-                id: 3, home: 'Реал', away: 'Барселона', league: 'Ла Лига', country: 'Испания',  
-                startTime: new Date(now.getTime() + 6 * 60 * 60 * 1000),  
-                homeScore: null, awayScore: null, status: 'upcoming',  
-                prediction: 'ОЗ - ДА', confidence: 85, odds: 1.75, total: 2.5, oz: true, isLive: false  
-            },  
-            {  
-                id: 4, home: 'Бавария', away: 'Боруссия', league: 'Бундеслига', country: 'Германия',  
-                startTime: new Date(now.getTime() + 8 * 60 * 60 * 1000),  
-                homeScore: null, awayScore: null, status: 'upcoming',  
-                prediction: 'Тотал > 3.5', confidence: 82, odds: 1.90, total: 3.5, oz: true, isLive: false  
-            },  
-            {  
-                id: 5, home: 'Ювентус', away: 'Милан', league: 'Серия А', country: 'Италия',  
-                startTime: new Date(now.getTime() + 10 * 60 * 60 * 1000),  
-                homeScore: null, awayScore: null, status: 'upcoming',  
-                prediction: 'Фора +1.5', confidence: 68, odds: 1.85, total: 2.5, oz: false, isLive: false  
-            },  
-            {  
-                id: 6, home: 'ПСЖ', away: 'Марсель', league: 'Лига 1', country: 'Франция',  
-                startTime: new Date(now.getTime() + 12 * 60 * 60 * 1000),  
-                homeScore: null, awayScore: null, status: 'upcoming',  
-                prediction: 'ОЗ - ДА', confidence: 80, odds: 1.70, total: 2.5, oz: true, isLive: false  
-            },  
-            {  
-                id: 7, home: 'Славия', away: 'Спарта', league: 'Лига 1', country: 'Чехия',  
-                startTime: new Date(now.getTime() + 14 * 60 * 60 * 1000),  
-                homeScore: null, awayScore: null, status: 'upcoming',  
-                prediction: 'Тотал > 2.5', confidence: 75, odds: 1.88, total: 2.5, oz: true, isLive: false  
-            }  
+            { id: 1, home: 'Спартак', away: 'Зенит', league: 'РПЛ', country: 'Россия', startTime: new Date(now.getTime() + 2 * 60 * 60 * 1000), homeScore: null, awayScore: null, status: 'upcoming', prediction: 'ОЗ - ДА', confidence: 78, odds: 1.95, total: 2.5, oz: true, isLive: false },  
+            { id: 2, home: 'ЦСКА', away: 'Динамо', league: 'РПЛ', country: 'Россия', startTime: new Date(now.getTime() + 4 * 60 * 60 * 1000), homeScore: null, awayScore: null, status: 'upcoming', prediction: 'Тотал > 2.5', confidence: 72, odds: 1.80, total: 2.5, oz: true, isLive: false },  
+            { id: 3, home: 'Реал', away: 'Барселона', league: 'Ла Лига', country: 'Испания', startTime: new Date(now.getTime() + 6 * 60 * 60 * 1000), homeScore: null, awayScore: null, status: 'upcoming', prediction: 'ОЗ - ДА', confidence: 85, odds: 1.75, total: 2.5, oz: true, isLive: false },  
+            { id: 4, home: 'Бавария', away: 'Боруссия', league: 'Бундеслига', country: 'Германия', startTime: new Date(now.getTime() + 8 * 60 * 60 * 1000), homeScore: null, awayScore: null, status: 'upcoming', prediction: 'Тотал > 3.5', confidence: 82, odds: 1.90, total: 3.5, oz: true, isLive: false },  
+            { id: 5, home: 'Ювентус', away: 'Милан', league: 'Серия А', country: 'Италия', startTime: new Date(now.getTime() + 10 * 60 * 60 * 1000), homeScore: null, awayScore: null, status: 'upcoming', prediction: 'Фора +1.5', confidence: 68, odds: 1.85, total: 2.5, oz: false, isLive: false },  
+            { id: 6, home: 'ПСЖ', away: 'Марсель', league: 'Лига 1', country: 'Франция', startTime: new Date(now.getTime() + 12 * 60 * 60 * 1000), homeScore: null, awayScore: null, status: 'upcoming', prediction: 'ОЗ - ДА', confidence: 80, odds: 1.70, total: 2.5, oz: true, isLive: false },  
+            { id: 7, home: 'Славия', away: 'Спарта', league: 'Лига 1', country: 'Чехия', startTime: new Date(now.getTime() + 14 * 60 * 60 * 1000), homeScore: null, awayScore: null, status: 'upcoming', prediction: 'Тотал > 2.5', confidence: 75, odds: 1.88, total: 2.5, oz: true, isLive: false }  
         ];  
     }  
   
@@ -7430,106 +7250,411 @@ for (let i = 0; i < 10; i++) {
     }  
   
     // ================================================================  
-    // АССИСТЕНТ  
+    // АССИСТЕНТ (СТАРЫЙ, НО НЕ ИСПОЛЬЗУЕТСЯ)  
     // ================================================================  
   
     function renderAssistantHistory() {  
-        const chat = document.getElementById('assistantChat');  
-        if (!chat) return;  
-        if (state.assistantHistory.length === 0) {  
-            chat.innerHTML = `  
-                <div class="assistant-message ai">  
-                    👋 Привет! Я ассистент Квантум v6.1.<br>  
-                    Сезон ${CURRENT_SEASON} - все прогнозы актуальны!<br>  
-                    Теперь с ТОП-3 прогнозами дня и Глубокой AI-моделью!<br>  
-                    Задай вопрос о ставках, прогнозах или анализе матчей.  
-                    <div class="time">🤖 Ассистент</div>  
+        // Функция оставлена для совместимости, но не используется  
+        // Теперь вместо нее используется renderScannerHistory()  
+    }  
+  
+    function sendUltimateMessage() {  
+        // Функция оставлена для совместимости  
+    }  
+  
+    function quickUltimateQuestion(text) {  
+        // Функция оставлена для совместимости  
+    }  
+  
+    function addUltimateMessage(text, type) {  
+        // Функция оставлена для совместимости  
+    }  
+  
+    function generateUltimateResponse(text) {  
+        // Функция оставлена для совместимости  
+    }  
+  
+    // ================================================================  
+    // СКАННЕР VALUE (ВМЕСТО АССИСТЕНТА)  
+    // ================================================================  
+  
+    let scannerFilter = 'all';  
+    let scannerResults = [];  
+  
+    async function findValueBets() {  
+        const container = document.getElementById('scannerContainer');  
+        if (!container) return;  
+  
+        container.innerHTML = `  
+            <div style="text-align:center;color:#888;padding:20px 0;font-size:13px;">  
+                ⏳ Сканирование матчей...  
+                <div style="font-size:10px;color:#555;margin-top:4px;">AI анализирует коэффициенты</div>  
+            </div>  
+        `;  
+  
+        const matches = state.predictions || [];  
+        scannerResults = [];  
+  
+        for (const match of matches) {  
+            if (match.status === 'finished') continue;  
+  
+            const totalTypes = [  
+                { type: 'total', name: '⚽ Тотал > 1.5', odds: match.odds ? match.odds * 0.8 : 1.60 },  
+                { type: 'total', name: '⚽ Тотал > 2.5', odds: match.odds || 1.85 },  
+                { type: 'total', name: '⚽ Тотал > 3.5', odds: match.odds ? match.odds * 1.2 : 2.20 },  
+                { type: 'total_under', name: '⚽ Тотал < 2.5', odds: match.odds ? match.odds * 0.9 : 1.70 }  
+            ];  
+  
+            for (const t of totalTypes) {  
+                const realProb = await getRealProbability(match.home, match.away, t.type);  
+                const realOdds = 1 / realProb;  
+                const ev = (realProb * t.odds) - 1;  
+                if (ev > 0.02) {  
+                    scannerResults.push(createBet(match, t, realOdds, ev));  
+                }  
+            }  
+  
+            await delay(50);  
+        }  
+  
+        scannerResults.sort((a, b) => b.ev - a.ev);  
+        renderScannerResults();  
+        updateScannerStats();  
+    }  
+  
+    function createBet(match, t, realOdds, ev) {  
+        const date = new Date(match.startTime);  
+        return {  
+            home: match.home,  
+            away: match.away,  
+            type: t.type,  
+            name: t.name,  
+            odds: t.odds,  
+            realOdds: realOdds,  
+            realProb: Math.round((1 / realOdds) * 100),  
+            ev: Math.round(ev * 100),  
+            league: match.league || 'Лига',  
+            date: match.startTime,  
+            dateStr: date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }),  
+            timeStr: date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })  
+        };  
+    }  
+  
+    async function getRealProbability(homeTeam, awayTeam, betType) {  
+        try {  
+            const apiKey = localStorage.getItem('quantum_api_key');  
+            if (!apiKey) return 0.5;  
+  
+            const homeSearch = await fetchWithCache(`teams?search=${encodeURIComponent(homeTeam)}`, {  
+                headers: { 'x-apisports-key': apiKey }  
+            }, CACHE_CONFIG.API_TTL);  
+            const awaySearch = await fetchWithCache(`teams?search=${encodeURIComponent(awayTeam)}`, {  
+                headers: { 'x-apisports-key': apiKey }  
+            }, CACHE_CONFIG.API_TTL);  
+  
+            if (!homeSearch?.response?.length || !awaySearch?.response?.length) return 0.5;  
+  
+            const homeId = homeSearch.response[0].team.id;  
+            const awayId = awaySearch.response[0].team.id;  
+  
+            const h2hData = await fetchWithCache(  
+                `fixtures/headtohead?h2h=${homeId}-${awayId}&season=2025`,  
+                { headers: { 'x-apisports-key': apiKey } },  
+                CACHE_CONFIG.API_TTL  
+            );  
+  
+            let prob = 0.5;  
+            if (h2hData?.response?.length > 0) {  
+                const totalMatches = h2hData.response.length;  
+                let overMatches = 0;  
+                h2hData.response.forEach(m => {  
+                    const hGoals = m.goals.home || 0;  
+                    const aGoals = m.goals.away || 0;  
+                    if (hGoals + aGoals > 2.5) overMatches++;  
+                });  
+                prob = overMatches / totalMatches;  
+                prob = prob * 0.5 + 0.5 * 0.5;  
+            }  
+  
+            return Math.min(0.95, Math.max(0.05, prob));  
+        } catch (error) {  
+            console.error('❌ Ошибка:', error);  
+            return 0.5;  
+        }  
+    }  
+  
+    function renderScannerResults() {  
+        const container = document.getElementById('scannerContainer');  
+        if (!container) return;  
+  
+        let filtered = scannerResults;  
+        if (scannerFilter === 'high') filtered = filtered.filter(r => r.ev > 20);  
+        else if (scannerFilter === 'medium') filtered = filtered.filter(r => r.ev >= 10 && r.ev <= 20);  
+        else if (scannerFilter === 'low') filtered = filtered.filter(r => r.ev < 10);  
+  
+        if (filtered.length === 0) {  
+            container.innerHTML = `  
+                <div style="text-align:center;color:#888;padding:20px 0;font-size:13px;">  
+                    ${scannerResults.length === 0 ? '🔍 Нажмите "Найти Value ставки"' : '💰 VALUE ставок не найдено'}  
                 </div>  
             `;  
             return;  
         }  
-        chat.innerHTML = state.assistantHistory.map(msg => `  
-            <div class="assistant-message ${msg.type}">  
-                ${msg.text}  
-                <div class="time">${msg.time}</div>  
+  
+        let html = '';  
+        const best = filtered[0];  
+        if (best) {  
+            html += `  
+                <div style="background:linear-gradient(135deg,#1a3a1a,#0b0e14);border-radius:12px;padding:12px;border:2px solid #2ecc71;margin-bottom:8px;">  
+                    <div style="display:flex;justify-content:space-between;">  
+                        <div style="font-size:13px;font-weight:600;color:#fff;">🏆 ${sanitizeHTML(best.home)} vs ${sanitizeHTML(best.away)}</div>  
+                        <div style="font-size:11px;color:#2ecc71;font-weight:700;">🔥 ТОП-1</div>  
+                    </div>  
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;font-size:11px;color:#888;">  
+                        <span>${best.name}</span>  
+                        <span style="color:#f7931a;font-weight:600;">💰 ${best.odds.toFixed(2)}</span>  
+                        <span>📊 ${best.realProb}%</span>  
+                        <span style="color:#2ecc71;font-weight:600;">💎 EV: +${best.ev}%</span>  
+                    </div>  
+                    <div style="margin-top:4px;font-size:10px;color:#555;">  
+                        📅 ${best.dateStr} ${best.timeStr} · ${best.league}  
+                    </div>  
+                    <div style="margin-top:6px;padding:6px 10px;background:#0b0e14;border-radius:6px;font-size:11px;color:#aaa;">  
+                        💰 Реальный коэффициент: ${best.realOdds.toFixed(2)} → БК дает: ${best.odds.toFixed(2)}  
+                    </div>  
+                    <div style="margin-top:4px;font-size:11px;color:#2ecc71;font-weight:600;">  
+                        ✅ VALUE! Потенциальная прибыль: +${best.ev}%  
+                    </div>  
+                    <button onclick="saveValueBet(scannerResults[0])" style="width:100%;padding:6px;border-radius:6px;border:1px solid #2ecc71;background:transparent;color:#2ecc71;font-size:10px;cursor:pointer;margin-top:4px;min-height:30px;">  
+                        💾 Сохранить в историю  
+                    </button>  
+                </div>  
+            `;  
+        }  
+  
+        filtered.slice(1).forEach((bet) => {  
+            html += `  
+                <div style="background:#1a1f2a;border-radius:8px;padding:8px 12px;margin-bottom:4px;border-left:3px solid ${bet.ev > 20 ? '#2ecc71' : bet.ev > 10 ? '#f1c40f' : '#888'};">  
+                    <div style="display:flex;justify-content:space-between;">  
+                        <div style="font-size:12px;color:#fff;">${sanitizeHTML(bet.home)} vs ${sanitizeHTML(bet.away)}</div>  
+                        <div style="font-size:11px;color:${bet.ev > 20 ? '#2ecc71' : bet.ev > 10 ? '#f1c40f' : '#888'};font-weight:600;">+${bet.ev}%</div>  
+                    </div>  
+                    <div style="display:flex;flex-wrap:wrap;gap:6px;font-size:10px;color:#888;margin-top:2px;">  
+                        <span>${bet.name}</span>  
+                        <span>💰 ${bet.odds.toFixed(2)}</span>  
+                        <span>📊 ${bet.realProb}%</span>  
+                    </div>  
+                </div>  
+            `;  
+        });  
+  
+        container.innerHTML = html;  
+    }  
+  
+    function updateScannerStats() {  
+        const statsEl = document.getElementById('scannerStats');  
+        if (!statsEl || scannerResults.length === 0) {  
+            if (statsEl) statsEl.style.display = 'none';  
+            return;  
+        }  
+        statsEl.style.display = 'block';  
+        document.getElementById('scannerCount').textContent = scannerResults.length;  
+        const avgEV = scannerResults.reduce((sum, r) => sum + r.ev, 0) / scannerResults.length;  
+        document.getElementById('scannerAvgEV').textContent = Math.round(avgEV) + '%';  
+        const totalProfit = scannerResults.reduce((sum, r) => sum + r.ev, 0);  
+        document.getElementById('scannerProfit').textContent = '+' + Math.round(totalProfit) + '%';  
+    }  
+  
+    function filterScanner(filter) {  
+        scannerFilter = filter;  
+        document.querySelectorAll('.filter-btn').forEach(btn => {  
+            btn.style.background = btn.dataset.filter === filter ? '#f7931a' : 'transparent';  
+            btn.style.color = btn.dataset.filter === filter ? '#000' : '#888';  
+            btn.style.borderColor = btn.dataset.filter === filter ? '#f7931a' : '#2a3140';  
+        });  
+        renderScannerResults();  
+    }  
+  
+    function saveValueBet(bet) {  
+        if (!bet) return;  
+        let history = JSON.parse(localStorage.getItem('quantum_value_history') || '[]');  
+        history.push({  
+            date: new Date().toISOString(),  
+            match: bet.home + ' vs ' + bet.away,  
+            type: bet.name,  
+            odds: bet.odds,  
+            ev: bet.ev,  
+            league: bet.league  
+        });  
+        localStorage.setItem('quantum_value_history', JSON.stringify(history));  
+        renderScannerHistory();  
+        showToast('✅ VALUE ставка сохранена!', 'success');  
+    }  
+  
+    function renderScannerHistory() {  
+        const container = document.getElementById('scannerHistory');  
+        if (!container) return;  
+        const history = JSON.parse(localStorage.getItem('quantum_value_history') || '[]');  
+        if (history.length === 0) {  
+            container.innerHTML = `<div style="text-align:center;color:#888;padding:10px 0;font-size:11px;">Нет сохраненных VALUE ставок</div>`;  
+            return;  
+        }  
+        const last10 = history.slice(-10).reverse();  
+        container.innerHTML = last10.map(h => `  
+            <div style="background:#1a1f2a;padding:6px 10px;border-radius:6px;margin-bottom:4px;display:flex;justify-content:space-between;font-size:11px;">  
+                <div><span style="color:#fff;">${sanitizeHTML(h.match)}</span> <span style="color:#888;font-size:10px;">${h.type}</span></div>  
+                <div><span style="color:#f7931a;">${h.odds.toFixed(2)}</span> <span style="color:#2ecc71;">+${h.ev}%</span></div>  
             </div>  
         `).join('');  
-        chat.scrollTop = chat.scrollHeight;  
     }  
   
-    function sendUltimateMessage() {  
-        const input = document.getElementById('assistantInput');  
-        if (!input) return;  
-        const text = input.value.trim();  
-        if (!text) return;  
-        input.value = '';  
-        addUltimateMessage(text, 'user');  
-        setTimeout(() => {  
-            const response = generateUltimateResponse(text);  
-            addUltimateMessage(response, 'ai');  
-        }, 300 + Math.random() * 400);  
+    // ================================================================  
+    // АВТОПРОВЕРКА (каждые 12 часов)  
+    // ================================================================  
+  
+    async function autoCheckResults() {  
+        console.log('🔍 Запуск автопроверки результатов...');  
+          
+        const pendingBets = state.bets.filter(b => b.outcome === 'pending');  
+        if (pendingBets.length === 0) {  
+            console.log('ℹ️ Нет ставок для проверки');  
+            return;  
+        }  
+          
+        console.log(`📊 Найдено ${pendingBets.length} ставок для проверки`);  
+        const apiKey = localStorage.getItem('quantum_api_key');  
+        if (!apiKey || apiKey === '') {  
+            console.log('⚠️ Нет API ключа для автопроверки');  
+            showToast('⚠️ Введите API ключ для автопроверки', 'error');  
+            return;  
+        }  
+          
+        let checkedCount = 0;  
+        let errorCount = 0;  
+          
+        for (const bet of pendingBets) {  
+            try {  
+                const matchParts = bet.match.split(' - ');  
+                if (matchParts.length < 2) {  
+                    console.log(`⚠️ Не могу распарсить матч: ${bet.match}`);  
+                    errorCount++;  
+                    continue;  
+                }  
+                  
+                const homeTeam = matchParts[0].trim();  
+                const awayTeam = matchParts[1].trim();  
+                  
+                const homeSearch = await fetchWithCache(`teams?search=${encodeURIComponent(homeTeam)}`, {  
+                    headers: { 'x-apisports-key': apiKey }  
+                }, CACHE_CONFIG.API_TTL);  
+                  
+                const awaySearch = await fetchWithCache(`teams?search=${encodeURIComponent(awayTeam)}`, {  
+                    headers: { 'x-apisports-key': apiKey }  
+                }, CACHE_CONFIG.API_TTL);  
+                  
+                if (!homeSearch?.response?.length || !awaySearch?.response?.length) {  
+                    console.log(`⚠️ Не найдены ID для ${bet.match}`);  
+                    errorCount++;  
+                    continue;  
+                }  
+                  
+                const homeId = homeSearch.response[0].team.id;  
+                const awayId = awaySearch.response[0].team.id;  
+                  
+                const date = new Date(bet.date);  
+                const dateStr = date.toISOString().split('T')[0];  
+                  
+                const fixtures = await fetchWithCache(  
+                    `fixtures?h2h=${homeId}-${awayId}&date=${dateStr}`,  
+                    { headers: { 'x-apisports-key': apiKey } },  
+                    CACHE_CONFIG.API_TTL  
+                );  
+                  
+                if (!fixtures?.response?.length) {  
+                    console.log(`ℹ️ Матч ${bet.match} еще не сыгран или нет данных`);  
+                    continue;  
+                }  
+                  
+                const match = fixtures.response[0];  
+                const status = match.fixture.status.short;  
+                  
+                if (status === 'FT' || status === 'AET' || status === 'PEN') {  
+                    const homeGoals = match.goals.home || 0;  
+                    const awayGoals = match.goals.away || 0;  
+                    const actualTotal = homeGoals + awayGoals;  
+                    const predictedTotal = bet.home + bet.away;  
+                    const ozActual = homeGoals > 0 && awayGoals > 0;  
+                      
+                    let isWin = false;  
+                    let resultText = '';  
+                      
+                    if (bet.mode === 'total') {  
+                        const line = 2.5;  
+                        const predictedOver = predictedTotal > line;  
+                        const actualOver = actualTotal > line;  
+                        isWin = predictedOver === actualOver;  
+                        resultText = isWin ? '✅ Тотал угадан' : '❌ Тотал не угадан';  
+                    } else if (bet.mode === 'oz') {  
+                        isWin = ozActual;  
+                        resultText = isWin ? '✅ ОЗ угадан' : '❌ ОЗ не угадан';  
+                    } else if (bet.mode === 'fora') {  
+                        const diff = homeGoals - awayGoals;  
+                        const line = 1.5;  
+                        isWin = diff > -line;  
+                        resultText = isWin ? '✅ Фора угадана' : '❌ Фора не угадана';  
+                    }  
+                      
+                    bet.outcome = isWin ? 'win' : 'loss';  
+                    bet.resultText = resultText;  
+                    bet.actualScore = `${homeGoals}:${awayGoals}`;  
+                    bet.checkedDate = new Date().toISOString();  
+                    bet.actualTotal = actualTotal;  
+                    checkedCount++;  
+                    console.log(`✅ Проверена ставка: ${bet.match} → ${resultText} (${homeGoals}:${awayGoals})`);  
+                } else {  
+                    console.log(`ℹ️ Матч ${bet.match} еще идет (${status})`);  
+                }  
+            } catch (error) {  
+                console.error(`❌ Ошибка проверки ${bet.match}:`, error);  
+                errorCount++;  
+            }  
+            await delay(500);  
+        }  
+          
+        if (checkedCount > 0) {  
+            localStorage.setItem('quantum_bets', JSON.stringify(state.bets));  
+            renderHistory();  
+            renderStats();  
+            renderDashboard();  
+            renderInsights();  
+            renderUltimateDashboard();  
+            showToast(`✅ Автопроверка: ${checkedCount} ставок обновлено!`, 'success');  
+            console.log(`✅ Автопроверка завершена: ${checkedCount} обновлено, ${errorCount} ошибок`);  
+        } else {  
+            console.log('ℹ️ Автопроверка завершена, обновлений нет');  
+        }  
     }  
   
-    function quickUltimateQuestion(text) {  
-        document.getElementById('assistantInput').value = text;  
-        sendUltimateMessage();  
+    function manualCheck() {  
+        showToast('🔄 Проверка результатов...', 'info');  
+        autoCheckResults();  
     }  
   
-    function addUltimateMessage(text, type) {  
-        const time = new Date().toLocaleTimeString();  
-        state.assistantHistory.push({ text, type, time });  
-        if (state.assistantHistory.length > 50) {  
-            state.assistantHistory = state.assistantHistory.slice(-50);  
-        }  
-        localStorage.setItem('quantum_assistant', JSON.stringify(state.assistantHistory));  
-        renderAssistantHistory();  
-    }  
+    // ================================================================  
+    // ЗАПУСК АВТОПРОВЕРКИ (каждые 12 часов)  
+    // ================================================================  
   
-    function generateUltimateResponse(text) {  
-        const lower = text.toLowerCase();  
-        const context = {  
-            bets: state.bets,  
-            h2h: state.h2hData,  
-            weather: state.headerWeather,  
-            prediction: document.getElementById('aiRecommendation')?.textContent || 'нет',  
-            valueBets: state.valueBets || [],  
-            predictions: state.predictions || getFallbackMatches()  
-        };  
-        if (lower.includes('прогноз') || lower.includes('матч')) {  
-            const upcoming = context.predictions.filter(p => p.status !== 'finished').length;  
-            const today = context.predictions.filter(p => {  
-                const d = new Date(p.startTime);  
-                const now = new Date();  
-                return d.toDateString() === now.toDateString() && p.status !== 'finished';  
-            }).length;  
-            return `📊 **АКТУАЛЬНЫЕ ПРОГНОЗЫ (сезон ${CURRENT_SEASON})**\n\n• Всего прогнозов: ${context.predictions.length}\n• Будущих матчей: ${upcoming}\n• Сегодня: ${today}\n\n🔥 Топ-прогноз: ${context.predictions.filter(p => p.status !== 'finished').sort((a,b) => b.confidence - a.confidence)[0]?.prediction || 'нет'}\n\n💡 Используй фильтры в разделе "Прогнозы" для сортировки по времени и уверенности.`;  
-        }  
-        if (lower.includes('точный счет')) {  
-            return `⚽ **ПРОГНОЗ ТОЧНОГО СЧЕТА**\n\nТеперь приложение показывает топ-5 самых вероятных счетов!\n\nПример:\n• 2:1 — 28%\n• 1:1 — 23%\n• 2:0 — 18%\n• 1:2 — 12%\n• 3:1 — 8%\n\n🎯 Самый вероятный счет выделяется зеленым.\n\n📊 Уверенность в точном счете рассчитывается на основе xG команд.`;  
-        }  
-        if (lower.includes('топ-3') || lower.includes('топ 3') || lower.includes('лучшие прогнозы')) {  
-            return `🏆 **ТОП-3 ПРОГНОЗА ДНЯ**\n\nНа главном экране теперь отображаются 3 самых надежных прогноза!\n\n• 🥇 Золото — самый уверенный прогноз\n• 🥈 Серебро — второй по надежности\n• 🥉 Бронза — третий по надежности\n\n📊 Отбираются только прогнозы с уверенностью ≥ 60%\n\n💡 Нажми на любой прогноз для Турбо-анализа!`;  
-        }  
-        if (lower.includes('глубокая ai') || lower.includes('глубокая модель') || lower.includes('ai модель')) {  
-            return `🧠 **ГЛУБОКАЯ AI-МОДЕЛЬ**\n\nМодель анализирует 9+ факторов:\n• 📊 Форма команд (последние 5 матчей)\n• 🏠 Домашняя/гостевая форма\n• 🎯 Мотивация (дерби, борьба за место)\n• 🌤️ Погодные условия\n• ⚔️ Дерби-фактор\n• 📈 Стабильность команд\n• 🏆 Историческая точность по лиге\n\n📊 Общая оценка выводится в процентах\n\n🔥 Каждый фактор визуально отображается в виде шкалы!`;  
-        }  
-        if (lower.includes('уведомл') || lower.includes('напомина') || lower.includes('нотификац')) {  
-            return `🔔 **УВЕДОМЛЕНИЯ**\n\nСистема автоматически проверяет матчи каждые 30 минут.\n\n• Оповещает за 30 минут до начала\n• Только для прогнозов с уверенностью ≥ 70%\n• Показывает в приложении и браузере\n\n✅ Для браузерных уведомлений разрешите их в настройках браузера.\n\n📊 Сейчас активно: ${state.notifiedMatches.size} уведомлений за сессию.`;  
-        }  
-        if (lower.includes('фильтр') || lower.includes('сортировк')) {  
-            return `🔍 **ФИЛЬТРАЦИЯ ПРОГНОЗОВ**\n\nДоступные фильтры:\n• ⏱ По времени (6ч, сегодня, завтра, неделя)\n• 📊 По тоталам (Over/Under 1.5, 2.5, 3.5)\n• 🏆 По лигам / регионам\n• 🎯 По минимальной уверенности (≥ 50-90%)\n• 💰 Только с live-коэффициентами\n• 🔄 Автообновление каждые 30 минут\n\n📈 Сортировка: Уверенность × (время до начала)⁻¹`;  
-        }  
-        if (lower.includes('статус') || lower.includes('время')) {  
-            return `⏱ **СТАТУСЫ МАТЧЕЙ**\n\n• 🟢 «Через 2 ч 15 мин» — скоро начнётся\n• 🔴 «Идёт 37'» — матч в прямом эфире\n• 🏁 «Завершён 2:1» — матч сыгран\n\nТеперь каждый прогноз имеет чёткий статус, а не только «ОЗ: Да/Нет».\n\n📊 Актуальных матчей: ${context.predictions.filter(p => p.status !== 'finished').length}`;  
-        }  
-        if (lower.includes('ai') || lower.includes('модель')) {  
-            return `🧠 **РАСШИРЕННАЯ AI-МОДЕЛЬ**\n\nМодель учитывает 32 параметра:\n• xG и xGA\n• Форма команд (последние 5 матчей)\n• Домашняя/гостевая форма\n• Мотивация (дерби, борьба за место)\n• Травмы\n• Погода\n• H2H история\n• Статистика лиги\n\n📊 Точность модели: ${ultimateAI.isTrained() ? Math.round(ultimateAI.accuracy * 100) + '%' : 'не обучена'}\n\n🔥 Авто-обучение каждые 6 часов!`;  
-        }  
-        const total = context.bets.length;  
-        const wins = context.bets.filter(b => b.outcome === 'win').length;  
-        const rate = total > 0 ? Math.round((wins / total) * 100) : 0;  
-        return `🧠 **АССИСТЕНТ v6.1**\n\n📊 Ваша статистика: ${total} ставок, ${rate}% точности\n${ultimateAI.isTrained() ? `🎯 Модель: ${Math.round(ultimateAI.accuracy * 100)}%` : '⏳ Обучите модель'}\n\nНОВОЕ В v6.1:\n• 🏆 ТОП-3 прогноза дня на главном экране\n• 🧠 Глубокая AI-модель (9+ факторов)\n• 📊 Визуальные шкалы факторов влияния\n• ⚽ Прогноз точного счета (топ-5 счетов)\n• 🎯 Индивидуальный тотал команд\n• ⏰ Голы по таймам\n• 🔄 Авто-обучение каждые 6 часов\n\nЧто вас интересует?`;  
-    }  
+    setTimeout(() => {  
+        autoCheckResults();  
+    }, 120 * 1000);  
+  
+    setInterval(() => {  
+        autoCheckResults();  
+    }, 12 * 60 * 60 * 1000);  
+  
+    console.log('🤖 Автопроверка запущена (каждые 12 часов)');  
+    console.log('⏰ Первая проверка через 2 минуты');  
+    console.log('🔍 Сканнер Value загружен!');  
   
     // ================================================================  
     // ИНИЦИАЛИЗАЦИЯ  
@@ -7537,7 +7662,6 @@ for (let i = 0; i < 10; i++) {
   
     document.addEventListener('DOMContentLoaded', async function() {  
         initTheme();  
-        renderLeagues();  
         renderHistory();  
         renderStats();  
         renderDashboard();  
@@ -7578,14 +7702,12 @@ for (let i = 0; i < 10; i++) {
   
         updateAIStatus();  
         await loadHeaderWeather();  
-        renderAssistantHistory();  
         await ultimateAI.loadModel();  
         updateAIStatus();  
   
         updateLeagueFilters();  
         requestNotificationPermission();  
   
-        // ===== НОВЫЕ ФИЧИ: ТОП-3 И ГЛУБОКАЯ AI =====  
         setTimeout(() => {  
             renderTopPredictions();  
             renderDeepAIAnalysis();  
@@ -7624,399 +7746,27 @@ for (let i = 0; i < 10; i++) {
         console.log('✅ ГЛУБОКАЯ AI-МОДЕЛЬ (9+ ФАКТОРОВ)');  
         console.log('✅ РАСШИРЕННАЯ AI-МОДЕЛЬ (32 ПАРАМЕТРА)');  
         console.log('✅ АВТО-ОБУЧЕНИЕ КАЖДЫЕ 6 ЧАСОВ');  
+        console.log('✅ АВТОПРОВЕРКА КАЖДЫЕ 12 ЧАСОВ');  
+        console.log('✅ СКАННЕР VALUE ВМЕСТО АССИСТЕНТА');  
         console.log('🚀 ГОТОВ К РАБОТЕ!');  
     });  
   
     window.addEventListener('resize', () => {  
         if (state.currentTab === 'stats') renderChartCanvas();  
     });  
-  // ================================================================
-// АВТОПРОВЕРКА РЕЗУЛЬТАТОВ (каждые 12 часов)
-// ================================================================
-
-async function autoCheckResults() {
-    console.log('🔍 Запуск автопроверки результатов...');
-    
-    const pendingBets = state.bets.filter(b => b.outcome === 'pending');
-    if (pendingBets.length === 0) {
-        console.log('ℹ️ Нет ставок для проверки');
-        return;
-    }
-    
-    console.log(`📊 Найдено ${pendingBets.length} ставок для проверки`);
-    const apiKey = localStorage.getItem('quantum_api_key');
-    if (!apiKey || apiKey === '') {
-        console.log('⚠️ Нет API ключа для автопроверки');
-        showToast('⚠️ Введите API ключ для автопроверки', 'error');
-        return;
-    }
-    
-    let checkedCount = 0;
-    let errorCount = 0;
-    
-    for (const bet of pendingBets) {
-        try {
-            const matchParts = bet.match.split(' - ');
-            if (matchParts.length < 2) {
-                console.log(`⚠️ Не могу распарсить матч: ${bet.match}`);
-                errorCount++;
-                continue;
-            }
-            
-            const homeTeam = matchParts[0].trim();
-            const awayTeam = matchParts[1].trim();
-            
-            // Поиск ID команд
-            const homeSearch = await fetchWithCache(`teams?search=${encodeURIComponent(homeTeam)}`, {
-                headers: { 'x-apisports-key': apiKey }
-            }, CACHE_CONFIG.API_TTL);
-            
-            const awaySearch = await fetchWithCache(`teams?search=${encodeURIComponent(awayTeam)}`, {
-                headers: { 'x-apisports-key': apiKey }
-            }, CACHE_CONFIG.API_TTL);
-            
-            if (!homeSearch?.response?.length || !awaySearch?.response?.length) {
-                console.log(`⚠️ Не найдены ID для ${bet.match}`);
-                errorCount++;
-                continue;
-            }
-            
-            const homeId = homeSearch.response[0].team.id;
-            const awayId = awaySearch.response[0].team.id;
-            
-            // Поиск матча
-            const date = new Date(bet.date);
-            const dateStr = date.toISOString().split('T')[0];
-            
-            const fixtures = await fetchWithCache(
-                `fixtures?h2h=${homeId}-${awayId}&date=${dateStr}`,
-                { headers: { 'x-apisports-key': apiKey } },
-                CACHE_CONFIG.API_TTL
-            );
-            
-            if (!fixtures?.response?.length) {
-                console.log(`ℹ️ Матч ${bet.match} еще не сыгран или нет данных`);
-                continue;
-            }
-            
-            const match = fixtures.response[0];
-            const status = match.fixture.status.short;
-            
-            // Проверяем только завершенные матчи
-            if (status === 'FT' || status === 'AET' || status === 'PEN') {
-                const homeGoals = match.goals.home || 0;
-                const awayGoals = match.goals.away || 0;
-                const actualTotal = homeGoals + awayGoals;
-                const predictedTotal = bet.home + bet.away;
-                const ozActual = homeGoals > 0 && awayGoals > 0;
-                
-                let isWin = false;
-                let resultText = '';
-                
-                // Определяем исход в зависимости от типа ставки
-                if (bet.mode === 'total') {
-                    const line = 2.5;
-                    const predictedOver = predictedTotal > line;
-                    const actualOver = actualTotal > line;
-                    isWin = predictedOver === actualOver;
-                    resultText = isWin ? '✅ Тотал угадан' : '❌ Тотал не угадан';
-                    
-                } else if (bet.mode === 'oz') {
-                    isWin = ozActual;
-                    resultText = isWin ? '✅ ОЗ угадан' : '❌ ОЗ не угадан';
-                    
-                } else if (bet.mode === 'fora') {
-                    const diff = homeGoals - awayGoals;
-                    const line = 1.5;
-                    isWin = diff > -line;
-                    resultText = isWin ? '✅ Фора угадана' : '❌ Фора не угадана';
-                }
-                
-                // Обновляем ставку
-                bet.outcome = isWin ? 'win' : 'loss';
-                bet.resultText = resultText;
-                bet.actualScore = `${homeGoals}:${awayGoals}`;
-                bet.checkedDate = new Date().toISOString();
-                bet.actualTotal = actualTotal;
-                checkedCount++;
-                console.log(`✅ Проверена ставка: ${bet.match} → ${resultText} (${homeGoals}:${awayGoals})`);
-                
-            } else {
-                console.log(`ℹ️ Матч ${bet.match} еще идет (${status})`);
-            }
-            
-        } catch (error) {
-            console.error(`❌ Ошибка проверки ${bet.match}:`, error);
-            errorCount++;
-        }
-        
-        await delay(500); // Пауза между запросами
-    }
-    
-    // Сохраняем обновленные данные
-    if (checkedCount > 0) {
-        localStorage.setItem('quantum_bets', JSON.stringify(state.bets));
-        renderHistory();
-        renderStats();
-        renderDashboard();
-        renderInsights();
-        renderUltimateDashboard();
-        showToast(`✅ Автопроверка: ${checkedCount} ставок обновлено!`, 'success');
-        console.log(`✅ Автопроверка завершена: ${checkedCount} обновлено, ${errorCount} ошибок`);
-    } else {
-        console.log('ℹ️ Автопроверка завершена, обновлений нет');
-    }
-}
-
-// ===== РУЧНАЯ ПРОВЕРКА =====
-function manualCheck() {
-    showToast('🔄 Проверка результатов...', 'info');
-    autoCheckResults();
-}
-
-// ================================================================
-// СКАННЕР VALUE (ВМЕСТО АССИСТЕНТА)
-// ================================================================
-
-let scannerFilter = 'all';
-let scannerResults = [];
-
-// ----- 1. ПОИСК VALUE СТАВОК -----
-async function findValueBets() {
-    const container = document.getElementById('scannerContainer');
-    if (!container) return;
-
-    container.innerHTML = `
-        <div style="text-align:center;color:#888;padding:20px 0;font-size:13px;">
-            ⏳ Сканирование матчей...
-            <div style="font-size:10px;color:#555;margin-top:4px;">AI анализирует коэффициенты</div>
-        </div>
-    `;
-
-    const matches = state.predictions || [];
-    scannerResults = [];
-
-    for (const match of matches) {
-        if (match.status === 'finished') continue;
-
-        const totalTypes = [
-            { type: 'total', name: '⚽ Тотал > 1.5', odds: match.odds ? match.odds * 0.8 : 1.60 },
-            { type: 'total', name: '⚽ Тотал > 2.5', odds: match.odds || 1.85 },
-            { type: 'total', name: '⚽ Тотал > 3.5', odds: match.odds ? match.odds * 1.2 : 2.20 },
-            { type: 'total_under', name: '⚽ Тотал < 2.5', odds: match.odds ? match.odds * 0.9 : 1.70 }
-        ];
-
-        for (const t of totalTypes) {
-            const realProb = await getRealProbability(match.home, match.away, t.type);
-            const realOdds = 1 / realProb;
-            const ev = (realProb * t.odds) - 1;
-            if (ev > 0.02) {
-                scannerResults.push(createBet(match, t, realOdds, ev));
-            }
-        }
-
-        await delay(50);
-    }
-
-    scannerResults.sort((a, b) => b.ev - a.ev);
-    renderScannerResults();
-    updateScannerStats();
-}
-
-// ----- 2. СОЗДАНИЕ СТАВКИ -----
-function createBet(match, t, realOdds, ev) {
-    const date = new Date(match.startTime);
-    return {
-        home: match.home,
-        away: match.away,
-        type: t.type,
-        name: t.name,
-        odds: t.odds,
-        realOdds: realOdds,
-        realProb: Math.round((1 / realOdds) * 100),
-        ev: Math.round(ev * 100),
-        league: match.league || 'Лига',
-        date: match.startTime,
-        dateStr: date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }),
-        timeStr: date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
-    };
-}
-
-// ----- 3. РАСЧЕТ РЕАЛЬНОЙ ВЕРОЯТНОСТИ -----
-async function getRealProbability(homeTeam, awayTeam, betType) {
-    try {
-        const apiKey = localStorage.getItem('quantum_api_key');
-        if (!apiKey) return 0.5;
-
-        const homeSearch = await fetchWithCache(`teams?search=${encodeURIComponent(homeTeam)}`, {
-            headers: { 'x-apisports-key': apiKey }
-        }, CACHE_CONFIG.API_TTL);
-        const awaySearch = await fetchWithCache(`teams?search=${encodeURIComponent(awayTeam)}`, {
-            headers: { 'x-apisports-key': apiKey }
-        }, CACHE_CONFIG.API_TTL);
-
-        if (!homeSearch?.response?.length || !awaySearch?.response?.length) return 0.5;
-
-        const homeId = homeSearch.response[0].team.id;
-        const awayId = awaySearch.response[0].team.id;
-
-        const h2hData = await fetchWithCache(
-            `fixtures/headtohead?h2h=${homeId}-${awayId}&season=2025`,
-            { headers: { 'x-apisports-key': apiKey } },
-            CACHE_CONFIG.API_TTL
-        );
-
-        let prob = 0.5;
-        if (h2hData?.response?.length > 0) {
-            const totalMatches = h2hData.response.length;
-            let overMatches = 0;
-            h2hData.response.forEach(m => {
-                const hGoals = m.goals.home || 0;
-                const aGoals = m.goals.away || 0;
-                if (hGoals + aGoals > 2.5) overMatches++;
-            });
-            prob = overMatches / totalMatches;
-            prob = prob * 0.5 + 0.5 * 0.5;
-        }
-
-        return Math.min(0.95, Math.max(0.05, prob));
-    } catch (error) {
-        console.error('❌ Ошибка:', error);
-        return 0.5;
-    }
-}
-
-// ----- 4. ОТОБРАЖЕНИЕ РЕЗУЛЬТАТОВ -----
-function renderScannerResults() {
-    const container = document.getElementById('scannerContainer');
-    if (!container) return;
-
-    let filtered = scannerResults;
-    if (scannerFilter === 'high') filtered = filtered.filter(r => r.ev > 20);
-    else if (scannerFilter === 'medium') filtered = filtered.filter(r => r.ev >= 10 && r.ev <= 20);
-    else if (scannerFilter === 'low') filtered = filtered.filter(r => r.ev < 10);
-
-    if (filtered.length === 0) {
-        container.innerHTML = `
-            <div style="text-align:center;color:#888;padding:20px 0;font-size:13px;">
-                ${scannerResults.length === 0 ? '🔍 Нажмите "Найти Value ставки"' : '💰 VALUE ставок не найдено'}
-            </div>
-        `;
-        return;
-    }
-
-    let html = '';
-    const best = filtered[0];
-    if (best) {
-        html += `
-            <div style="background:linear-gradient(135deg,#1a3a1a,#0b0e14);border-radius:12px;padding:12px;border:2px solid #2ecc71;margin-bottom:8px;">
-                <div style="display:flex;justify-content:space-between;">
-                    <div style="font-size:13px;font-weight:600;color:#fff;">🏆 ${sanitizeHTML(best.home)} vs ${sanitizeHTML(best.away)}</div>
-                    <div style="font-size:11px;color:#2ecc71;font-weight:700;">🔥 ТОП-1</div>
-                </div>
-                <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;font-size:11px;color:#888;">
-                    <span>${best.name}</span>
-                    <span style="color:#f7931a;font-weight:600;">💰 ${best.odds.toFixed(2)}</span>
-                    <span>📊 ${best.realProb}%</span>
-                    <span style="color:#2ecc71;font-weight:600;">💎 EV: +${best.ev}%</span>
-                </div>
-                <div style="margin-top:4px;font-size:10px;color:#555;">
-                    📅 ${best.dateStr} ${best.timeStr} · ${best.league}
-                </div>
-                <div style="margin-top:6px;padding:6px 10px;background:#0b0e14;border-radius:6px;font-size:11px;color:#aaa;">
-                    💰 Реальный коэффициент: ${best.realOdds.toFixed(2)} → БК дает: ${best.odds.toFixed(2)}
-                </div>
-                <div style="margin-top:4px;font-size:11px;color:#2ecc71;font-weight:600;">
-                    ✅ VALUE! Потенциальная прибыль: +${best.ev}%
-                </div>
-                <button onclick="saveValueBet(scannerResults[0])" style="width:100%;padding:6px;border-radius:6px;border:1px solid #2ecc71;background:transparent;color:#2ecc71;font-size:10px;cursor:pointer;margin-top:4px;min-height:30px;">
-                    💾 Сохранить в историю
-                </button>
-            </div>
-        `;
-    }
-
-    filtered.slice(1).forEach((bet) => {
-        html += `
-            <div style="background:#1a1f2a;border-radius:8px;padding:8px 12px;margin-bottom:4px;border-left:3px solid ${bet.ev > 20 ? '#2ecc71' : bet.ev > 10 ? '#f1c40f' : '#888'};">
-                <div style="display:flex;justify-content:space-between;">
-                    <div style="font-size:12px;color:#fff;">${sanitizeHTML(bet.home)} vs ${sanitizeHTML(bet.away)}</div>
-                    <div style="font-size:11px;color:${bet.ev > 20 ? '#2ecc71' : bet.ev > 10 ? '#f1c40f' : '#888'};font-weight:600;">+${bet.ev}%</div>
-                </div>
-                <div style="display:flex;flex-wrap:wrap;gap:6px;font-size:10px;color:#888;margin-top:2px;">
-                    <span>${bet.name}</span>
-                    <span>💰 ${bet.odds.toFixed(2)}</span>
-                    <span>📊 ${bet.realProb}%</span>
-                </div>
-            </div>
-        `;
-    });
-
-    container.innerHTML = html;
-}
-
-// ----- 5. СТАТИСТИКА -----
-function updateScannerStats() {
-    const statsEl = document.getElementById('scannerStats');
-    if (!statsEl || scannerResults.length === 0) {
-        if (statsEl) statsEl.style.display = 'none';
-        return;
-    }
-    statsEl.style.display = 'block';
-    document.getElementById('scannerCount').textContent = scannerResults.length;
-    const avgEV = scannerResults.reduce((sum, r) => sum + r.ev, 0) / scannerResults.length;
-    document.getElementById('scannerAvgEV').textContent = Math.round(avgEV) + '%';
-    const totalProfit = scannerResults.reduce((sum, r) => sum + r.ev, 0);
-    document.getElementById('scannerProfit').textContent = '+' + Math.round(totalProfit) + '%';
-}
-
-// ----- 6. ФИЛЬТРЫ -----
-function filterScanner(filter) {
-    scannerFilter = filter;
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.style.background = btn.dataset.filter === filter ? '#f7931a' : 'transparent';
-        btn.style.color = btn.dataset.filter === filter ? '#000' : '#888';
-        btn.style.borderColor = btn.dataset.filter === filter ? '#f7931a' : '#2a3140';
-    });
-    renderScannerResults();
-}
-
-// ----- 7. СОХРАНЕНИЕ В ИСТОРИЮ -----
-function saveValueBet(bet) {
-    if (!bet) return;
-    let history = JSON.parse(localStorage.getItem('quantum_value_history') || '[]');
-    history.push({
-        date: new Date().toISOString(),
-        match: bet.home + ' vs ' + bet.away,
-        type: bet.name,
-        odds: bet.odds,
-        ev: bet.ev,
-        league: bet.league
-    });
-    localStorage.setItem('quantum_value_history', JSON.stringify(history));
-    renderScannerHistory();
-    showToast('✅ VALUE ставка сохранена!', 'success');
-}
-
-// ----- 8. ИСТОРИЯ -----
-function renderScannerHistory() {
-    const container = document.getElementById('scannerHistory');
-    if (!container) return;
-    const history = JSON.parse(localStorage.getItem('quantum_value_history') || '[]');
-    if (history.length === 0) {
-        container.innerHTML = `<div style="text-align:center;color:#888;padding:10px 0;font-size:11px;">Нет сохраненных VALUE ставок</div>`;
-        return;
-    }
-    const last10 = history.slice(-10).reverse();
-    container.innerHTML = last10.map(h => `
-        <div style="background:#1a1f2a;padding:6px 10px;border-radius:6px;margin-bottom:4px;display:flex;justify-content:space-between;font-size:11px;">
-            <div><span style="color:#fff;">${sanitizeHTML(h.match)}</span> <span style="color:#888;font-size:10px;">${h.type}</span></div>
-            <div><span style="color:#f7931a;">${h.odds.toFixed(2)}</span> <span style="color:#2ecc71;">+${h.ev}%</span></div>
-        </div>
-    `).join('');
-}
-
-console.log('🔍 Сканнер Value загружен!');        
-</script>  
+  
+    // Глобальный обработчик ошибок  
+    window.onerror = function(msg, url, line, col, error) {  
+        console.error('❌ Ошибка:', msg);  
+        showToast('⚠️ Произошла ошибка, проверьте консоль', 'error');  
+        return false;  
+    };  
+  
+    window.addEventListener('unhandledrejection', function(event) {  
+        console.error('❌ Необработанный Promise:', event.reason);  
+        showToast('⚠️ Ошибка в запросе, проверьте подключение', 'error');  
+        event.preventDefault();  
+    });  
+    </script>  
 </body>  
-</html>     
+</html> 
