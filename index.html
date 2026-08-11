@@ -7607,6 +7607,166 @@ for (let i = 0; i < 10; i++) {
     window.addEventListener('resize', () => {  
         if (state.currentTab === 'stats') renderChartCanvas();  
     });  
+  // ================================================================
+// АВТОПРОВЕРКА РЕЗУЛЬТАТОВ (каждые 12 часов)
+// ================================================================
+
+async function autoCheckResults() {
+    console.log('🔍 Запуск автопроверки результатов...');
+    
+    const pendingBets = state.bets.filter(b => b.outcome === 'pending');
+    if (pendingBets.length === 0) {
+        console.log('ℹ️ Нет ставок для проверки');
+        return;
+    }
+    
+    console.log(`📊 Найдено ${pendingBets.length} ставок для проверки`);
+    const apiKey = localStorage.getItem('quantum_api_key');
+    if (!apiKey || apiKey === '') {
+        console.log('⚠️ Нет API ключа для автопроверки');
+        showToast('⚠️ Введите API ключ для автопроверки', 'error');
+        return;
+    }
+    
+    let checkedCount = 0;
+    let errorCount = 0;
+    
+    for (const bet of pendingBets) {
+        try {
+            const matchParts = bet.match.split(' - ');
+            if (matchParts.length < 2) {
+                console.log(`⚠️ Не могу распарсить матч: ${bet.match}`);
+                errorCount++;
+                continue;
+            }
+            
+            const homeTeam = matchParts[0].trim();
+            const awayTeam = matchParts[1].trim();
+            
+            // Поиск ID команд
+            const homeSearch = await fetchWithCache(`teams?search=${encodeURIComponent(homeTeam)}`, {
+                headers: { 'x-apisports-key': apiKey }
+            }, CACHE_CONFIG.API_TTL);
+            
+            const awaySearch = await fetchWithCache(`teams?search=${encodeURIComponent(awayTeam)}`, {
+                headers: { 'x-apisports-key': apiKey }
+            }, CACHE_CONFIG.API_TTL);
+            
+            if (!homeSearch?.response?.length || !awaySearch?.response?.length) {
+                console.log(`⚠️ Не найдены ID для ${bet.match}`);
+                errorCount++;
+                continue;
+            }
+            
+            const homeId = homeSearch.response[0].team.id;
+            const awayId = awaySearch.response[0].team.id;
+            
+            // Поиск матча
+            const date = new Date(bet.date);
+            const dateStr = date.toISOString().split('T')[0];
+            
+            const fixtures = await fetchWithCache(
+                `fixtures?h2h=${homeId}-${awayId}&date=${dateStr}`,
+                { headers: { 'x-apisports-key': apiKey } },
+                CACHE_CONFIG.API_TTL
+            );
+            
+            if (!fixtures?.response?.length) {
+                console.log(`ℹ️ Матч ${bet.match} еще не сыгран или нет данных`);
+                continue;
+            }
+            
+            const match = fixtures.response[0];
+            const status = match.fixture.status.short;
+            
+            // Проверяем только завершенные матчи
+            if (status === 'FT' || status === 'AET' || status === 'PEN') {
+                const homeGoals = match.goals.home || 0;
+                const awayGoals = match.goals.away || 0;
+                const actualTotal = homeGoals + awayGoals;
+                const predictedTotal = bet.home + bet.away;
+                const ozActual = homeGoals > 0 && awayGoals > 0;
+                
+                let isWin = false;
+                let resultText = '';
+                
+                // Определяем исход в зависимости от типа ставки
+                if (bet.mode === 'total') {
+                    const line = 2.5;
+                    const predictedOver = predictedTotal > line;
+                    const actualOver = actualTotal > line;
+                    isWin = predictedOver === actualOver;
+                    resultText = isWin ? '✅ Тотал угадан' : '❌ Тотал не угадан';
+                    
+                } else if (bet.mode === 'oz') {
+                    isWin = ozActual;
+                    resultText = isWin ? '✅ ОЗ угадан' : '❌ ОЗ не угадан';
+                    
+                } else if (bet.mode === 'fora') {
+                    const diff = homeGoals - awayGoals;
+                    const line = 1.5;
+                    isWin = diff > -line;
+                    resultText = isWin ? '✅ Фора угадана' : '❌ Фора не угадана';
+                }
+                
+                // Обновляем ставку
+                bet.outcome = isWin ? 'win' : 'loss';
+                bet.resultText = resultText;
+                bet.actualScore = `${homeGoals}:${awayGoals}`;
+                bet.checkedDate = new Date().toISOString();
+                bet.actualTotal = actualTotal;
+                checkedCount++;
+                console.log(`✅ Проверена ставка: ${bet.match} → ${resultText} (${homeGoals}:${awayGoals})`);
+                
+            } else {
+                console.log(`ℹ️ Матч ${bet.match} еще идет (${status})`);
+            }
+            
+        } catch (error) {
+            console.error(`❌ Ошибка проверки ${bet.match}:`, error);
+            errorCount++;
+        }
+        
+        await delay(500); // Пауза между запросами
+    }
+    
+    // Сохраняем обновленные данные
+    if (checkedCount > 0) {
+        localStorage.setItem('quantum_bets', JSON.stringify(state.bets));
+        renderHistory();
+        renderStats();
+        renderDashboard();
+        renderInsights();
+        renderUltimateDashboard();
+        showToast(`✅ Автопроверка: ${checkedCount} ставок обновлено!`, 'success');
+        console.log(`✅ Автопроверка завершена: ${checkedCount} обновлено, ${errorCount} ошибок`);
+    } else {
+        console.log('ℹ️ Автопроверка завершена, обновлений нет');
+    }
+}
+
+// ===== РУЧНАЯ ПРОВЕРКА =====
+function manualCheck() {
+    showToast('🔄 Проверка результатов...', 'info');
+    autoCheckResults();
+}
+
+// ================================================================
+// ЗАПУСК АВТОПРОВЕРКИ (КАЖДЫЕ 12 ЧАСОВ)
+// ================================================================
+
+// Первая проверка через 2 минуты после загрузки
+setTimeout(() => {
+    autoCheckResults();
+}, 120 * 1000);
+
+// Затем каждые 12 часов (43200000 мс)
+setInterval(() => {
+    autoCheckResults();
+}, 12 * 60 * 60 * 1000);
+
+console.log('🤖 Автопроверка запущена (каждые 12 часов)');
+console.log('⏰ Первая проверка через 2 минуты');      
 </script>  
 </body>  
 </html>     
