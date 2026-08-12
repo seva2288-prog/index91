@@ -7206,101 +7206,104 @@ score = Math.max(0, Math.min(100, score));
         let scannerResults = [];
 
         async function findValueBets() {
-            const container = document.getElementById('scannerContainer');
-            if (!container) return;
+    const container = document.getElementById('scannerContainer');
+    if (!container) return;
 
-            container.innerHTML = `
-                    <div style="text-align:center;color:#888;padding:20px 0;font-size:13px;">
-                        ⏳ Сканирование матчей...
-                        <div style="font-size:10px;color:#555;margin-top:4px;">AI анализирует коэффициенты</div>
-                    </div>
-                `;
+    container.innerHTML = `
+            <div style="text-align:center;color:#888;padding:20px 0;font-size:13px;">
+                ⏳ Сканирование матчей...
+                <div style="font-size:10px;color:#555;margin-top:4px;">AI анализирует коэффициенты</div>
+            </div>
+        `;
 
-            const matches = state.predictions || [];
-            scannerResults = [];
+    // FIX v7.0: Исключаем завершённые матчи из сканера VALUE
+    const allMatches = state.predictions || [];
+    const matches = allMatches.filter(m => m.status !== 'finished');
+    
+    scannerResults = [];
 
-            for (const match of matches) {
-                if (match.status === 'finished') continue;
+    for (const match of matches) {
+        if (match.status === 'finished') continue; // Дополнительная страховка
 
-                const totalTypes = [
-                    { type: 'total', name: '⚽ Тотал > 1.5', odds: match.odds ? match.odds * 0.8 : 1.60 },
-                    { type: 'total', name: '⚽ Тотал > 2.5', odds: match.odds || 1.85 },
-                    { type: 'total', name: '⚽ Тотал > 3.5', odds: match.odds ? match.odds * 1.2 : 2.20 },
-                    { type: 'total_under', name: '⚽ Тотал < 2.5', odds: match.odds ? match.odds * 0.9 : 1.70 }
-                ];
+        const totalTypes = [
+            { type: 'total', name: '⚽ Тотал > 1.5', odds: match.odds ? match.odds * 0.8 : 1.60 },
+            { type: 'total', name: '⚽ Тотал > 2.5', odds: match.odds || 1.85 },
+            { type: 'total', name: '⚽ Тотал > 3.5', odds: match.odds ? match.odds * 1.2 : 2.20 },
+            { type: 'total_under', name: '⚽ Тотал < 2.5', odds: match.odds ? match.odds * 0.9 : 1.70 }
+        ];
 
-                for (const t of totalTypes) {
-                    const realProb = await getRealProbability(match.home, match.away, t.type);
-                    const realOdds = 1 / realProb;
-                    const ev = (realProb * t.odds) - 1;
-                    if (ev > 0.02) {
-                        scannerResults.push(createBet(match, t, realOdds, ev));
-                    }
-                }
-
-                const homeTotalTypes = [
-                    { type: 'home_total', name: '🏠 ИТ хозяев > 0.5', odds: match.odds ? match.odds * 0.7 : 1.40 },
-                    { type: 'home_total', name: '🏠 ИТ хозяев > 1.5', odds: match.odds ? match.odds * 0.85 : 1.65 }
-                ];
-
-                for (const t of homeTotalTypes) {
-                    const realProb = await getRealProbability(match.home, match.away, t.type);
-                    const realOdds = 1 / realProb;
-                    const ev = (realProb * t.odds) - 1;
-                    if (ev > 0.02) {
-                        scannerResults.push(createBet(match, t, realOdds, ev));
-                    }
-                }
-
-                const awayTotalTypes = [
-                    { type: 'away_total', name: '✈️ ИТ гостей > 0.5', odds: match.odds ? match.odds * 0.65 : 1.30 },
-                    { type: 'away_total', name: '✈️ ИТ гостей > 1.5', odds: match.odds ? match.odds * 0.8 : 1.55 }
-                ];
-
-                for (const t of awayTotalTypes) {
-                    const realProb = await getRealProbability(match.home, match.away, t.type);
-                    const realOdds = 1 / realProb;
-                    const ev = (realProb * t.odds) - 1;
-                    if (ev > 0.02) {
-                        scannerResults.push(createBet(match, t, realOdds, ev));
-                    }
-                }
-
-                const ozTypes = [
-                    { type: 'oz', name: '⚽ ОЗ (Да)', odds: match.odds ? match.odds * 0.95 : 1.80 },
-                    { type: 'oz_no', name: '⚽ ОЗ (Нет)', odds: match.odds ? match.odds * 0.9 : 1.75 }
-                ];
-
-                for (const t of ozTypes) {
-                    const realProb = await getRealProbability(match.home, match.away, t.type);
-                    const realOdds = 1 / realProb;
-                    const ev = (realProb * t.odds) - 1;
-                    if (ev > 0.02) {
-                        scannerResults.push(createBet(match, t, realOdds, ev));
-                    }
-                }
-
-                const foraTypes = [
-                    { type: 'fora_home', name: '⚖️ Фора +1.5 (хозяева)', odds: match.odds ? match.odds * 0.9 : 1.75 },
-                    { type: 'fora_away', name: '⚖️ Фора +1.5 (гости)', odds: match.odds ? match.odds * 0.9 : 1.75 }
-                ];
-
-                for (const t of foraTypes) {
-                    const realProb = await getRealProbability(match.home, match.away, t.type);
-                    const realOdds = 1 / realProb;
-                    const ev = (realProb * t.odds) - 1;
-                    if (ev > 0.02) {
-                        scannerResults.push(createBet(match, t, realOdds, ev));
-                    }
-                }
-
-                await delay(50);
+        for (const t of totalTypes) {
+            const realProb = await getRealProbability(match.home, match.away, t.type);
+            const realOdds = 1 / realProb;
+            const ev = (realProb * t.odds) - 1;
+            if (ev > 0.02) {
+                scannerResults.push(createBet(match, t, realOdds, ev));
             }
-
-            scannerResults.sort((a, b) => b.ev - a.ev);
-            renderScannerResults();
-            updateScannerStats();
         }
+
+        const homeTotalTypes = [
+            { type: 'home_total', name: '🏠 ИТ хозяев > 0.5', odds: match.odds ? match.odds * 0.7 : 1.40 },
+            { type: 'home_total', name: '🏠 ИТ хозяев > 1.5', odds: match.odds ? match.odds * 0.85 : 1.65 }
+        ];
+
+        for (const t of homeTotalTypes) {
+            const realProb = await getRealProbability(match.home, match.away, t.type);
+            const realOdds = 1 / realProb;
+            const ev = (realProb * t.odds) - 1;
+            if (ev > 0.02) {
+                scannerResults.push(createBet(match, t, realOdds, ev));
+            }
+        }
+
+        const awayTotalTypes = [
+            { type: 'away_total', name: '✈️ ИТ гостей > 0.5', odds: match.odds ? match.odds * 0.65 : 1.30 },
+            { type: 'away_total', name: '✈️ ИТ гостей > 1.5', odds: match.odds ? match.odds * 0.8 : 1.55 }
+        ];
+
+        for (const t of awayTotalTypes) {
+            const realProb = await getRealProbability(match.home, match.away, t.type);
+            const realOdds = 1 / realProb;
+            const ev = (realProb * t.odds) - 1;
+            if (ev > 0.02) {
+                scannerResults.push(createBet(match, t, realOdds, ev));
+            }
+        }
+
+        const ozTypes = [
+            { type: 'oz', name: '⚽ ОЗ (Да)', odds: match.odds ? match.odds * 0.95 : 1.80 },
+            { type: 'oz_no', name: '⚽ ОЗ (Нет)', odds: match.odds ? match.odds * 0.9 : 1.75 }
+        ];
+
+        for (const t of ozTypes) {
+            const realProb = await getRealProbability(match.home, match.away, t.type);
+            const realOdds = 1 / realProb;
+            const ev = (realProb * t.odds) - 1;
+            if (ev > 0.02) {
+                scannerResults.push(createBet(match, t, realOdds, ev));
+            }
+        }
+
+        const foraTypes = [
+            { type: 'fora_home', name: '⚖️ Фора +1.5 (хозяева)', odds: match.odds ? match.odds * 0.9 : 1.75 },
+            { type: 'fora_away', name: '⚖️ Фора +1.5 (гости)', odds: match.odds ? match.odds * 0.9 : 1.75 }
+        ];
+
+        for (const t of foraTypes) {
+            const realProb = await getRealProbability(match.home, match.away, t.type);
+            const realOdds = 1 / realProb;
+            const ev = (realProb * t.odds) - 1;
+            if (ev > 0.02) {
+                scannerResults.push(createBet(match, t, realOdds, ev));
+            }
+        }
+
+        await delay(50);
+    }
+
+    scannerResults.sort((a, b) => b.ev - a.ev);
+    renderScannerResults();
+    updateScannerStats();
+}
 
         function createBet(match, t, realOdds, ev) {
             const date = new Date(match.startTime);
