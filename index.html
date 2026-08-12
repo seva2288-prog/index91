@@ -3131,26 +3131,60 @@
             </div>
         </div>
 
-        <!-- ============================================================
+       <!-- ============================================================
         ЭКРАН 5: НАСТРОЙКИ
         ============================================================ -->
         <div class="screen" id="settingsScreen">
             <div class="card">
                 <div class="card-title">⚙️ Настройки</div>
-                <div class="settings-item"><span class="label">🎨 Тема</span><button class="toggle-btn" id="themeToggle" onclick="toggleTheme()">🌙 Тёмная</button></div>
-                <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:6px;">
+
+                <!-- ТЕМА -->
+                <div class="settings-item" style="border-bottom:1px solid #2a3140;padding:8px 0;">
+                    <span class="label">🎨 Тема</span>
+                    <button class="toggle-btn" id="themeToggle" onclick="toggleTheme()">🌙 Тёмная</button>
+                </div>
+
+                <!-- API КЛЮЧ -->
+                <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:6px;border-bottom:1px solid #2a3140;padding:8px 0;">
                     <span class="label">🔑 API ключ (платный)</span>
                     <input type="password" id="apiKeyInput" placeholder="Вставьте ваш платный API ключ" style="padding:8px;border-radius:8px;border:1px solid #2a3140;background:#0b0e14;color:#e0e0e0;outline:0;min-height:44px;">
                     <button onclick="saveApiKey()" style="padding:8px;border-radius:8px;border:1px solid #2ecc71;background:transparent;color:#2ecc71;cursor:pointer;min-height:44px;">💾 Сохранить ключ</button>
                     <div id="apiStatus" style="font-size:11px;color:#888;"></div>
                 </div>
-                <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:6px;">
+
+                <!-- ПОГОДА -->
+                <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:6px;border-bottom:1px solid #2a3140;padding:8px 0;">
                     <span class="label">🌤️ OpenWeatherMap ключ (погода)</span>
                     <input type="password" id="weatherKeyInput" placeholder="Вставьте ваш ключ погоды" style="padding:8px;border-radius:8px;border:1px solid #2a3140;background:#0b0e14;color:#e0e0e0;outline:0;min-height:44px;">
                     <button onclick="saveWeatherKey()" style="padding:8px;border-radius:8px;border:1px solid #3498db;background:transparent;color:#3498db;cursor:pointer;min-height:44px;">💾 Сохранить ключ погоды</button>
                     <div id="weatherStatus" style="font-size:11px;color:#888;"></div>
                 </div>
-                <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:6px;">
+
+                <!-- ===== НОВЫЙ КРАСИВЫЙ БЛОК: ДОСТУПНЫЕ ЛИГИ ===== -->
+                <div style="background:#1a2a3a;border-radius:10px;padding:10px;border-left:3px solid #2ecc71;margin:6px 0;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <span style="font-size:13px;color:#f7931a;font-weight:600;">🏆 ДОСТУПНЫЕ ЛИГИ</span>
+                        <span style="font-size:11px;color:#2ecc71;font-weight:600;" id="leagueCountDisplay">10 лиг</span>
+                    </div>
+                    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;" id="leagueTagsContainer">
+                        <span style="background:#0b0e14;padding:2px 10px;border-radius:12px;font-size:10px;color:#f7931a;border:1px solid #2a3140;">🏴 АПЛ</span>
+                        <span style="background:#0b0e14;padding:2px 10px;border-radius:12px;font-size:10px;color:#f7931a;border:1px solid #2a3140;">🇪🇸 Ла Лига</span>
+                        <span style="background:#0b0e14;padding:2px 10px;border-radius:12px;font-size:10px;color:#f7931a;border:1px solid #2a3140;">🇩🇪 Бундеслига</span>
+                        <span style="background:#0b0e14;padding:2px 10px;border-radius:12px;font-size:10px;color:#f7931a;border:1px solid #2a3140;">🇮🇹 Серия А</span>
+                        <span style="background:#0b0e14;padding:2px 10px;border-radius:12px;font-size:10px;color:#f7931a;border:1px solid #2a3140;">🇫🇷 Лига 1</span>
+                        <span style="background:#0b0e14;padding:2px 10px;border-radius:12px;font-size:10px;color:#f7931a;border:1px solid #2a3140;">🇷🇺 РПЛ</span>
+                        <span style="background:#0b0e14;padding:2px 10px;border-radius:12px;font-size:10px;color:#f7931a;border:1px solid #2a3140;">🏆 Лига Чемпионов</span>
+                        <span style="background:#0b0e14;padding:2px 10px;border-radius:12px;font-size:10px;color:#f7931a;border:1px solid #2a3140;">🏆 Лига Европы</span>
+                        <span style="background:#0b0e14;padding:2px 10px;border-radius:12px;font-size:10px;color:#f7931a;border:1px solid #2a3140;">🇵🇹 Примейра</span>
+                        <span style="background:#0b0e14;padding:2px 10px;border-radius:12px;font-size:10px;color:#f7931a;border:1px solid #2a3140;">🇹🇷 Суперлига</span>
+                    </div>
+                    <div style="font-size:9px;color:#555;margin-top:4px;">
+                        📊 Данные загружены · ✅ Доступно офлайн
+                    </div>
+                </div>
+
+                <!-- AI МОДЕЛЬ -->
+                <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:6px;border-bottom:1px solid #2a3140;padding:8px 0;">
                     <span class="label">🧠 Экспериментальная модель</span>
                     <div style="display:flex;gap:8px;flex-wrap:wrap;">
                         <button class="btn-ai-train" id="trainAIBtn" onclick="trainUltimateAI()" style="flex:2;">🧠 Обучить модель</button>
@@ -3163,7 +3197,9 @@
                     <div style="font-size:9px;color:#555;margin-top:2px;">📊 Требуется минимум 10 ставок</div>
                     <div id="aiTrainLog" style="font-size:10px;color:#888;margin-top:4px;max-height:60px;overflow-y:auto;display:none;background:#0b0e14;padding:4px 8px;border-radius:6px;"></div>
                 </div>
-                <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:6px;border-bottom:none;padding-bottom:4px;">
+
+                <!-- ДАННЫЕ -->
+                <div class="settings-item" style="flex-direction:column;align-items:stretch;gap:6px;border-bottom:1px solid #2a3140;padding:8px 0;">
                     <span class="label">💾 Данные</span>
                     <div style="display:flex;gap:8px;flex-wrap:wrap;">
                         <button onclick="exportData()" style="flex:1;padding:8px;border-radius:8px;border:1px solid #2a3140;background:#0b0e14;color:#e0e0e0;cursor:pointer;font-size:12px;min-height:40px;">📦 Экспорт JSON</button>
@@ -3171,10 +3207,14 @@
                         <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
                     </div>
                 </div>
-                <div class="settings-item" style="border-bottom:none;padding-bottom:4px;">
+
+                <!-- СБРОС -->
+                <div class="settings-item" style="border-bottom:none;padding:8px 0;">
                     <span class="label">🗑️ Сброс</span>
                     <button onclick="resetAll()" style="padding:6px 16px;border-radius:8px;border:1px solid #e74c3c;background:transparent;color:#e74c3c;cursor:pointer;font-size:12px;min-height:36px;">Сбросить всё</button>
                 </div>
+
+                <!-- ФУТЕР -->
                 <div style="text-align:center;font-size:10px;color:#555;margin-top:8px;border-top:1px solid #2a3140;padding-top:8px;">
                     ⚛️ Квантум · Анализ на основе H2H, Poisson и погоды
                 </div>
