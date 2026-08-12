@@ -2940,7 +2940,7 @@
         </div>
 
         <!-- ============================================================
-        ЭКРАН 2: ПОИСК H2H
+        ЭКРАН 2: H2H
         ============================================================ -->
         <div class="screen" id="searchScreen">
             <div class="card">
@@ -2977,7 +2977,7 @@
         </div>
 
         <!-- ============================================================
-        ЭКРАН 3: СТАТИСТИКА / ДАШБОРД
+        ЭКРАН 3: СТАТИСТИКА
         ============================================================ -->
         <div class="screen" id="statsScreen">
             <div class="kpi-grid">
@@ -3048,7 +3048,7 @@
         </div>
 
         <!-- ============================================================
-        ЭКРАН 4: ПРОГНОЗЫ
+        ЭКРАН 4: МАТЧИ
         ============================================================ -->
         <div class="screen" id="liveScreen">
             <div class="card">
@@ -3269,7 +3269,7 @@
             <div class="disclaimer">Это аналитический инструмент, а не рекомендация к ставкам. Решения принимаете вы.</div>
         </div>
 
-        <!-- ===== НИЖНЯЯ НАВИГАЦИЯ ===== -->
+        <!-- ===== НИЖНЯЯ НАВИГАЦИЯ (УПОРЯДОЧЕННАЯ) ===== -->
         <div class="bottom-nav" id="bottomNav">
             <button class="nav-btn active" data-tab="analysis" onclick="switchTab('analysis')">
                 <span class="nav-icon">📊</span>
@@ -3277,25 +3277,25 @@
             </button>
             <button class="nav-btn" data-tab="search" onclick="switchTab('search')">
                 <span class="nav-icon">🔍</span>
-                <span class="nav-label">Поиск</span>
+                <span class="nav-label">H2H</span>
                 <span class="badge" id="searchBadgeNav" style="display:none;">0</span>
+            </button>
+            <button class="nav-btn" data-tab="live" onclick="switchTab('live')">
+                <span class="nav-icon">🔮</span>
+                <span class="nav-label">Матчи</span>
+                <span class="badge" id="liveBadgeNav" style="display:none;">0</span>
+            </button>
+            <button class="nav-btn" data-tab="assistant" onclick="switchTab('assistant')">
+                <span class="nav-icon">💰</span>
+                <span class="nav-label">Value</span>
             </button>
             <button class="nav-btn" data-tab="stats" onclick="switchTab('stats')">
                 <span class="nav-icon">📈</span>
                 <span class="nav-label">Стат</span>
             </button>
-            <button class="nav-btn" data-tab="live" onclick="switchTab('live')">
-                <span class="nav-icon">🔮</span>
-                <span class="nav-label">Прогнозы</span>
-                <span class="badge" id="liveBadgeNav" style="display:none;">0</span>
-            </button>
             <button class="nav-btn" data-tab="settings" onclick="switchTab('settings')">
                 <span class="nav-icon">⚙️</span>
                 <span class="nav-label">Настройки</span>
-            </button>
-            <button class="nav-btn" data-tab="assistant" onclick="switchTab('assistant')">
-                <span class="nav-icon">🔍</span>
-                <span class="nav-label">Сканнер</span>
             </button>
         </div>
 
