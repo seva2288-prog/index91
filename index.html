@@ -6094,33 +6094,73 @@
             updateTurboProgress(progressFill, progressStep, progressPercent, currentStep, totalSteps, steps[currentStep -
                 1].icon + ' ' + steps[currentStep - 1].label);
 
-            let score = 20;
+            // ===== РАСЧЁТ ОБЩЕЙ ОЦЕНКИ (FIX v7.0) =====
+let score = 25; // Базовое значение
 
-            if (aiConfidence >= 70) score += 30;
-            else if (aiConfidence >= 50) score += 20;
-            else score += 10;
+// 1. Уверенность AI (макс. 30 баллов)
+if (aiConfidence >= 80) score += 30;
+else if (aiConfidence >= 70) score += 25;
+else if (aiConfidence >= 60) score += 20;
+else if (aiConfidence >= 50) score += 15;
+else if (aiConfidence >= 40) score += 10;
+else score += 5;
 
-            if (homeForm > 60 || awayForm > 60) score += 15;
-            if (homeForm > 70 || awayForm > 70) score += 10;
+// 2. Форма команд (макс. 20 баллов)
+if (homeForm > 65) score += 12;
+else if (homeForm > 50) score += 8;
+else if (homeForm > 35) score += 4;
 
-            if (motivationFactor > 1.2) score += 15;
-            if (isDerbyMatch) score += 10;
+if (awayForm > 65) score += 8;
+else if (awayForm > 50) score += 5;
+else if (awayForm > 35) score += 3;
 
-            if (weatherCondition === 'good') score += 5;
-            if (weatherCondition === 'neutral') score += 3;
-            if (weatherCondition === 'rain' || weatherCondition === 'snow') score -= 10;
+// 3. Мотивация (макс. 15 баллов)
+if (motivationFactor > 1.3) score += 15;
+else if (motivationFactor > 1.1) score += 10;
+else if (motivationFactor > 0.9) score += 5;
 
-            if (valueResult.isValue) score += 20;
+// 4. Дерби (макс. 10 баллов)
+if (isDerbyMatch) score += 10;
 
-            if (homeUnpred.level === 'high') score -= 35;
-            if (awayUnpred.level === 'high') score -= 35;
-            if (homeUnpred.level === 'medium') score -= 15;
-            if (awayUnpred.level === 'medium') score -= 15;
+// 5. Погода (макс. 10 баллов)
+if (weatherCondition === 'good') score += 10;
+else if (weatherCondition === 'neutral') score += 5;
+else if (weatherCondition === 'rain' || weatherCondition === 'snow') score -= 5;
 
-            if (homeUnpred.level === 'low') score += 5;
-            if (awayUnpred.level === 'low') score += 5;
+// 6. Value (макс. 15 баллов)
+if (valueResult.isValue) {
+    score += 15;
+    if (parseFloat(valueResult.evPercent) > 20) score += 5;
+}
 
-            score = Math.max(5, Math.min(100, score));
+// 7. НЕПРЕДСКАЗУЕМОСТЬ (штрафы и бонусы)
+if (homeUnpred.level === 'high') score -= 20;
+if (awayUnpred.level === 'high') score -= 20;
+if (homeUnpred.level === 'medium') score -= 10;
+if (awayUnpred.level === 'medium') score -= 10;
+
+if (homeUnpred.level === 'low') score += 5;
+if (awayUnpred.level === 'low') score += 5;
+
+// 8. Стабильность (бонус за обе стабильные)
+if (homeUnpred.level === 'low' && awayUnpred.level === 'low') score += 10;
+
+// 9. Количество H2H матчей (макс. 5 баллов)
+const h2hCount = state.h2hData ? state.h2hData.length : 0;
+if (h2hCount >= 10) score += 5;
+else if (h2hCount >= 5) score += 3;
+else if (h2hCount >= 3) score += 1;
+
+// 10. Poisson (бонус за высокую вероятность)
+const poissonMatch = aiPoisson ? aiPoisson.match(/П1: (\d+)%/) : null;
+if (poissonMatch) {
+    const p1 = parseInt(poissonMatch[1]);
+    if (p1 > 60) score += 5;
+    else if (p1 > 50) score += 3;
+}
+
+// Ограничиваем результат
+score = Math.max(0, Math.min(100, score));
 
             let finalRecommendation = '';
             let recommendationColor = '';
